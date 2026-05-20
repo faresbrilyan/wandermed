@@ -105,28 +105,67 @@
         position: relative;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 24px;
+        gap: 32px;
         margin-top: 48px;
     }
     @media (max-width: 991px) {
         .saas-timeline {
             grid-template-columns: 1fr;
-            gap: 32px;
+            gap: 40px;
         }
     }
     
     .saas-timeline-step {
         position: relative;
         text-align: center;
-        padding: 24px;
+        padding: 32px 20px;
+        background: var(--saas-card-bg) !important;
+        border: 1px solid var(--saas-border) !important;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+    .saas-timeline-step:hover {
+        border-color: var(--saas-orange) !important;
+        transform: translateY(-4px);
     }
     @media (max-width: 991px) {
         .saas-timeline-step {
             text-align: left;
-            padding: 16px;
+            padding: 24px;
             display: flex;
             gap: 20px;
             align-items: flex-start;
+        }
+        .saas-timeline-step:hover {
+            transform: translateX(4px) translateY(0);
+        }
+    }
+    
+    /* Arrows between steps (Desktop: Right, Mobile: Down) */
+    .saas-timeline-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -26px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7a00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 10;
+    }
+    @media (max-width: 991px) {
+        .saas-timeline-step:not(:last-child)::after {
+            right: auto;
+            left: 50%;
+            bottom: -30px;
+            top: auto;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7a00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14'/%3E%3Cpath d='m19 12-7 7-7-7'/%3E%3C/svg%3E");
         }
     }
     
@@ -150,6 +189,7 @@
     .saas-timeline-step:hover .saas-step-num {
         border-color: var(--saas-orange) !important;
         color: var(--saas-orange) !important;
+        background: var(--saas-slate) !important;
     }
     @media (max-width: 991px) {
         .saas-step-num {
