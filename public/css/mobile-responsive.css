@@ -22,243 +22,54 @@ html, body {
  * 2. NAVBAR (Semua halaman wisatawan)
  * ========================================================================= */
 
-/* Elemen khusus mobile (ikon + section labels) — sembunyikan di desktop */
-.nm-icon, .nm-section-label { display: none; }
+/* ─── WM Navbar — Mobile Compatibility Shim ───
+   Seluruh gaya navbar baru sudah diatur di style-wisatawan.css.
+   Section ini hanya menyediakan override minimum agar Bootstrap
+   collapse bekerja dengan benar pada viewport ≤ 991px.
+ ─────────────────────────────────────────────── */
+
+/* Sembunyikan elemen lama yang sudah tidak dipakai */
+.nm-icon,
+.nm-section-label,
+.navbar-action-wrapper,
+.nav-action-box,
+.nav-drawer-backdrop,
+.v-separator { display: none !important; }
 
 @media (max-width: 991px) {
 
-    /* ── Navbar wrapper ── */
-    .navbar-desktop-premier {
-        padding: 8px 0 !important;
-    }
-
-    .navbar-desktop-premier .container {
-        padding-left: 14px !important;
-        padding-right: 14px !important;
-    }
-
-    /* ── Brand ── */
-    .navbar-brand {
-        font-size: 19px !important;
-        letter-spacing: 0 !important;
-    }
-    .navbar-brand i { font-size: 21px !important; }
-
-    /* ── Tombol Hamburger ── */
-    .navbar-toggler {
-        width: 40px !important;
-        height: 40px !important;
-        padding: 0 !important;
-        border: 1.5px solid rgba(255, 122, 0, 0.5) !important;
-        border-radius: 9px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: rgba(255, 122, 0, 0.08) !important;
-        flex-shrink: 0 !important;
-    }
-    .navbar-toggler:focus {
-        box-shadow: none !important;
-        outline: none !important;
-    }
-    .navbar-toggler .fas {
-        font-size: 16px !important;
-        color: #ff7a00 !important;
-    }
-
-    /* ── Dropdown menu ── */
+    /* Bootstrap collapse override — pastikan posisi tidak floating */
     .navbar-collapse {
         position: static !important;
-        top: auto !important; right: auto !important;
+        top: auto !important;
+        right: auto !important;
         width: 100% !important;
-        height: auto !important;
-        max-height: 80vh !important;
+        max-height: 82vh !important;
         overflow-y: auto !important;
-        background: #0d1b3e !important;
-        border-top: 2px solid #ff7a00 !important;
-        border-bottom: none !important;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45) !important;
-        padding: 8px 12px 16px !important;
         z-index: auto !important;
         transition: none !important;
         pointer-events: auto !important;
     }
 
-    /* ── Animasi slide-down + fade saat menu terbuka ── */
-    @keyframes navDropDown {
-        from {
-            opacity: 0;
-            transform: translateY(-12px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .navbar-collapse.show {
-        animation: navDropDown 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
-    }
-
-    /* ── Section labels ── */
-    .nm-section-label {
-        display: block;
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: rgba(255, 122, 0, 0.55);
-        padding: 10px 4px 4px;
-    }
-    .nm-section-label-action {
-        margin-top: 4px;
-        padding-top: 14px;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    /* ── Nav lists ── */
+    /* Nav items dari struktur lama tetap bisa dipakai */
     .navbar-collapse .navbar-nav {
         flex-direction: column !important;
         width: 100% !important;
-        gap: 2px !important;
-        padding: 0 !important;
     }
-    .navbar-collapse .navbar-nav.mr-auto { margin-right: 0 !important; }
-    .navbar-collapse .navbar-nav.ml-auto {
-        margin-left: 0 !important;
-        padding-top: 0 !important;
-        border-top: none !important;
-    }
+
     .navbar-collapse .nav-item { width: 100% !important; }
 
-    /* ── Nav link dengan ikon ── */
-    .navbar-collapse .nav-pill-link {
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-        width: 100% !important;
-        padding: 10px 12px !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        color: rgba(255, 255, 255, 0.82) !important;
-        border-radius: 10px !important;
-        text-decoration: none !important;
-        cursor: pointer !important;
-        pointer-events: auto !important;
-        transition: background 0.15s, color 0.15s, transform 0.12s !important;
-    }
-    .navbar-collapse .nav-pill-link:hover,
-    .navbar-collapse .nav-pill-link.active {
-        background: rgba(255, 122, 0, 0.12) !important;
-        color: #ffaa55 !important;
-        transform: translateX(3px) !important;
-    }
-    .navbar-collapse .nav-pill-link:hover .nm-icon,
-    .navbar-collapse .nav-pill-link.active .nm-icon {
-        background: rgba(255, 122, 0, 0.25) !important;
-        color: #ff7a00 !important;
-    }
-
-    /* ── Ikon per nav item ── */
-    .nm-icon {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.07);
-        color: rgba(255, 255, 255, 0.55);
-        font-size: 13px;
-        flex-shrink: 0;
-        transition: background 0.15s, color 0.15s;
-    }
-
-    /* ── Action Box (Login & Lapor) ── */
-    .nav-action-box {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        gap: 6px !important;
-    }
-    .nav-action-box .btn {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        padding: 11px 14px !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        border-radius: 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        background: rgba(255, 255, 255, 0.06) !important;
-        color: rgba(255, 255, 255, 0.85) !important;
-        cursor: pointer !important;
-        pointer-events: auto !important;
-    }
-    .nav-action-box .btn:first-child {
-        background: rgba(255, 122, 0, 0.16) !important;
-        border-color: rgba(255, 122, 0, 0.4) !important;
-        color: #ff9a3c !important;
-    }
-    .nav-action-box .btn.text-danger {
-        background: rgba(239, 68, 68, 0.1) !important;
-        border-color: rgba(239, 68, 68, 0.35) !important;
-        color: #fca5a5 !important;
-    }
-
-    .v-separator { display: none !important; }
-    /* Tombol tema di mobile tersembunyi (ada di navbar bar) */
-    .navbar-collapse .nav-item.ml-3 { display: none !important; }
-    .nav-drawer-backdrop { display: none !important; }
 }
 
-/* ── LIGHT MODE: Navbar Mobile ── */
+/* ── Light Mode Mobile (Bootstrap collapse) ── */
 @media (max-width: 991px) {
-    body.light-mode .navbar-collapse {
-        background: #f8faff !important;
-        border-top: 2px solid #ff7a00 !important;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1) !important;
-    }
-    body.light-mode .nm-section-label { color: rgba(229, 92, 0, 0.65); }
-    body.light-mode .nm-section-label-action { border-top-color: rgba(0, 0, 0, 0.07); }
-    body.light-mode .navbar-collapse .nav-pill-link { color: #334155 !important; }
-    body.light-mode .navbar-collapse .nav-pill-link:hover,
-    body.light-mode .navbar-collapse .nav-pill-link.active {
-        background: rgba(255, 122, 0, 0.09) !important;
-        color: #e65c00 !important;
-    }
-    body.light-mode .nm-icon {
-        background: rgba(0, 0, 0, 0.05);
-        color: #64748b;
-    }
-    body.light-mode .navbar-collapse .nav-pill-link:hover .nm-icon,
-    body.light-mode .navbar-collapse .nav-pill-link.active .nm-icon {
-        background: rgba(229, 92, 0, 0.14) !important;
-        color: #e65c00 !important;
-    }
-    body.light-mode .nav-action-box .btn {
-        border-color: rgba(0, 0, 0, 0.1) !important;
-        background: rgba(0, 0, 0, 0.04) !important;
-        color: #475569 !important;
-    }
-    body.light-mode .nav-action-box .btn:first-child {
-        background: rgba(255, 122, 0, 0.1) !important;
-        border-color: rgba(255, 122, 0, 0.4) !important;
-        color: #e65c00 !important;
-    }
-    body.light-mode .nav-action-box .btn.text-danger {
-        background: rgba(239, 68, 68, 0.07) !important;
-        border-color: rgba(239, 68, 68, 0.3) !important;
-        color: #dc2626 !important;
-    }
     body.light-mode .navbar-toggler {
         border-color: rgba(255, 122, 0, 0.55) !important;
         background: rgba(255, 122, 0, 0.06) !important;
     }
 }
+
+
 
 /* =========================================================================
  * 3. HERO SECTION (Beranda / Home)

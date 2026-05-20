@@ -3,6 +3,174 @@
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link href="{{ asset('css/wisatawan-home.css') }}" rel="stylesheet">
+<style>
+    /* ── SYSTEM COLORS (Strict Adaptive SaaS Scheme) ── */
+    body {
+        --saas-bg: #0a1428;
+        --saas-bg-alt: #050b14;
+        --saas-card-bg: #112240;
+        --saas-text-primary: #ffffff;
+        --saas-text-secondary: #94a3b8;
+        --saas-border: rgba(255, 255, 255, 0.08);
+        --saas-orange: #ff7a00;
+        --saas-orange-hover: #e56a00;
+        --saas-white: #ffffff;
+        --saas-slate: #112240;
+    }
+
+    body.light-mode {
+        --saas-bg: #ffffff;
+        --saas-bg-alt: #f8f9fa;
+        --saas-card-bg: #ffffff;
+        --saas-text-primary: #0a1428;
+        --saas-text-secondary: #475569;
+        --saas-border: rgba(10, 20, 40, 0.08);
+        --saas-slate: #f1f5f9;
+    }
+
+    /* ── CARD STYLING ── */
+    .saas-card {
+        background: var(--saas-card-bg) !important;
+        border: 1px solid var(--saas-border) !important;
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .saas-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(10, 20, 40, 0.04);
+    }
+    body:not(.light-mode) .saas-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Lucide Icon Standard Styling */
+    .saas-icon {
+        width: 24px;
+        height: 24px;
+        stroke-width: 2px;
+        stroke: var(--saas-text-primary) !important;
+        fill: none;
+        transition: stroke 0.2s ease;
+    }
+    .saas-icon-orange {
+        stroke: var(--saas-orange) !important;
+    }
+
+    /* Theme-Adaptive Logos */
+    body.light-mode .logo-for-dark-bg {
+        display: none !important;
+    }
+    body:not(.light-mode) .logo-for-light-bg {
+        display: none !important;
+    }
+
+    /* Buttons */
+    .btn-saas-primary {
+        background-color: var(--saas-orange) !important;
+        border-color: var(--saas-orange) !important;
+        color: var(--saas-white) !important;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-saas-primary:hover {
+        background-color: var(--saas-orange-hover) !important;
+        border-color: var(--saas-orange-hover) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
+    }
+    
+    .btn-saas-secondary {
+        background-color: transparent !important;
+        border: 1px solid var(--saas-border) !important;
+        color: var(--saas-text-primary) !important;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-saas-secondary:hover {
+        background-color: var(--saas-slate) !important;
+    }
+
+    /* Stepper User Flow */
+    .saas-timeline {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        margin-top: 48px;
+    }
+    @media (max-width: 991px) {
+        .saas-timeline {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+    
+    .saas-timeline-step {
+        position: relative;
+        text-align: center;
+        padding: 24px;
+    }
+    @media (max-width: 991px) {
+        .saas-timeline-step {
+            text-align: left;
+            padding: 16px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+    }
+    
+    .saas-step-num {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--saas-card-bg) !important;
+        border: 2px solid var(--saas-text-primary) !important;
+        color: var(--saas-text-primary) !important;
+        font-weight: 700;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px auto;
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+    .saas-timeline-step:hover .saas-step-num {
+        border-color: var(--saas-orange) !important;
+        color: var(--saas-orange) !important;
+    }
+    @media (max-width: 991px) {
+        .saas-step-num {
+            margin: 0;
+            flex-shrink: 0;
+        }
+    }
+
+    /* Stats Panel */
+    .saas-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 40px;
+    }
+    @media (max-width: 768px) {
+        .saas-stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
 @endpush
 
 @section('content')
@@ -10,271 +178,293 @@
 
     <div id="page-top"></div>
 
+    {{-- ── 1. HERO SECTION (Always Overlay on Dark Map) ── --}}
     <section class="hero-slanted section-scroll" style="position:relative;">
-
-        {{-- Layer 0: Peta Leaflet sebagai Background --}}
+        {{-- Map Background Layer --}}
         <div id="hero-bg-map"></div>
-
-        {{-- Layer 1: Dark Gradient Overlay --}}
         <div class="hero-map-overlay"></div>
 
-        {{-- Badge Live Map --}}
+        {{-- Live Status Badge --}}
         <div class="hero-map-badge">
-            <span class="dot-live"></span> Live Map · Subang
+            <span class="dot-live"></span> Active GIS Node · Subang
         </div>
 
-        {{-- Layer 2: Konten Utama --}}
+        {{-- Hero Contents --}}
         <div class="container px-4" style="position:relative; z-index:2;">
             <div class="row align-items-center">
-
                 <div class="col-lg-7 text-left mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="700">
-                    <div class="hero-content-box">
-                        <div class="mb-4" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,122,0,0.12);border:1px solid rgba(255,122,0,0.3);border-radius:20px;padding:6px 16px;">
-                            <i class="fas fa-map-marked-alt text-hnb-orange" style="font-size:13px;"></i>
-                            <span class="hero-tag-text">SISTEM PEMETAAN MEDIS WISATAWAN</span>
+                    <div class="hero-content-box" style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 20, 40, 0.85); backdrop-filter: blur(16px); padding: 48px; border-radius: 24px;">
+                        <div class="mb-4" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,122,0,0.1); border:1px solid rgba(255,122,0,0.25); border-radius:30px; padding:6px 16px;">
+                            <i data-lucide="map-pin" class="saas-icon saas-icon-orange" style="width: 14px; height: 14px;"></i>
+                            <span style="font-size:11px; font-weight:700; color:var(--saas-white); letter-spacing:1px; text-transform:uppercase;">GIS Medical Mapping System</span>
                         </div>
-                        <h1 class="font-weight-bold text-white mb-3" style="font-size: 3.5rem; line-height: 1.15;">
-                            Kesehatan Anda,<br>
-                            <span class="text-hnb-orange">Prioritas Kami.</span>
+                        
+                        <h1 class="font-weight-bold text-white mb-3" style="font-size: 3.2rem; line-height: 1.15; font-family:'Poppins', sans-serif;">
+                            Navigasi Medis,<br>
+                            <span style="color: var(--saas-orange);">Real-Time & Akurat.</span>
                         </h1>
-                        <p class="text-white-50 mb-5" style="font-size: 1.1rem; max-width: 540px; line-height: 1.75;">
-                            Temukan UGD, Klinik, dan Apotek terdekat di Subang secara <strong class="hero-strong">real-time</strong> langsung dari peta interaktif kami — dalam hitungan detik.
+                        
+                        <p class="text-white-50 mb-5" style="font-size: 1.05rem; max-width: 540px; line-height: 1.75;">
+                            Integrasi spasial cerdas untuk memetakan UGD, Puskesmas, Klinik, dan Apotek di seluruh rute wisata Subang. Respons cepat saat darurat demi kenyamanan perjalanan Anda.
                         </p>
 
-                        <div class="d-flex flex-wrap align-items-center" style="gap:14px;">
-                            <a href="/peta-faskes" class="btn btn-hnb-orange radius-hnb font-weight-bold shadow-lg py-3 px-5" style="border-radius:12px;font-size:1.1rem;display:inline-flex;align-items:center;">
-                                <i class="fas fa-map-marked-alt mr-3" style="font-size:1.2rem;"></i> Buka Peta Faskes
+                        <div class="d-flex flex-wrap align-items-center" style="gap:16px;">
+                            <a href="/peta-faskes" class="btn btn-saas-primary">
+                                <i data-lucide="map"></i> Buka Peta Interaktif
                             </a>
-                            <a href="#tentang" class="btn hero-btn-outline">
-                                Pelajari Lebih Lanjut <i class="fas fa-arrow-down ml-2"></i>
+                            <a href="#tentang" class="btn btn-saas-secondary" style="border-color: rgba(255,255,255,0.2) !important; color: #fff !important;">
+                                Pelajari Sistem <i data-lucide="arrow-down" style="width: 16px; height: 16px; stroke: #fff;"></i>
                             </a>
-                        </div>
-
-                        <div class="mt-4 d-flex flex-wrap" style="gap:20px;">
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <i class="fas fa-check-circle text-success"></i>
-                                <span class="hero-check-text">Mendukung BPJS & UGD 24 Jam</span>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <i class="fas fa-check-circle text-success"></i>
-                                <span class="hero-check-text">Gratis untuk Wisatawan</span>
-                            </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- Hero Side Logo Panel --}}
                 <div class="col-lg-5 d-none d-lg-flex justify-content-center" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
-                    <div class="d-flex align-items-center justify-content-center animasi-jantung hero-logo-box">
-                        <img src="{{ asset('img/wdm.png') }}" alt="WanderMed Logo" class="logo-for-light-bg" style="width: 200px; height: 200px; object-fit: contain;">
-                        <img src="{{ asset('img/wdmlight.png') }}" alt="WanderMed Logo" class="logo-for-dark-bg" style="width: 200px; height: 200px; object-fit: contain;">
+                    <div class="d-flex align-items-center justify-content-center hero-logo-box" style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 20, 42, 0.6); backdrop-filter: blur(12px);">
+                        <img src="{{ asset('img/wdm.png') }}" alt="WanderMed Logo" class="logo-for-light-bg" style="width: 180px; height: 180px; object-fit: contain;">
+                        <img src="{{ asset('img/wdmlight.png') }}" alt="WanderMed Logo" class="logo-for-dark-bg" style="width: 180px; height: 180px; object-fit: contain;">
                     </div>
                 </div>
-
             </div>
         </div>
 
         {{-- Scroll Indicator --}}
-        <div class="scroll-indicator" id="heroScrollIndicator"
-             onclick="if(typeof $ !== 'undefined'){$('html,body').animate({scrollTop:window.innerHeight*0.85},800);}else{window.scrollBy({top:window.innerHeight*0.85,behavior:'smooth'});}">
-            <span>Scroll</span>
-            <i class="fas fa-chevron-down text-hnb-orange" style="font-size:18px;"></i>
+        <div class="scroll-indicator" id="heroScrollIndicator" style="cursor: pointer;">
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--saas-orange);">Scroll</span>
+            <i data-lucide="chevron-down" class="saas-icon saas-icon-orange" style="margin-top: 4px;"></i>
         </div>
     </section>
 
-    <section id="tentang" class="py-5 section-scroll">
+    {{-- ── 2. TENTANG SECTION (SaaS Bento Grid) ── --}}
+    <section id="tentang" class="py-5 section-scroll" style="background: var(--saas-bg) !important; transition: background 0.3s ease;">
         <div class="container px-4 mt-5 mb-5">
-
-            <div class="text-center mb-5 pb-4" data-aos="fade-up" data-aos-duration="600">
-                <h2 class="teks-judul font-weight-bold mb-3 text-white">Layanan & Tujuan Kami</h2>
-                <div style="width: 60px; height: 3px; background-color: var(--hnb-orange); margin: 0 auto 20px auto; border-radius: 2px;"></div>
-                <p class="teks-subjudul mx-auto text-white-50">Mengenal lebih dekat visi kami dalam mengintegrasikan pariwisata dengan fasilitas kesehatan yang tanggap darurat.</p>
+            {{-- ── Statistics Panel (Moved to top, right below hero) ── --}}
+            <div class="saas-stats-grid mb-5" style="max-width: 1050px; margin: 0 auto 56px auto;" data-aos="fade-up" data-aos-duration="600">
+                <div class="saas-card p-4 text-center">
+                    <h3 class="font-weight-bold mb-1" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">15+</h3>
+                    <span class="text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--saas-text-secondary) !important;">RSUD & Puskesmas</span>
+                </div>
+                <div class="saas-card p-4 text-center">
+                    <h3 class="font-weight-bold mb-1" style="color: var(--saas-orange) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">24/7</h3>
+                    <span class="text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--saas-text-secondary) !important;">Spatio-Temporal Monitor</span>
+                </div>
+                <div class="saas-card p-4 text-center">
+                    <h3 class="font-weight-bold mb-1" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">10K+</h3>
+                    <span class="text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--saas-text-secondary) !important;">Wisatawan Terproteksi</span>
+                </div>
+                <div class="saas-card p-4 text-center">
+                    <h3 class="font-weight-bold mb-1" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">120+</h3>
+                    <span class="text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--saas-text-secondary) !important;">Destinasi Terpetakan</span>
+                </div>
             </div>
 
-            <style>
-                .hnb-bento-card { transition: all 0.3s ease; }
-                .hnb-bento-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2) !important; }
-            </style>
+            <div class="text-center mb-5 pb-4" data-aos="fade-up" data-aos-duration="600">
+                <h2 class="font-weight-bold mb-3" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">Teknologi & Infrastruktur</h2>
+                <div style="width: 48px; height: 3px; background-color: var(--saas-orange); margin: 0 auto 24px auto; border-radius: 2px;"></div>
+                <p class="mx-auto text-muted" style="max-width: 600px; font-size: 1rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Bagaimana WanderMed mengintegrasikan kesiapan faskes dengan spasial destinasi wisata di Kabupaten Subang.</p>
+            </div>
+
             <div class="row g-4 justify-content-center">
-                <!-- Card 1: Utama (Besar) -->
-                <div class="col-lg-5 mb-4 px-3" data-aos="fade-right" data-aos-delay="0" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-5 h-100 shadow-sm position-relative overflow-hidden hnb-bento-card" style="border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid var(--hnb-orange); background: linear-gradient(145deg, rgba(255,122,0,0.08) 0%, transparent 100%);">
-                        <div class="position-absolute" style="top: -20px; right: -20px; font-size: 160px; opacity: 0.04; color: white;">
-                            <i class="fas fa-heartbeat"></i>
+                {{-- Card 1: Visi Utama --}}
+                <div class="col-lg-5 mb-4 px-3" data-aos="fade-right" data-aos-duration="600">
+                    <div class="saas-card p-5 h-100 position-relative overflow-hidden" style="border-left: 4px solid var(--saas-orange) !important;">
+                        <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,122,0,0.06);">
+                            <i data-lucide="activity" class="saas-icon saas-icon-orange"></i>
                         </div>
-                        <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255,122,0,0.15); border: 1px solid rgba(255,122,0,0.2);">
-                            <i class="fas fa-bullseye fa-lg text-hnb-orange"></i>
-                        </div>
-                        <h3 class="text-white font-weight-bold mb-3" style="font-size: 1.7rem;">Tujuan Utama</h3>
-                        <p class="text-white-50 mb-0" style="font-size: 1.05rem; line-height: 1.8;">
-                            Menjadi jembatan digital yang andal untuk menghubungkan wisatawan dengan layanan kesehatan terdekat di momen genting, memberikan rasa aman selama berwisata di Subang.
+                        <h3 class="font-weight-bold mb-3" style="color: var(--saas-text-primary) !important; font-size: 1.5rem;">Akurasi Spasial GIS</h3>
+                        <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.75; color: var(--saas-text-secondary) !important;">
+                            Menghubungkan koordinat geografis wisatawan dengan fasilitas kesehatan terdekat menggunakan metode perhitungan jarak geodesik (Haversine Formula) untuk rujukan tercepat saat terjadi insiden darurat medis di destinasi.
                         </p>
                     </div>
                 </div>
 
-                <!-- Card 2: 3 Cards Kecil di kanan -->
+                {{-- Card 2 & 3 Right Columns --}}
                 <div class="col-lg-7">
                     <div class="row h-100 align-content-stretch">
                         <div class="col-sm-6 mb-4 px-3" data-aos="fade-down" data-aos-delay="100" data-aos-duration="600">
-                            <div class="glass-premier radius-hnb p-4 h-100 shadow-sm hnb-bento-card" style="border: 1px solid rgba(28,200,138,0.15);">
-                                <div class="mb-3 d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(28,200,138,0.1);">
-                                    <i class="fas fa-satellite-dish text-success" style="font-size: 1.2rem;"></i>
+                            <div class="saas-card p-4 h-100">
+                                <div class="mb-3 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: rgba(10, 20, 40, 0.04);">
+                                    <i data-lucide="server" class="saas-icon"></i>
                                 </div>
-                                <h5 class="text-white font-weight-bold mb-2">Sistem Terpadu</h5>
-                                <p class="text-white-50 mb-0" style="font-size: 0.9rem; line-height: 1.6;">Smart Mapping menampilkan lokasi dan ketersediaan layanan faskes secara <strong class="text-white-50">real-time</strong>.</p>
+                                <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important;">Sinkronisasi Mitra</h5>
+                                <p class="text-muted mb-0" style="font-size: 0.88rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Pembaruan status operasional faskes, ketersediaan kasur UGD, dan jadwal dokter dikelola langsung oleh mitra faskes.</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 mb-4 px-3" data-aos="fade-down" data-aos-delay="200" data-aos-duration="600">
-                            <div class="glass-premier radius-hnb p-4 h-100 shadow-sm hnb-bento-card" style="border: 1px solid rgba(231,74,59,0.15);">
-                                <div class="mb-3 d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(231,74,59,0.1);">
-                                    <i class="fas fa-first-aid text-danger" style="font-size: 1.2rem;"></i>
+                            <div class="saas-card p-4 h-100">
+                                <div class="mb-3 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: rgba(10, 20, 40, 0.04);">
+                                    <i data-lucide="heart-pulse" class="saas-icon"></i>
                                 </div>
-                                <h5 class="text-white font-weight-bold mb-2">Solusi Instan</h5>
-                                <p class="text-white-50 mb-0" style="font-size: 0.9rem; line-height: 1.6;">Temukan <strong>UGD 24 Jam</strong> atau faskes BPJS terdekat dalam hitungan detik saat darurat.</p>
+                                <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important;">Kesiapan Tanggap Darurat</h5>
+                                <p class="text-muted mb-0" style="font-size: 0.88rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Identifikasi cepat faskes yang mendukung BPJS Kesehatan atau UGD 24 jam dengan satu klik langsung dari perangkat Anda.</p>
                             </div>
                         </div>
 
                         <div class="col-12 mb-4 px-3" data-aos="fade-up" data-aos-delay="300" data-aos-duration="600">
-                            <div class="glass-premier radius-hnb p-4 h-100 shadow-sm d-flex flex-column flex-sm-row align-items-start align-items-sm-center hnb-bento-card" style="border: 1px solid rgba(54,185,204,0.15); gap: 20px;">
-                                <div class="d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 14px; background: rgba(54,185,204,0.1); border: 1px solid rgba(54,185,204,0.2); flex-shrink: 0;">
-                                    <i class="fas fa-shield-alt fa-lg text-info"></i>
+                            <div class="saas-card p-4 h-100 d-flex flex-column flex-sm-row align-items-start align-items-sm-center" style="gap: 20px;">
+                                <div class="d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(10, 20, 40, 0.04); flex-shrink: 0;">
+                                    <i data-lucide="shield-check" class="saas-icon"></i>
                                 </div>
                                 <div>
-                                    <h5 class="text-white font-weight-bold mb-2">Standar Keamanan Tinggi</h5>
-                                    <p class="text-white-50 mb-0" style="font-size: 0.95rem; line-height: 1.6;">Mendukung terciptanya ekosistem pariwisata yang tidak hanya indah, tapi juga terjamin keselamatan medisnya untuk semua wisatawan.</p>
+                                    <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important;">Verifikasi Akreditasi Faskes</h5>
+                                    <p class="text-muted mb-0" style="font-size: 0.9rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Seluruh fasilitas kesehatan yang terdaftar melewati proses verifikasi ketat dokumen resmi oleh Dinas Kesehatan Kabupaten Subang untuk menjamin validitas layanan.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <section id="panduan" class="py-5 section-scroll">
+    {{-- ── 3. PANDUAN PENGGUNAAN (WanderMed GIS User Flow) ── --}}
+    <section id="panduan" class="py-5 section-scroll" style="background: var(--saas-slate) !important; border-top: 1px solid var(--saas-border) !important; border-bottom: 1px solid var(--saas-border) !important; transition: background 0.3s ease;">
         <div class="container px-4 my-5 d-flex flex-column align-items-center">
             <div class="text-center mb-5 pb-2" data-aos="fade-up" data-aos-duration="600">
-                <h2 class="teks-judul font-weight-bold mb-3 text-white">Panduan Penggunaan</h2>
-                <div style="width: 60px; height: 3px; background-color: var(--hnb-orange); margin: 0 auto 20px auto; border-radius: 2px;"></div>
-                <p class="teks-subjudul mx-auto text-white-50">3 Langkah mudah menemukan fasilitas kesehatan dan destinasi yang tepat.</p>
+                <h2 class="font-weight-bold mb-3" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">Alur Kerja GIS WanderMed</h2>
+                <div style="width: 48px; height: 3px; background-color: var(--saas-orange); margin: 0 auto 24px auto; border-radius: 2px;"></div>
+                <p class="text-muted mx-auto" style="max-width: 600px; font-size: 1rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Ikuti 4 langkah terintegrasi sistem informasi geografis untuk merujuk dan mendapatkan penanganan medis darurat.</p>
             </div>
-            <div class="row w-100 justify-content-center" style="max-width: 1000px; gap: 20px 0;">
 
-                {{-- Card 1 --}}
-                <div class="col-md-4 mb-4 px-3" data-aos="fade-up" data-aos-delay="0" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-4 h-100 text-center shadow-sm" style="border-top: 4px solid var(--hnb-orange);">
-                        <div class="mb-4 mt-2">
-                            <span class="d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,122,0,0.15); color: var(--hnb-orange); font-size: 1.5rem; font-weight: 800;">1</span>
+            <div class="saas-timeline w-100" style="max-width: 1100px;">
+                {{-- Step 1 --}}
+                <div class="saas-timeline-step" data-aos="fade-up" data-aos-delay="0" data-aos-duration="600">
+                    <div class="saas-step-num">1</div>
+                    <div class="mt-3">
+                        <div class="mb-3 d-flex justify-content-center justify-content-lg-center">
+                            <i data-lucide="map-pin" class="saas-icon saas-icon-orange"></i>
                         </div>
-                        <h5 class="text-white font-weight-bold mb-3">Akses Peta Pintar</h5>
-                        <p class="text-white-50 mb-0" style="font-size: 14px; line-height: 1.6;">Klik tombol <strong>Buka Peta Faskes</strong> untuk langsung memuat sistem pemetaan digital interaktif pada layar perangkat Anda.</p>
+                        <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important; font-size: 1.05rem;">Identifikasi Destinasi</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6; color: var(--saas-text-secondary) !important;">Pilih objek wisata Subang yang sedang Anda kunjungi (misal: Sari Ater, Tangkuban Perahu) pada peta interaktif GIS.</p>
                     </div>
                 </div>
 
-                {{-- Card 2 --}}
-                <div class="col-md-4 mb-4 px-3" data-aos="fade-up" data-aos-delay="150" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-4 h-100 text-center shadow-sm" style="border-top: 4px solid var(--hnb-orange);">
-                        <div class="mb-4 mt-2">
-                            <span class="d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,122,0,0.15); color: var(--hnb-orange); font-size: 1.5rem; font-weight: 800;">2</span>
+                {{-- Step 2 --}}
+                <div class="saas-timeline-step" data-aos="fade-up" data-aos-delay="150" data-aos-duration="600">
+                    <div class="saas-step-num">2</div>
+                    <div class="mt-3">
+                        <div class="mb-3 d-flex justify-content-center justify-content-lg-center">
+                            <i data-lucide="filter" class="saas-icon saas-icon-orange"></i>
                         </div>
-                        <h5 class="text-white font-weight-bold mb-3">Gunakan Pencarian</h5>
-                        <p class="text-white-50 mb-0" style="font-size: 14px; line-height: 1.6;">Gunakan fitur *filter* dan kolom pencarian untuk memilah destinasi pariwisata, apotek, klinik, maupun rumah sakit.</p>
+                        <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important; font-size: 1.05rem;">Saring & Cari Faskes</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6; color: var(--saas-text-secondary) !important;">Gunakan filter pintar untuk menemukan Rumah Sakit, Puskesmas, atau Apotek terdekat yang beroperasi 24 Jam atau menerima BPJS.</p>
                     </div>
                 </div>
 
-                {{-- Card 3 --}}
-                <div class="col-md-4 mb-4 px-3" data-aos="fade-up" data-aos-delay="300" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-4 h-100 text-center shadow-sm" style="border-top: 4px solid var(--hnb-orange);">
-                        <div class="mb-4 mt-2">
-                            <span class="d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,122,0,0.15); color: var(--hnb-orange); font-size: 1.5rem; font-weight: 800;">3</span>
+                {{-- Step 3 --}}
+                <div class="saas-timeline-step" data-aos="fade-up" data-aos-delay="300" data-aos-duration="600">
+                    <div class="saas-step-num">3</div>
+                    <div class="mt-3">
+                        <div class="mb-3 d-flex justify-content-center justify-content-lg-center">
+                            <i data-lucide="info" class="saas-icon saas-icon-orange"></i>
                         </div>
-                        <h5 class="text-white font-weight-bold mb-3">Dapatkan Navigasi</h5>
-                        <p class="text-white-50 mb-0" style="font-size: 14px; line-height: 1.6;">Klik titik lokasi di peta untuk melihat kontak informasi layanan, serta panduan arah rute tercepat ke lokasi darurat.</p>
+                        <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important; font-size: 1.05rem;">Verifikasi Detail Layanan</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6; color: var(--saas-text-secondary) !important;">Periksa fasilitas medis, ketersediaan ambulans, dokter jaga aktif, stok obat-obatan, serta info kontak darurat instan faskes.</p>
                     </div>
                 </div>
 
+                {{-- Step 4 --}}
+                <div class="saas-timeline-step" data-aos="fade-up" data-aos-delay="450" data-aos-duration="600">
+                    <div class="saas-step-num">4</div>
+                    <div class="mt-3">
+                        <div class="mb-3 d-flex justify-content-center justify-content-lg-center">
+                            <i data-lucide="navigation" class="saas-icon saas-icon-orange"></i>
+                        </div>
+                        <h5 class="font-weight-bold mb-2" style="color: var(--saas-text-primary) !important; font-size: 1.05rem;">Mulai Navigasi Rute</h5>
+                        <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6; color: var(--saas-text-secondary) !important;">Dapatkan kalkulasi rute spasial darurat tercepat secara real-time langsung dari lokasi wisata Anda menuju gerbang faskes.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-
-    <section id="mitra" class="py-5 section-scroll">
+    {{-- ── 4. KEMITRAAN & STATISTIK SECTION ── --}}
+    <section id="mitra" class="py-5 section-scroll" style="background: var(--saas-bg) !important; transition: background 0.3s ease;">
         <div class="container px-4 my-5">
             <div class="text-center mb-5" data-aos="fade-up" data-aos-duration="600">
-                <h2 class="teks-judul font-weight-bold mb-3 text-white">Peluang Kemitraan</h2>
-                <div style="width: 60px; height: 3px; background-color: var(--hnb-orange); margin: 0 auto 20px auto; border-radius: 2px;"></div>
-                <p class="teks-subjudul mx-auto text-white-50 mb-0">Jadilah bagian dari ekosistem digital untuk pariwisata sehat dan tanggap darurat.</p>
+                <h2 class="font-weight-bold mb-3" style="color: var(--saas-text-primary) !important; font-size: 2.2rem; font-family:'Poppins', sans-serif;">Kemitraan & Ekosistem</h2>
+                <div style="width: 48px; height: 3px; background-color: var(--saas-orange); margin: 0 auto 24px auto; border-radius: 2px;"></div>
+                <p class="text-muted mx-auto" style="max-width: 600px; font-size: 1rem; line-height: 1.6; color: var(--saas-text-secondary) !important;">Berkolaborasi bersama kami membangun standar baru keselamatan medis pariwisata terintegrasi.</p>
             </div>
-            <div class="row align-items-stretch justify-content-center" style="gap: 20px 0; max-width: 1000px; margin: 0 auto;">
-                
+
+            <div class="row align-items-stretch justify-content-center" style="gap: 24px 0; max-width: 1050px; margin: 0 auto;">
+                {{-- Column Left: Partnership Benefits --}}
                 <div class="col-md-6 mb-4 px-3" data-aos="fade-right" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-4 p-md-5 h-100 shadow-sm d-flex flex-column justify-content-center">
-                        <h5 class="text-white font-weight-bold mb-4 border-bottom pb-3" style="border-color: rgba(255,255,255,0.1) !important;">
-                            <i class="fas fa-handshake text-hnb-orange mr-2"></i> Mengapa Bergabung?
-                        </h5>
-                        <ul class="text-white-50 pl-4 mb-0" style="font-size: 14.5px; line-height: 1.9;">
-                            <li class="mb-3"><strong>Visibilitas Tinggi:</strong> Lokasi Faskes atau Pariwisata Anda akan terdaftar eksklusif di peta digital WanderMed.</li>
-                            <li class="mb-3"><strong>Manajemen Cepat:</strong> Perbarui status layanan, fasilitas, dan jadwal praktik secara *real-time* lewat dashboard admin.</li>
-                            <li><strong>Bantuan Darurat:</strong> Membantu wisatawan mendapatkan tindakan medis yang cepat di saat-saat genting.</li>
-                        </ul>
+                    <div class="saas-card p-5 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h4 class="font-weight-bold mb-4 pb-3" style="color: var(--saas-text-primary) !important; border-bottom: 1px solid var(--saas-border) !important;">
+                                <i data-lucide="handshake" class="saas-icon saas-icon-orange mr-2" style="vertical-align: middle;"></i> Manfaat Bergabung
+                            </h4>
+                            <ul class="list-unstyled text-muted pl-0" style="font-size: 14px; line-height: 2; color: var(--saas-text-secondary) !important;">
+                                <li class="mb-3 d-flex align-items-start gap-2">
+                                    <i data-lucide="check-circle-2" class="saas-icon saas-icon-orange" style="width: 16px; height: 16px; margin-top: 4px; flex-shrink: 0;"></i>
+                                    <span><strong>Dashboard Spasial:</strong> Kelola data operasional, fasilitas, dan jadwal praktik faskes Anda kapan saja secara real-time.</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start gap-2">
+                                    <i data-lucide="check-circle-2" class="saas-icon saas-icon-orange" style="width: 16px; height: 16px; margin-top: 4px; flex-shrink: 0;"></i>
+                                    <span><strong>Sertifikasi Wisata Sehat:</strong> Tingkatkan branding keselamatan medis objek wisata Anda untuk menarik minat pelancong nasional & asing.</span>
+                                </li>
+                                <li class="d-flex align-items-start gap-2">
+                                    <i data-lucide="check-circle-2" class="saas-icon saas-icon-orange" style="width: 16px; height: 16px; margin-top: 4px; flex-shrink: 0;"></i>
+                                    <span><strong>Integrasi Sistem Rujukan:</strong> Membantu dinas terkait mendeteksi sebaran titik rawan kecelakaan atau kebutuhan faskes darurat di Subang.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
+                {{-- Column Right: CTA Cards --}}
                 <div class="col-md-6 mb-4 px-3" data-aos="fade-left" data-aos-duration="600">
-                    <div class="glass-premier radius-hnb p-4 p-md-5 h-100 text-center shadow-sm d-flex flex-column justify-content-center align-items-center" style="border-color: var(--hnb-orange) !important; background: rgba(255, 122, 0, 0.05) !important;">
-                        <i class="fas fa-user-plus fa-3x text-hnb-orange mb-3 opacity-75"></i>
-                        <h4 class="text-white font-weight-bold mb-3">Siap Berkolaborasi?</h4>
-                        <p class="text-white-50 mb-4" style="font-size: 14px;">Tingkatkan mutu keselamatan pelayanan pariwisata bersama kami hari ini juga.</p>
+                    <div class="saas-card p-5 h-100 text-center d-flex flex-column justify-content-center align-items-center" style="border: 1.5px solid var(--saas-orange) !important; background: rgba(255, 122, 0, 0.02) !important;">
+                        <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 122, 0, 0.08);">
+                            <i data-lucide="plus-circle" class="saas-icon saas-icon-orange" style="width: 32px; height: 32px;"></i>
+                        </div>
+                        <h4 class="font-weight-bold mb-3" style="color: var(--saas-text-primary) !important; font-size: 1.6rem;">Siap Berkolaborasi?</h4>
+                        <p class="text-muted mb-4" style="font-size: 14px; max-width: 320px; color: var(--saas-text-secondary) !important;">Daftarkan instansi faskes atau pengelola destinasi wisata Anda pada sistem GIS WanderMed sekarang.</p>
                         
-                        <div class="w-100" style="display:grid; gap: 12px;">
-                            <a href="/daftar" class="btn btn-hnb-orange radius-hnb px-4 py-3 font-weight-bold shadow-sm w-100">
-                                <i class="fas fa-clipboard-list mr-2"></i> Mulai Pendaftaran
+                        <div class="w-100 d-flex flex-column gap-2" style="gap: 12px;">
+                            <a href="/daftar" class="btn btn-saas-primary w-100 justify-content-center">
+                                <i data-lucide="user-check"></i> Mulai Pendaftaran Mitra
                             </a>
                             @if(session('auth_user'))
-                                <a href="{{ url('/login') }}" class="btn btn-light text-hnb-navy radius-hnb px-4 py-3 font-weight-bold w-100">
-                                    <i class="fas fa-sign-in-alt mr-2 text-hnb-orange"></i> Lanjut ke Dashboard
+                                <a href="{{ url('/login') }}" class="btn btn-saas-secondary w-100 justify-content-center">
+                                    Lanjut ke Dashboard
                                 </a>
                             @else
-                                <a href="/login" class="btn btn-light text-hnb-navy radius-hnb px-4 py-3 font-weight-bold w-100">
-                                    <i class="fas fa-sign-in-alt mr-2 text-hnb-orange"></i> Login Mitra
+                                <a href="/login" class="btn btn-saas-secondary w-100 justify-content-center">
+                                    Login Dashboard Mitra
                                 </a>
                             @endif
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <section class="py-5 mb-4">
+    {{-- ── 5. DEDIKASI SECTION ── --}}
+    <section class="py-5 mb-4" style="background: var(--saas-slate) !important; border-top: 1px solid var(--saas-border) !important; transition: background 0.3s ease;">
         <div class="container px-4">
             <div class="row justify-content-center">
                 <div class="col-lg-10 px-3" data-aos="zoom-in" data-aos-duration="800">
-                    <div class="glass-premier position-relative radius-hnb p-5 overflow-hidden shadow-lg border-0 text-center"
-                         style="background: linear-gradient(135deg, rgba(20, 25, 40, 0.8) 0%, rgba(10, 14, 25, 0.9) 100%); border-top: 1px solid rgba(255,255,255,0.08) !important;">
-                        
-                        <!-- Decorative Elements -->
-                        <div class="position-absolute" style="top: -60px; left: -60px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,122,0,0.12) 0%, transparent 70%); border-radius: 50%;"></div>
-                        <div class="position-absolute" style="bottom: -80px; right: -50px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(78,115,223,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-
+                    <div class="saas-card position-relative p-5 overflow-hidden text-center">
                         <div class="position-relative" style="z-index: 2;">
-                            <div class="mb-4">
-                                <i class="fas fa-quote-left text-hnb-orange opacity-50 fa-2x"></i>
+                            <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(10,20,40,0.04);">
+                                <i data-lucide="quote" class="saas-icon saas-icon-orange"></i>
                             </div>
                             
-                            <h4 class="text-white font-weight-bold mb-4" style="letter-spacing: 1px;">Sebuah Dedikasi</h4>
+                            <h4 class="font-weight-bold mb-4" style="color: var(--saas-text-primary) !important; letter-spacing: 0.5px; font-family:'Poppins', sans-serif;">Dedikasi Untuk Pariwisata Subang</h4>
                             
-                            <p class="text-white-50 mx-auto mb-5" style="max-width: 750px; font-size: 1.15rem; line-height: 1.8; font-style: italic;">
-                                "Terima kasih telah mempercayakan perjalanan Anda kepada <strong>WanderMed</strong>. Kami membangun platform ini dengan visi sederhana: merangkai ekosistem pariwisata yang lebih peduli, responsif, dan terintegrasi demi keamanan setiap langkah Anda."
+                            <p class="text-muted mx-auto mb-5" style="max-width: 720px; font-size: 1.05rem; line-height: 1.8; font-style: italic; color: var(--saas-text-secondary) !important;">
+                                "Keamanan perjalanan Anda adalah fondasi utama dari sistem kami. WanderMed hadir menyajikan ekosistem tanggap darurat yang efisien, transparan, dan terintegrasi secara spasial demi melindungi setiap petualangan Anda di Kabupaten Subang."
                             </p>
 
                             <div class="d-flex align-items-center justify-content-center flex-wrap" style="gap: 15px;">
-                                <div class="d-flex align-items-center px-4 py-2 hover-translate" style="background: rgba(255,255,255,0.03); border-radius: 50px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s;">
-                                    <img src="{{ asset('img/wdm.png') }}" class="logo-for-light-bg mr-3" style="width: 24px; height: 24px; object-fit: contain;">
-                                    <img src="{{ asset('img/wdmlight.png') }}" class="logo-for-dark-bg mr-3" style="width: 24px; height: 24px; object-fit: contain;">
-                                    <span class="text-white font-weight-bold" style="font-size: 0.9rem; letter-spacing: 0.5px;">HEAR & BUILD STUDIO</span>
+                                <div class="d-flex align-items-center px-4 py-2" style="background: var(--saas-slate) !important; border-radius: 50px; border: 1px solid var(--saas-border) !important;">
+                                    <i data-lucide="activity" class="saas-icon saas-icon-orange mr-2" style="width: 18px; height: 18px;"></i>
+                                    <span style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; color: var(--saas-text-primary) !important;">WANDERMED DEV LABS</span>
                                 </div>
                             </div>
                         </div>
@@ -285,11 +475,16 @@
     </section>
 
     @include('theme.footer')
-
 @endsection
 
 @push('scripts')
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="{{ asset('js/wisatawan-home.js') }}"></script>
-
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize Lucide Line Art Icons
+        lucide.createIcons();
+    });
+</script>
 @endpush

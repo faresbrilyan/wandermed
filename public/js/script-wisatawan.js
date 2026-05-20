@@ -6,13 +6,14 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     // --- 1. INISIALISASI ---
-    var body    = document.body;
-    var html    = document.documentElement;
-    var navbar  = document.getElementById("mainNavbar");
-    var navLinks = document.querySelectorAll(".scroll-link");
-    var sections = document.querySelectorAll(".section-scroll, #page-top");
+    var body     = document.body;
+    var html     = document.documentElement;
+    var navbar   = document.getElementById("mainNavbar");
+    var scrollLinks = document.querySelectorAll(".scroll-link");
+    var allNavLinks  = document.querySelectorAll(".wm-nav-link, .nav-pill-link");
+    var sections  = document.querySelectorAll(".section-scroll, #page-top");
 
-    var getNavbarHeight = function () { return navbar ? navbar.offsetHeight : 70; };
+    var getNavbarHeight = function () { return navbar ? navbar.offsetHeight : 68; };
 
     // =========================================================
     // 2. DARK / LIGHT MODE TOGGLE
@@ -22,9 +23,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var updateThemeUI = function () {
         if (body.classList.contains("light-mode")) {
-            if (themeIcon) { themeIcon.classList.remove("fa-sun"); themeIcon.classList.add("fa-moon"); themeIcon.classList.add("text-hnb-navy"); }
+            if (themeIcon) {
+                themeIcon.classList.remove("fa-sun");
+                themeIcon.classList.add("fa-moon");
+            }
         } else {
-            if (themeIcon) { themeIcon.classList.remove("fa-moon"); themeIcon.classList.add("fa-sun"); themeIcon.classList.remove("text-hnb-navy"); }
+            if (themeIcon) {
+                themeIcon.classList.remove("fa-moon");
+                themeIcon.classList.add("fa-sun");
+            }
         }
     };
     updateThemeUI();
@@ -42,25 +49,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================================================
     // 3. SMOOTH SCROLL saat klik nav link
     // =========================================================
-    navLinks.forEach(function (link) {
+    scrollLinks.forEach(function (link) {
         link.addEventListener("click", function (e) {
             var href = this.getAttribute("href");
             if (href && href.includes("#")) {
                 var targetId      = href.substring(href.indexOf("#"));
                 var targetElement = document.querySelector(targetId);
-                
-                // Pastikan kita berada di halaman beranda. Jika di halaman lain, biarkan link berjalan normal (ke /#target).
-                if (targetElement && window.location.pathname === '/' || window.location.pathname === '') {
+
+                if (targetElement && (window.location.pathname === '/' || window.location.pathname === '')) {
                     e.preventDefault();
                     var targetPosition = targetElement.offsetTop - getNavbarHeight() - 10;
-                    
-                    // Gunakan jQuery animate untuk scroll yang lebih lambat dan sinematik
+
                     if (typeof $ !== 'undefined') {
-                        $('html, body').animate({
-                            scrollTop: targetPosition
-                        }, 800); // 800ms duration
+                        $('html, body').animate({ scrollTop: targetPosition }, 800);
                     } else {
-                        // Fallback
                         window.scrollTo({ top: targetPosition, behavior: "smooth" });
                     }
 
@@ -76,21 +78,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // =========================================================
     // 4. SCROLL SPY + SCROLL INDICATOR HIDE
-    //    Navbar SELALU fix di atas — tidak ada show/hide logic
     // =========================================================
     var ticking = false;
 
     function onScroll() {
         var scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
-        // --- Scroll Spy: highlight nav link aktif ---
+        // --- Scroll Spy: highlight .wm-nav-link aktif ---
         var currentSectionId = "";
         sections.forEach(function (section) {
             if (scrollY >= section.offsetTop - getNavbarHeight() - 80) {
                 currentSectionId = section.getAttribute("id") || "";
             }
         });
-        navLinks.forEach(function (link) {
+
+        allNavLinks.forEach(function (link) {
             link.classList.remove("active");
             var href = link.getAttribute("href") || "";
             if (currentSectionId && href.includes("#" + currentSectionId)) {

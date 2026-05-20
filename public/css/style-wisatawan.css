@@ -31,49 +31,466 @@ body {
     animation: wmPageFadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* 2. NAVBAR & ACTION BOX */
-.navbar-desktop-premier {
-    background: rgba(17, 34, 64, 0.92);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0 !important;
-    /* Selalu fix di atas, tanpa animasi scroll */
-    transition: background 0.3s ease;
+/* ─────────────────────────────────────────────────────────────── */
+/* 2. NAVBAR — Premium WanderMed Redesign                          */
+/* ─────────────────────────────────────────────────────────────── */
+
+/* ── Core Navbar Shell ── */
+.wm-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    height: 68px;
+    background: rgba(10, 20, 42, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 24px rgba(0,0,0,0.35);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-.nav-pill-link {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7) !important;
-    padding: 8px 15px;
-    transition: var(--transition);
-}
-
-.nav-pill-link:hover,
-.nav-pill-link.active {
-    color: var(--hnb-orange) !important;
-}
-
-/* Kotak Gabungan Login & Lapor */
-.nav-action-box {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 2px 5px;
+/* ── Inner Flex Layout ── */
+.wm-navbar-inner {
     display: flex;
     align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 28px;
+    gap: 0;
 }
 
-.v-separator {
+@media (min-width: 992px) {
+    .navbar-collapse {
+        flex-grow: 1;
+    }
+}
+
+/* ─────────────────── BRAND ─────────────────── */
+.wm-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none !important;
+    flex-shrink: 0;
+    margin-right: 36px;
+}
+
+.wm-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ff7a00, #ff4d00);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(255, 122, 0, 0.45);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wm-brand:hover .wm-brand-icon {
+    transform: rotate(-8deg) scale(1.08);
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.6);
+}
+
+.wm-brand-icon i {
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.wm-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.wm-brand-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.2px;
+}
+
+.wm-brand-sub {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255, 122, 0, 0.85);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* Light Mode Brand */
+body.light-mode .wm-brand-name { color: var(--hnb-navy); }
+body.light-mode .wm-brand-sub  { color: var(--hnb-orange); }
+
+/* ─────────────────── NAVIGATION LINKS ─────────────────── */
+.wm-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+}
+
+.wm-nav-link {
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.68) !important;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    letter-spacing: 0.1px;
+    transition: color 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+}
+
+.wm-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 16px;
+    height: 2px;
+    background: var(--hnb-orange);
+    border-radius: 2px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wm-nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.wm-nav-link:hover::after,
+.wm-nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.wm-nav-link.active {
+    color: #ffffff !important;
+    background: rgba(255, 122, 0, 0.1);
+}
+
+/* Light Mode Nav Links */
+body.light-mode .wm-nav-link {
+    color: #475569 !important;
+}
+body.light-mode .wm-nav-link:hover {
+    color: var(--hnb-navy) !important;
+    background: rgba(17, 34, 64, 0.06);
+}
+body.light-mode .wm-nav-link.active {
+    color: var(--hnb-orange) !important;
+    background: rgba(255, 122, 0, 0.08);
+}
+
+/* ─────────────────── VERTICAL DIVIDER ─────────────────── */
+.wm-divider {
     width: 1px;
-    height: 18px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 0 10px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 20px;
+    flex-shrink: 0;
+}
+body.light-mode .wm-divider { background: rgba(17, 34, 64, 0.12); }
+
+/* ─────────────────── ACTION BUTTONS ─────────────────── */
+.wm-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
+/* ── Base Button ── */
+.wm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1.5px solid transparent;
+    text-decoration: none !important;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.1px;
+    line-height: 1;
+}
 
-/* --- 3. HERO SECTION (SLANTED) --- */
+.wm-btn i { font-size: 13px; }
+
+/* ── Kontak CS (WhatsApp) ── */
+.wm-btn-cs {
+    background: rgba(37, 211, 102, 0.1);
+    border-color: rgba(37, 211, 102, 0.25);
+    color: #2ecc71 !important;
+}
+.wm-btn-cs:hover {
+    background: #25d366;
+    border-color: #25d366;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+    transform: translateY(-1px);
+}
+
+body.light-mode .wm-btn-cs {
+    background: rgba(37, 211, 102, 0.07);
+    border-color: rgba(37, 211, 102, 0.3);
+    color: #16a34a !important;
+}
+body.light-mode .wm-btn-cs:hover {
+    background: #25d366;
+    color: #ffffff !important;
+}
+
+/* ── Lapor ── */
+.wm-btn-lapor {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.22);
+    color: #f87171 !important;
+}
+.wm-btn-lapor:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+    transform: translateY(-1px);
+}
+
+body.light-mode .wm-btn-lapor {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #dc2626 !important;
+}
+body.light-mode .wm-btn-lapor:hover {
+    background: #ef4444;
+    color: #ffffff !important;
+}
+
+/* ── Login / Masuk (Primary CTA) ── */
+.wm-btn-login {
+    background: linear-gradient(135deg, #ff7a00, #ff4500);
+    border-color: transparent;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(255, 122, 0, 0.35);
+}
+.wm-btn-login:hover {
+    background: linear-gradient(135deg, #ff8f1c, #ff6000);
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+body.light-mode .wm-btn-login {
+    box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
+}
+
+/* ── Theme Toggle ── */
+.wm-theme-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.22s ease;
+    font-size: 14px;
+}
+.wm-theme-btn:hover {
+    background: rgba(255, 122, 0, 0.15);
+    border-color: rgba(255, 122, 0, 0.4);
+    color: #ff7a00;
+    transform: scale(1.05);
+}
+
+body.light-mode .wm-theme-btn {
+    background: rgba(17, 34, 64, 0.05);
+    border-color: rgba(17, 34, 64, 0.12);
+    color: #475569;
+}
+body.light-mode .wm-theme-btn:hover {
+    background: rgba(255, 122, 0, 0.08);
+    border-color: rgba(255, 122, 0, 0.3);
+    color: var(--hnb-orange);
+}
+
+/* ─────────────────── HAMBURGER ─────────────────── */
+.wm-toggler {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid rgba(255, 122, 0, 0.4);
+    border-radius: 10px;
+    background: rgba(255, 122, 0, 0.06);
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+    padding: 0;
+}
+.wm-toggler:focus { outline: none; box-shadow: none; }
+
+.wm-toggler-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #ff7a00;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+.wm-toggler--open .wm-toggler-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.wm-toggler--open .wm-toggler-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.wm-toggler--open .wm-toggler-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+body.light-mode .wm-toggler {
+    border-color: rgba(255, 122, 0, 0.45);
+    background: rgba(255, 122, 0, 0.05);
+}
+
+/* ─────────────────── LIGHT MODE NAVBAR ─────────────────── */
+body.light-mode .wm-navbar {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 20px rgba(17, 34, 64, 0.08);
+}
+
+/* ─────────────────── MOBILE MENU (< 992px) ─────────────────── */
+@media (max-width: 991px) {
+
+    .wm-navbar {
+        height: 60px;
+    }
+
+    .wm-navbar-inner {
+        padding: 0 16px;
+        flex-wrap: wrap;
+    }
+
+    .wm-brand {
+        margin-right: auto;
+    }
+
+    .wm-brand-icon { width: 34px; height: 34px; border-radius: 9px; }
+    .wm-brand-name { font-size: 16px; }
+    .wm-brand-sub  { display: none; }
+
+    .wm-toggler { display: flex; }
+
+    .navbar-collapse {
+        width: 100%;
+        background: #0a1428;
+        border-top: 2px solid rgba(255, 122, 0, 0.6);
+        padding: 16px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    body.light-mode .navbar-collapse {
+        background: #ffffff;
+        border-top-color: rgba(255, 122, 0, 0.5);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes wm-slide-down {
+        from { opacity: 0; transform: translateY(-10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .navbar-collapse.show {
+        animation: wm-slide-down 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .wm-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        margin-bottom: 12px;
+    }
+
+    body.light-mode .wm-nav-links {
+        border-bottom-color: rgba(0, 0, 0, 0.07);
+    }
+
+    .wm-nav-link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 11px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .wm-nav-link::after { display: none; }
+
+    .wm-divider { display: none !important; }
+
+    .wm-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .wm-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+        font-size: 14px;
+        border-radius: 10px;
+        min-height: 46px;
+    }
+
+    .wm-theme-btn {
+        width: 100%;
+        height: 46px;
+        border-radius: 10px;
+        justify-content: center;
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    .wm-theme-btn::after {
+        content: 'Ubah Tema';
+        font-size: 14px;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        color: inherit;
+    }
+}
+
+/* ─────────────────── LEGACY COMPAT (keep existing selectors working) ─────────────────── */
+.nav-pill-link { color: rgba(255,255,255,0.8) !important; padding: 8px 14px !important; border-radius: 8px; transition: var(--transition); font-size: 14px; font-weight: 500; }
+.nav-pill-link:hover, .nav-pill-link.active { color: #fff !important; background: rgba(255,122,0,0.12); }
+body.light-mode .nav-pill-link { color: #475569 !important; }
+
+.v-separator { width: 1px; height: 18px; background: rgba(255,255,255,0.15); margin: 0 8px; }
+
+
+
 .hero-slanted {
     position: relative;
     width: 100%;
@@ -85,8 +502,8 @@ body {
         var(--hnb-navy) 0%,
         var(--hnb-navy-light) 100%
     );
-    /* Padding top untuk clearance navbar yang selalu fix */
-    padding-top: 80px !important;
+    /* Padding top untuk clearance navbar fix 68px */
+    padding-top: 88px !important;
     padding-bottom: 150px;
     clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
 }
@@ -259,6 +676,25 @@ body.light-mode .nav-pill-link {
 body.light-mode .nav-pill-link:hover,
 body.light-mode .nav-pill-link.active {
     color: var(--hnb-orange) !important;
+    background: rgba(255, 122, 0, 0.1) !important;
+}
+
+@media (max-width: 991px) {
+    body.light-mode .navbar-collapse {
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    body.light-mode .nav-pill-link {
+        background: #f8f9fa;
+    }
+    /* Removed unused nav-action-box style */
+    body.light-mode .theme-toggle-btn {
+        background: #f8f9fa !important;
+    }
+    body.light-mode .theme-toggle-btn span {
+        color: var(--hnb-navy) !important;
+    }
 }
 
 /* Hero Light Mode Tetap Berkarakter */
@@ -284,16 +720,51 @@ body.light-mode .form-control-dark {
     color: var(--hnb-navy) !important;
 }
 
-body.light-mode .nav-action-box {
-    background: #f1f5f9;
-    border-color: #e2e8f0;
+/* Light mode overrides for navigation buttons */
+body.light-mode .nav-btn-whatsapp {
+    background: rgba(37, 211, 102, 0.08) !important;
+    border-color: rgba(37, 211, 102, 0.4) !important;
+    color: #128c7e !important;
 }
 
-body.light-mode .v-separator {
-    background: #cbd5e1;
+body.light-mode .nav-btn-whatsapp:hover {
+    background: #25d366 !important;
+    color: #ffffff !important;
 }
-body.light-mode .v-separator {
-    background: #cbd5e1;
+
+body.light-mode .nav-btn-danger {
+    background: rgba(239, 68, 68, 0.07) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #dc2626 !important;
+}
+
+body.light-mode .nav-btn-danger:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+body.light-mode .nav-btn-primary {
+    background: linear-gradient(135deg, var(--hnb-orange) 0%, #ff5100 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
+}
+
+body.light-mode .nav-btn-primary:hover {
+    background: linear-gradient(135deg, #ff9100 0%, var(--hnb-orange) 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(255, 122, 0, 0.35);
+}
+
+body.light-mode .nav-btn-theme {
+    background: rgba(17, 34, 64, 0.05) !important;
+    border-color: rgba(17, 34, 64, 0.1) !important;
+    color: var(--hnb-navy) !important;
+}
+
+body.light-mode .nav-btn-theme:hover {
+    background: rgba(17, 34, 64, 0.1) !important;
+    border-color: rgba(17, 34, 64, 0.2) !important;
+    color: var(--hnb-navy) !important;
 }
 
 .page-registration {
@@ -656,18 +1127,18 @@ body.light-mode .logo-for-dark-bg {
 /* --- A. Full Screen Map Layout --- */
 .map-page-wrapper {
     position: fixed;
-    top: 100px; /* Sesuai padding-top body di master */
+    top: 68px; /* Tinggi wm-navbar desktop */
     left: 0;
     width: 100vw;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 68px);
     z-index: 1;
     background-color: var(--hnb-navy);
 }
 
 @media (max-width: 991px) {
     .map-page-wrapper {
-        top: 85px;
-        height: calc(100vh - 85px);
+        top: 60px; /* Tinggi wm-navbar mobile */
+        height: calc(100vh - 60px);
     }
 }
 

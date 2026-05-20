@@ -1,115 +1,106 @@
 
-<nav class="navbar navbar-expand-lg navbar-desktop-premier fixed-top w-100" id="mainNavbar">
-    <div class="container px-4">
+<nav class="wm-navbar navbar navbar-expand-lg" id="mainNavbar">
+    <div class="wm-navbar-inner">
 
-        <a class="navbar-brand d-flex align-items-center text-white font-weight-bold scroll-link" href="#page-top" style="letter-spacing: 1px; font-size: 24px;">
-            <i class="fas fa-heartbeat text-hnb-orange mr-2" style="font-size: 28px;"></i>
-            <span>WanderMed</span>
+
+        {{-- ── BRAND (Far Left) ── --}}
+        <a class="wm-brand scroll-link" href="/#page-top">
+            <div class="wm-brand-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <div class="wm-brand-text">
+                <span class="wm-brand-name">WanderMed</span>
+                <span class="wm-brand-sub">Subang Health Map</span>
+            </div>
         </a>
 
-        <button class="navbar-toggler border-0" type="button" id="navbarTogglerBtn"
+        {{-- ── HAMBURGER (Mobile Only) ── --}}
+        <button class="wm-toggler" type="button" id="navbarTogglerBtn"
                 data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars" id="navbarTogglerIcon"></i>
+            <span class="wm-toggler-bar"></span>
+            <span class="wm-toggler-bar"></span>
+            <span class="wm-toggler-bar"></span>
         </button>
 
+        {{-- ── COLLAPSIBLE CONTENT ── --}}
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            {{-- ── Label section (mobile only) ── --}}
-            <div class="nm-section-label">Navigasi</div>
+            {{-- Navigation Links (Center-Left) --}}
+            <nav class="wm-nav-links">
+                <a class="wm-nav-link scroll-link" href="/#page-top">Beranda</a>
+                <a class="wm-nav-link scroll-link" href="/#tentang">Tentang</a>
+                <a class="wm-nav-link scroll-link" href="/#panduan">Panduan</a>
+                <a class="wm-nav-link scroll-link" href="/#mitra">Mitra</a>
+                <a class="wm-nav-link" href="/faq">FAQ</a>
+            </nav>
 
-            <ul class="navbar-nav mr-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link scroll-link" href="/#page-top">
-                        <span class="nm-icon"><i class="fas fa-home"></i></span>
-                        Beranda
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link scroll-link" href="/#tentang">
-                        <span class="nm-icon"><i class="fas fa-info-circle"></i></span>
-                        Tentang
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link scroll-link" href="/#panduan">
-                        <span class="nm-icon"><i class="fas fa-book-open"></i></span>
-                        Panduan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link scroll-link" href="/#mitra">
-                        <span class="nm-icon"><i class="fas fa-handshake"></i></span>
-                        Mitra
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link" href="/faq">
-                        <span class="nm-icon"><i class="fas fa-question-circle"></i></span>
-                        FAQ
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-pill-link" href="https://wa.me/6287775733922" target="_blank">
-                        <span class="nm-icon"><i class="fab fa-whatsapp"></i></span>
-                        Kontak CS
-                    </a>
-                </li>
-            </ul>
+            {{-- Vertical Divider --}}
+            <div class="wm-divider d-none d-lg-block"></div>
 
-            {{-- ── Label section aksi (mobile only) ── --}}
-            <div class="nm-section-label nm-section-label-action">Akun</div>
+            {{-- Action Buttons (Far Right) --}}
+            <div class="wm-actions">
 
-            <ul class="navbar-nav ml-auto align-items-center">
-                <li class="nav-item">
-                    <div class="nav-action-box shadow-sm">
-                        @if(session('auth_user'))
-                            <a href="{{ url('/login') }}" class="btn btn-sm text-white font-weight-bold px-3 py-2 border-0" style="font-size: 13px;">
-                                Enter <i class="fas fa-door-open ml-1 text-hnb-orange"></i>
-                            </a>
-                        @else
-                            <a href="/login" class="btn btn-sm text-white font-weight-bold px-3 py-2 border-0" style="font-size: 13px;">
-                                Login <i class="fas fa-sign-in-alt ml-1 text-hnb-orange"></i>
-                            </a>
-                        @endif
-                        <div class="v-separator"></div>
-                        <a href="#" class="btn btn-sm text-danger font-weight-bold px-3 py-2 border-0" data-toggle="modal" data-target="#reportModal" style="font-size: 13px;">
-                            <i class="fas fa-flag mr-1"></i> Lapor
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item ml-3">
-                    <a href="#" id="themeToggle" class="btn btn-sm text-white d-flex align-items-center justify-content-center shadow-sm" style="background: rgba(128,128,128,0.2); border-radius: 50%; width: 40px; height: 40px;">
-                        <i class="fas fa-sun" id="themeIcon" style="font-size: 18px;"></i>
+                {{-- Kontak CS --}}
+                <a href="https://wa.me/6287775733922" target="_blank" class="wm-btn wm-btn-cs" title="Chat via WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>Kontak CS</span>
+                </a>
+
+                {{-- Lapor Masalah --}}
+                <a href="#" class="wm-btn wm-btn-lapor" data-toggle="modal" data-target="#reportModal" title="Laporkan Masalah">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Lapor</span>
+                </a>
+
+                {{-- Login / Dashboard --}}
+                @if(session('auth_user'))
+                    <a href="{{ url('/login') }}" class="wm-btn wm-btn-login">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
                     </a>
-                </li>
-            </ul>
+                @else
+                    <a href="/login" class="wm-btn wm-btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Masuk</span>
+                    </a>
+                @endif
+
+                {{-- Theme Toggle --}}
+                <button type="button" id="themeToggle" class="wm-theme-btn theme-toggle-btn" title="Ubah Tema" aria-label="Toggle Theme">
+                    <i class="fas fa-sun" id="themeIcon"></i>
+                </button>
+
+            </div>
 
         </div>
     </div>
 </nav>
 
-
 <script>
-// Ganti ikon hamburger saat collapse dibuka/tutup
 (function() {
     var toggler = document.getElementById('navbarTogglerBtn');
-    var icon    = document.getElementById('navbarTogglerIcon');
     var navEl   = document.getElementById('navbarNav');
+    var navLinks = document.querySelectorAll('.wm-nav-link');
+
     if (!toggler || !navEl) return;
 
     toggler.addEventListener('click', function() {
-        // Cek state SESUDAH Bootstrap toggle (pakai setTimeout kecil)
-        setTimeout(function() {
-            if (icon) {
-                icon.className = navEl.classList.contains('show')
-                    ? 'fas fa-times'
-                    : 'fas fa-bars';
+        var isExpanded = navEl.classList.contains('show');
+        toggler.classList.toggle('wm-toggler--open', !isExpanded);
+    });
+
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 992 && navEl.classList.contains('show')) {
+                toggler.click();
             }
-        }, 10);
+        });
     });
 })();
 </script>
+
+{{-- ── MODALS ── --}}
 
 <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 400px;">
@@ -183,9 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             fetch(this.action, {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json'
-                },
+                headers: { 'Accept': 'application/json' },
                 body: formData
             })
             .then(res => res.json())
@@ -193,40 +182,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     $('#reportModal').modal('hide');
                     if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Terkirim!',
-                            text: data.message,
-                            confirmButtonColor: '#38a169'
-                        });
-                    } else {
-                        alert(data.message);
-                    }
+                        Swal.fire({ icon: 'success', title: 'Terkirim!', text: data.message, confirmButtonColor: '#38a169' });
+                    } else { alert(data.message); }
                     formLapor.reset();
                 } else {
                     if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: data.message || 'Gagal mengirim laporan.',
-                            confirmButtonColor: '#e53e3e'
-                        });
-                    } else {
-                        alert(data.message || 'Gagal mengirim laporan.');
-                    }
+                        Swal.fire({ icon: 'error', title: 'Oops...', text: data.message || 'Gagal mengirim laporan.', confirmButtonColor: '#e53e3e' });
+                    } else { alert(data.message || 'Gagal mengirim laporan.'); }
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Kesalahan Sistem',
-                        text: 'Gagal terhubung ke server. Silakan periksa koneksi internet Anda.',
-                        confirmButtonColor: '#e53e3e'
-                    });
-                } else {
-                    alert('Gagal terhubung ke server.');
-                }
+                    Swal.fire({ icon: 'error', title: 'Kesalahan Sistem', text: 'Gagal terhubung ke server. Silakan periksa koneksi internet Anda.', confirmButtonColor: '#e53e3e' });
+                } else { alert('Gagal terhubung ke server.'); }
             })
             .finally(() => {
                 btn.innerHTML = originalText;
