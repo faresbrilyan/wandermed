@@ -123,6 +123,7 @@ class AdminController extends Controller
                 'no_telp', 'latitude', 'longitude',
                 'status_operasional', 'dukungan_bpjs',
                 'layanan_tersedia', 'pengumuman',
+                'jam_buka', 'jam_tutup', 'is_24_jam',
             ])
             ->get()
             ->map(fn($f) => [
@@ -137,6 +138,9 @@ class AdminController extends Controller
                 'bpjs'       => (bool) $f->dukungan_bpjs,
                 'facilities' => $f->layanan_tersedia ?? [],
                 'notes'      => $f->pengumuman,
+                'jam_buka'   => $f->jam_buka,
+                'jam_tutup'  => $f->jam_tutup,
+                'is_24_jam'  => (bool) $f->is_24_jam,
             ]);
 
         return response()->json($faskesData);
@@ -190,6 +194,15 @@ class AdminController extends Controller
         }
         if ($request->has('pengumuman')) {
             $updateData['pengumuman'] = $request->pengumuman;
+        }
+        if ($request->has('jam_buka')) {
+            $updateData['jam_buka'] = $request->jam_buka;
+        }
+        if ($request->has('jam_tutup')) {
+            $updateData['jam_tutup'] = $request->jam_tutup;
+        }
+        if ($request->has('is_24_jam')) {
+            $updateData['is_24_jam'] = filter_var($request->is_24_jam, FILTER_VALIDATE_BOOLEAN);
         }
         // Update layanan tersedia (fasilitas di peta)
         if ($request->has('layanan_tersedia')) {

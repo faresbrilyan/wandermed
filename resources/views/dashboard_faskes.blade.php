@@ -298,7 +298,43 @@
                     </label>
                 </div>
             </div>
+            <!-- Toggle: Buka 24 Jam -->
+            <div class="wm-toggle-row" style="margin-top:16px;">
+                <div class="wm-toggle-info">
+                    <h6>Buka 24 Jam</h6>
+                    <p>Apakah faskes ini beroperasi 24 jam nonstop?</p>
+                </div>
+                <div class="wm-toggle-group">
+                    <span class="wm-toggle-label" id="label24Jam" style="color: {{ $faskes && $faskes->is_24_jam ? '#1cc88a' : '#858796' }};">
+                        {{ $faskes && $faskes->is_24_jam ? '✓ YA (24 J)' : '✕ TIDAK' }}
+                    </span>
+                    <label class="wm-switch">
+                        <input type="checkbox" id="switch24Jam" {{ $faskes && $faskes->is_24_jam ? 'checked' : '' }}
+                            onchange="handleAjaxToggle('is_24_jam', this.checked ? '1' : '0', 'switch24Jam', 'label24Jam', '✓ YA (24 J)', '✕ TIDAK', '#1cc88a', '#858796', 'Status 24 Jam diperbarui!')">
+                        <span class="wm-switch-slider"></span>
+                    </label>
+                </div>
+            </div>
 
+            <!-- Jam Operasional -->
+            <div class="wm-toggle-row" style="margin-top:16px; border-bottom: 1px solid #e3e6f0; padding-bottom: 16px;">
+                <div class="wm-toggle-info" style="flex:1;">
+                    <h6>Pengaturan Jam Operasional</h6>
+                    <p>Atur jam buka dan tutup faskes (hanya berlaku jika tidak 24 jam).</p>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:600; color:#5a5c69;">Jam Buka</label>
+                            <input type="time" class="form-control" style="width:120px;" value="{{ $faskes && $faskes->jam_buka ? substr($faskes->jam_buka, 0, 5) : '' }}"
+                                onchange="handleAjaxToggle('jam_buka', this.value, null, null, null, null, null, null, 'Jam Buka diperbarui!')">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:600; color:#5a5c69;">Jam Tutup</label>
+                            <input type="time" class="form-control" style="width:120px;" value="{{ $faskes && $faskes->jam_tutup ? substr($faskes->jam_tutup, 0, 5) : '' }}"
+                                onchange="handleAjaxToggle('jam_tutup', this.value, null, null, null, null, null, null, 'Jam Tutup diperbarui!')">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Toggle: BPJS -->
             <div class="wm-toggle-row" style="margin-top:16px;">
                 <div class="wm-toggle-info">
@@ -355,6 +391,9 @@
                     'Imunisasi'      => ['icon' => 'fa-syringe',      'color' => '#36b9cc'],
                     'Fisioterapi'    => ['icon' => 'fa-hand-holding-heart', 'color' => '#e74a3b'],
                     'Radiologi'      => ['icon' => 'fa-x-ray',        'color' => '#6f42c1'],
+                    'Poli Bedah'          => ['icon' => 'fa-scissors',         'color' => '#f6c23e'],
+                    'Poli Penyakit Dalam'  => ['icon' => 'fa-stethoscope',      'color' => '#858796'],
+                    'Poli Kandungan'       => ['icon' => 'fa-female',           'color' => '#e83e8c'],
                 ];
             @endphp
             <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">
@@ -413,21 +452,22 @@
                         </div>
                         <div class="wm-form-group mb-2">
                             <label class="wm-label">Hari Praktik</label>
-                            <select name="hari" class="wm-input" required>
-                                <option value="Senin">Senin</option><option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option><option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option>
-                                <option value="Minggu">Minggu</option>
-                            </select>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $h)
+                                <label style="display:inline-flex; align-items:center; gap:4px; font-size:13px; cursor:pointer;">
+                                    <input type="checkbox" name="hari[]" value="{{ $h }}"> {{ $h }}
+                                </label>
+                                @endforeach
+                            </div>
                         </div>
                         <div style="display:flex;gap:10px;" class="mb-3">
                             <div class="wm-form-group flex-1">
                                 <label class="wm-label">Jam Mulai</label>
-                                <input type="text" name="jam_mulai" class="wm-input" placeholder="08:00" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" title="Format 24 jam (misal 08:00 atau 14:30)" required maxlength="5">
+                                <input type="time" name="jam_mulai" class="wm-input" required>
                             </div>
                             <div class="wm-form-group flex-1">
                                 <label class="wm-label">Jam Selesai</label>
-                                <input type="text" name="jam_selesai" class="wm-input" placeholder="16:00" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" title="Format 24 jam (misal 08:00 atau 14:30)" required maxlength="5">
+                                <input type="time" name="jam_selesai" class="wm-input" required>
                             </div>
                         </div>
                         <button type="submit" class="wm-btn blue w-100"><i class="fas fa-plus"></i> Tambah Jadwal</button>
@@ -448,7 +488,7 @@
                             <tr>
                                 <td class="bold">{{ $jadwal->nama_dokter }}</td>
                                 <td>{{ $jadwal->spesialisasi }}</td>
-                                <td>{{ $jadwal->hari }}</td>
+                                <td>{{ is_array($jadwal->hari) ? implode(', ', $jadwal->hari) : $jadwal->hari }}</td>
                                 <td>{{ substr($jadwal->jam_mulai,0,5) }} - {{ substr($jadwal->jam_selesai,0,5) }}</td>
                                 <td>
                                     <form action="{{ route('faskes.jadwal.destroy', $jadwal->id) }}" method="POST">
@@ -482,6 +522,7 @@
             @php
                 $reviewer = $ulasan->user;
                 $hasAlergi = $reviewer && !empty($reviewer->riwayat_alergi);
+                $hasPenyakit = $reviewer && !empty($reviewer->riwayat_penyakit);
                 $hasGolDarah = $reviewer && !empty($reviewer->gol_darah);
                 $initial = $reviewer ? strtoupper(substr($reviewer->name, 0, 1)) : '?';
             @endphp
@@ -509,7 +550,7 @@
                         </div>
 
                         {{-- Medical Info Chips --}}
-                        @if($hasGolDarah || $hasAlergi)
+                        @if($hasGolDarah || $hasAlergi || $hasPenyakit)
                         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
                             @if($hasGolDarah)
                             <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(231,74,59,0.1); color:#e74a3b; border:1px solid rgba(231,74,59,0.3); border-radius:20px; padding:2px 9px; font-size:10px; font-weight:700;">
@@ -520,6 +561,12 @@
                             <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(246,194,62,0.1); color:#f6c23e; border:1px solid rgba(246,194,62,0.3); border-radius:20px; padding:2px 9px; font-size:10px; font-weight:600;" title="{{ $reviewer->riwayat_alergi }}">
                                 <i class="fas fa-exclamation-triangle" style="font-size:9px;"></i>
                                 Alergi: {{ Str::limit($reviewer->riwayat_alergi, 50) }}
+                            </span>
+                            @endif
+                            @if($hasPenyakit)
+                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(54,185,204,0.1); color:#36b9cc; border:1px solid rgba(54,185,204,0.3); border-radius:20px; padding:2px 9px; font-size:10px; font-weight:600;" title="{{ $reviewer->riwayat_penyakit }}">
+                                <i class="fas fa-notes-medical" style="font-size:9px;"></i>
+                                Riwayat Penyakit: {{ Str::limit($reviewer->riwayat_penyakit, 50) }}
                             </span>
                             @endif
                         </div>

@@ -63,9 +63,13 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="form-group mb-3">
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Riwayat Alergi (Opsional)</label>
+                                        <textarea name="riwayat_alergi" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="2" placeholder="Contoh: Alergi dingin, udang, parasetamol, dsb..." maxlength="200">{{ old('riwayat_alergi') }}</textarea>
+                                    </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Alergi atau Riwayat Penyakit</label>
-                                        <textarea name="riwayat_alergi" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="3" placeholder="Contoh: Alergi kacang, riwayat asma, dsb..." maxlength="200">{{ old('riwayat_alergi') }}</textarea>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Riwayat Kesehatan / Penyakit Bawaan (Opsional)</label>
+                                        <textarea name="riwayat_penyakit" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="2" placeholder="Contoh: Asma ringan, maag, dsb..." maxlength="200">{{ old('riwayat_penyakit') }}</textarea>
                                     </div>
                                 </div>
 

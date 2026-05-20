@@ -43,7 +43,9 @@ class MitraRegistrationRequest extends FormRequest
             'alamat'                => 'required|string|max:200',
             'latitude'              => 'required|numeric',
             'longitude'             => 'required|numeric',
-            'dokumen_izin'          => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'nomor_izin_praktik'    => 'nullable|string|max:100',
+            'foto_plang_izin'       => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
+            'foto_kondisi_faskes'   => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
         ];
     }
 

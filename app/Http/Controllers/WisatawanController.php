@@ -102,10 +102,11 @@ class WisatawanController extends Controller
             'gol_darah'      => 'nullable|in:A,B,AB,O',
             'kontak_darurat' => 'nullable|string|max:15',
             'riwayat_alergi' => 'nullable|string|max:200',
+            'riwayat_penyakit' => 'nullable|string|max:200',
         ]);
 
         $user = User::find(session('auth_user.id'));
-        $user->update($request->only(['name', 'gol_darah', 'kontak_darurat', 'riwayat_alergi']));
+        $user->update($request->only(['name', 'gol_darah', 'kontak_darurat', 'riwayat_alergi', 'riwayat_penyakit']));
 
         // Perbarui nama di session
         session(['auth_user.name' => $user->name]);

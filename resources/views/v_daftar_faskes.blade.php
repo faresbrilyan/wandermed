@@ -181,11 +181,27 @@
 
                                 {{-- STEP 4: Dokumen & PJ --}}
                                 <div id="step4" class="step-content d-none">
-                                    <div class="upload-box-premium mb-4">
-                                        <i class="fas fa-file-medical fa-2x text-hnb-orange mb-2"></i>
-                                        <p class="text-white small font-weight-bold mb-1">Unggah Surat Izin Operasional / SK</p>
-                                        <small class="text-white-50 d-block mb-2">Format: PDF, JPG, PNG — Maks 5MB</small>
-                                        <input type="file" name="dokumen_izin" class="form-control-file small text-white-50 mx-auto" accept=".pdf,.jpg,.jpeg,.png">
+                                    <div class="form-group mb-3">
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nomor Izin Praktik</label>
+                                        <input type="text" name="nomor_izin_praktik" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="Masukkan Nomor Izin Praktik" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="upload-box-premium h-100" style="padding:15px; display:flex; flex-direction:column; justify-content:center;">
+                                                <i class="fas fa-camera text-hnb-orange mb-2" style="font-size:1.5em;"></i>
+                                                <p class="text-white small font-weight-bold mb-1">Foto Plang Izin</p>
+                                                <small class="text-white-50 d-block mb-2" style="font-size:0.7em;">Format: JPG, PNG (Maks 5MB)</small>
+                                                <input type="file" name="foto_plang_izin" class="form-control-file small text-white-50 mx-auto" accept=".jpg,.jpeg,.png" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="upload-box-premium h-100" style="padding:15px; display:flex; flex-direction:column; justify-content:center;">
+                                                <i class="fas fa-building text-hnb-orange mb-2" style="font-size:1.5em;"></i>
+                                                <p class="text-white small font-weight-bold mb-1">Foto Kondisi Faskes</p>
+                                                <small class="text-white-50 d-block mb-2" style="font-size:0.7em;">Format: JPG, PNG (Maks 5MB)</small>
+                                                <input type="file" name="foto_kondisi_faskes" class="form-control-file small text-white-50 mx-auto" accept=".jpg,.jpeg,.png" required>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group mb-0">
                                         <label class="text-white font-weight-bold small ml-1 opacity-75">Nama Penanggung Jawab / Pimpinan</label>

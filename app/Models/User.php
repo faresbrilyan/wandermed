@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'gol_darah',
         'riwayat_alergi',
+        'riwayat_penyakit',
         'kontak_darurat',
         'is_active',
         'blocking_reason',

@@ -120,6 +120,7 @@ class AuthController extends Controller
             'gol_darah'      => $request->gol_darah,
             'kontak_darurat' => $request->kontak_darurat,
             'riwayat_alergi' => $request->riwayat_alergi,
+            'riwayat_penyakit' => $request->riwayat_penyakit,
         ]);
 
         $this->setSession('wisatawan', $user->id, $user->name, $user->email);
@@ -132,9 +133,14 @@ class AuthController extends Controller
      */
     public function registerMitra(MitraRegistrationRequest $request): RedirectResponse
     {
-        $dokumenPath = null;
-        if ($request->hasFile('dokumen_izin') && $request->file('dokumen_izin')->isValid()) {
-            $dokumenPath = $request->file('dokumen_izin')->store('dokumen_mitra', 'public');
+        $fotoPlangPath = null;
+        if ($request->hasFile('foto_plang_izin') && $request->file('foto_plang_izin')->isValid()) {
+            $fotoPlangPath = $request->file('foto_plang_izin')->store('dokumen_mitra/plang', 'public');
+        }
+
+        $fotoKondisiPath = null;
+        if ($request->hasFile('foto_kondisi_faskes') && $request->file('foto_kondisi_faskes')->isValid()) {
+            $fotoKondisiPath = $request->file('foto_kondisi_faskes')->store('dokumen_mitra/kondisi', 'public');
         }
 
         $pin = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -147,10 +153,10 @@ class AuthController extends Controller
             'no_telp'               => $request->no_telp,
             'jenis_mitra'           => 'faskes',
             'is_verified'           => false,
-            'catatan_admin'         => $dokumenPath,
+            'catatan_admin'         => null,
         ]);
 
-        $this->createFaskesProfile($mitra, $request);
+        $this->createFaskesProfile($mitra, $request, $fotoPlangPath, $fotoKondisiPath);
 
         return redirect('/login')->with('success',
             'Pendaftaran berhasil dikirim! Akun Anda sedang menunggu verifikasi Admin WanderMed.'
@@ -238,7 +244,7 @@ class AuthController extends Controller
         return null;
     }
 
-    private function createFaskesProfile(Mitra $mitra, Request $request): void
+    private function createFaskesProfile(Mitra $mitra, Request $request, ?string $fotoPlangPath, ?string $fotoKondisiPath): void
     {
         $pengajuanPengumuman = trim($request->pengumuman ?? '');
         if ($request->has('layanan_ugd')) {
@@ -249,6 +255,9 @@ class AuthController extends Controller
             'mitra_id'           => $mitra->id,
             'nama_faskes'        => $request->nama_faskes ?? "{$mitra->nama_penanggung_jawab} Faskes",
             'jenis_faskes'       => $request->jenis_faskes ?? 'Klinik',
+            'nomor_izin_praktik' => $request->nomor_izin_praktik,
+            'foto_plang_izin_path'     => $fotoPlangPath,
+            'foto_kondisi_faskes_path' => $fotoKondisiPath,
             'alamat'             => $request->alamat ?? '-',
             'no_telp'            => $request->no_telp,
             'latitude'           => $request->latitude ?? -6.5718,

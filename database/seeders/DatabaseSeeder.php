@@ -31,12 +31,12 @@ class DatabaseSeeder extends Seeder
         $users = [];
         for ($i = 0; $i < 40; $i++) {
             $users[] = User::create([
-                'name'           => $faker->name(),
-                'email'          => $faker->unique()->safeEmail(),
-                'password'       => Hash::make('password123'),
-                'recovery_pin'   => str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT),
-                'gol_darah'      => $faker->randomElement(['A', 'B', 'AB', 'O']),
-                'riwayat_alergi' => $faker->randomElement([
+                'name'              => $faker->name(),
+                'email'             => $faker->unique()->safeEmail(),
+                'password'          => Hash::make('password123'),
+                'recovery_pin'      => str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT),
+                'gol_darah'         => $faker->randomElement(['A', 'B', 'AB', 'O']),
+                'riwayat_alergi'    => $faker->randomElement([
                     'Alergi cuaca dingin / ekstrim',
                     'Alergi makanan laut (seafood/udang)',
                     'Alergi obat antibiotik Amoxicillin',
@@ -45,7 +45,17 @@ class DatabaseSeeder extends Seeder
                     'Alergi telur ayam',
                     null
                 ]),
-                'kontak_darurat' => $faker->phoneNumber(),
+                'riwayat_penyakit'  => $faker->randomElement([
+                    'Asma ringan',
+                    'Maag kronis',
+                    'Hipertensi terkontrol',
+                    'Diabetes tipe 2 ringan',
+                    'Anemia defisiensi besi',
+                    null,
+                    null,
+                    null,
+                ]),
+                'kontak_darurat'    => $faker->phoneNumber(),
             ]);
         }
 
@@ -311,8 +321,8 @@ class DatabaseSeeder extends Seeder
         $mitraList = [];
 
         foreach ($faskesList as $index => $item) {
-            // Buat Akun Mitra
-            $email = strtolower(str_replace([' ', '-', '.'], '', $item['nama'])) . '@gmail.com';
+            // Buat Akun Mitra (Tambahkan index agar dijamin unik)
+            $email = strtolower(str_replace([' ', '-', '.'], '', $item['nama'])) . '_' . $index . '@gmail.com';
             $mitra = Mitra::create([
                 'nama_penanggung_jawab' => $faker->name(),
                 'email'                 => $email,
@@ -326,6 +336,11 @@ class DatabaseSeeder extends Seeder
 
             $mitraList[] = $mitra;
 
+            // Tentukan jam buka berdasarkan jenis faskes atau layanan
+            $is24Jam = in_array('UGD 24 Jam', $item['layanan']) || in_array('Dokter Jaga 24 Jam', $item['layanan']) || str_contains(strtolower($item['pengumuman']), 'buka 24 jam');
+            $jamBuka = $is24Jam ? '00:00:00' : '08:00:00';
+            $jamTutup = $is24Jam ? '23:59:59' : '20:00:00';
+
             // Buat Profil Faskes
             $insertedFaskes[] = Faskes::create([
                 'mitra_id'           => $mitra->id,
@@ -334,6 +349,9 @@ class DatabaseSeeder extends Seeder
                 'latitude'           => $item['lat'],
                 'longitude'          => $item['lng'],
                 'status_operasional' => $item['operasional'],
+                'jam_buka'           => $jamBuka,
+                'jam_tutup'          => $jamTutup,
+                'is_24_jam'          => $is24Jam,
                 'dukungan_bpjs'      => $item['bpjs'],
                 'alamat'             => $item['alamat'],
                 'no_telp'            => $item['telp'],
@@ -643,7 +661,7 @@ class DatabaseSeeder extends Seeder
                     'faskes_id' => $faskes->id,
                     'nama_dokter' => $doc['nama'],
                     'spesialisasi' => $doc['spesialisasi'],
-                    'hari' => $faker->randomElement(['Senin - Jumat', 'Sabtu & Minggu', 'Senin - Rabu', 'Kamis - Sabtu', 'Setiap Hari']),
+                    'hari' => $faker->randomElements(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'], mt_rand(2, 5)),
                     'jam_mulai' => $faker->randomElement(['08:00:00', '09:00:00', '14:00:00', '16:00:00']),
                     'jam_selesai' => $faker->randomElement(['13:00:00', '14:00:00', '19:00:00', '21:00:00']),
                 ]);

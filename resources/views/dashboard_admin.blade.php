@@ -820,9 +820,17 @@
                         <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Layanan / Pengumuman</label>
                         <div id="detailFaskesLayanan" style="color:#707eae;background:#f4f7fe;padding:10px 14px;border-radius:8px;margin-top:4px;font-size:13px;">-</div>
                     </div>
-                    <div class="col-md-12 mb-2">
-                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Dokumen Izin / SK</label>
-                        <div id="detailFaskesDokumenWrap" style="margin-top:6px;"></div>
+                    <div class="col-md-12 mb-3">
+                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Nomor Izin Praktik</label>
+                        <div id="detailFaskesNomorIzin" style="font-weight:600;color:#2b3674;margin-top:4px;">-</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Foto Plang Izin</label>
+                        <div id="detailFaskesFotoPlangWrap" style="margin-top:6px;"></div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Foto Kondisi Faskes</label>
+                        <div id="detailFaskesFotoKondisiWrap" style="margin-top:6px;"></div>
                     </div>
                 </div>
             </div>
@@ -953,6 +961,22 @@
                                 <option value="1">✅ Menerima BPJS</option>
                                 <option value="0">❌ Non-BPJS</option>
                             </select>
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;display:block;margin-bottom:6px;">
+                                <i class="fas fa-clock" style="color:#e74a3b;"></i> Jam Operasional
+                            </label>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <input type="time" id="editFaskesJamBuka" class="wm-input" style="padding:6px 10px;font-size:12px;">
+                                <span style="font-size:12px;color:var(--text-muted);">-</span>
+                                <input type="time" id="editFaskesJamTutup" class="wm-input" style="padding:6px 10px;font-size:12px;">
+                            </div>
+                            <div style="margin-top:8px;">
+                                <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#5a5c69;cursor:pointer;">
+                                    <input type="checkbox" id="editFaskesIs24Jam" style="accent-color:#1cc88a;">
+                                    Buka 24 Jam Nonstop
+                                </label>
+                            </div>
                         </div>
                         <div>
                             <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;display:block;margin-bottom:6px;">

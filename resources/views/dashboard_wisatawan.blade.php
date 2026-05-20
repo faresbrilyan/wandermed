@@ -364,9 +364,14 @@
                             </div>
                         </div>
                         <div class="w-form-group">
-                            <label class="w-label">Riwayat Alergi & Penyakit Bawaan</label>
+                            <label class="w-label">Riwayat Alergi (Opsional)</label>
                             <textarea name="riwayat_alergi" class="w-textarea"
-                                placeholder="Contoh: Alergi Penisilin, Asma, Hipertensi..." maxlength="200">{{ old('riwayat_alergi', $user->riwayat_alergi) }}</textarea>
+                                placeholder="Contoh: Alergi dingin, udang, parasetamol, dsb..." maxlength="200">{{ old('riwayat_alergi', $user->riwayat_alergi) }}</textarea>
+                        </div>
+                        <div class="w-form-group">
+                            <label class="w-label">Riwayat Kesehatan / Penyakit Bawaan (Opsional)</label>
+                            <textarea name="riwayat_penyakit" class="w-textarea"
+                                placeholder="Contoh: Asma ringan, maag, dsb..." maxlength="200">{{ old('riwayat_penyakit', $user->riwayat_penyakit) }}</textarea>
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="w-btn" style="padding:11px 28px; background:rgba(239,68,68,0.1); color:var(--red); border:1px solid rgba(239,68,68,0.3);">

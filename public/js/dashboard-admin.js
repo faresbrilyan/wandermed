@@ -55,9 +55,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if(data.faskes){bpjs=data.faskes.dukungan_bpjs?'<span style="background:rgba(56,161,105,0.1);color:#38a169;border:1px solid rgba(56,161,105,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">✅ Menerima BPJS</span>':'<span style="background:rgba(229,62,62,0.1);color:#e53e3e;border:1px solid rgba(229,62,62,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">❌ Non-BPJS</span>';}
         document.getElementById('detailFaskesBPJS').innerHTML=bpjs;
         document.getElementById('detailFaskesLayanan').textContent=(data.faskes&&data.faskes.pengumuman)?data.faskes.pengumuman:'Tidak ada informasi layanan.';
-        var docWrap=document.getElementById('detailFaskesDokumenWrap');
-        if(data.catatan_admin&&!data.catatan_admin.includes(' ')){docWrap.innerHTML='<a href="/storage/'+data.catatan_admin+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#ebf8ff;color:#3182ce;border:1px solid #bee3f8;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;"><i class="fas fa-external-link-alt"></i> Buka Dokumen</a>';}
-        else{docWrap.innerHTML='<span style="color:#a3aed1;font-size:13px;"><i class="fas fa-times-circle"></i> Dokumen tidak diunggah</span>';}
+        document.getElementById('detailFaskesNomorIzin').textContent = (data.faskes && data.faskes.nomor_izin_praktik) ? data.faskes.nomor_izin_praktik : '-';
+        
+        var plangWrap = document.getElementById('detailFaskesFotoPlangWrap');
+        if(data.faskes && data.faskes.foto_plang_izin_path){
+            plangWrap.innerHTML='<a href="/storage/'+data.faskes.foto_plang_izin_path+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#ebf8ff;color:#3182ce;border:1px solid #bee3f8;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;"><i class="fas fa-image"></i> Lihat Foto Plang</a>';
+        } else {
+            plangWrap.innerHTML='<span style="color:#a3aed1;font-size:13px;"><i class="fas fa-times-circle"></i> Tidak ada foto</span>';
+        }
+
+        var kondisiWrap = document.getElementById('detailFaskesFotoKondisiWrap');
+        if(data.faskes && data.faskes.foto_kondisi_faskes_path){
+            kondisiWrap.innerHTML='<a href="/storage/'+data.faskes.foto_kondisi_faskes_path+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#ebf8ff;color:#3182ce;border:1px solid #bee3f8;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;"><i class="fas fa-image"></i> Lihat Foto Kondisi</a>';
+        } else {
+            kondisiWrap.innerHTML='<span style="color:#a3aed1;font-size:13px;"><i class="fas fa-times-circle"></i> Tidak ada foto</span>';
+        }
         document.getElementById('btnApproveFaskesModal').style.display=data.is_verified?'none':'';
         document.getElementById('btnRejectFaskesModal').style.display=data.is_verified?'none':'';
         $('#modalDetailFaskes').modal('show');
@@ -214,6 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('editFaskesLng').value = data.longitude || '';
         document.getElementById('editFaskesBPJS').value = data.dukungan_bpjs ? '1' : '0';
         document.getElementById('editFaskesPengumuman').value = data.pengumuman || '';
+        document.getElementById('editFaskesJamBuka').value = data.jam_buka ? data.jam_buka.substring(0,5) : '';
+        document.getElementById('editFaskesJamTutup').value = data.jam_tutup ? data.jam_tutup.substring(0,5) : '';
+        document.getElementById('editFaskesIs24Jam').checked = !!data.is_24_jam;
 
         // Render checkbox grid fasilitas
         var currentFasilitas = data.layanan_tersedia || [];
@@ -253,6 +268,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 longitude:         document.getElementById('editFaskesLng').value,
                 dukungan_bpjs:     document.getElementById('editFaskesBPJS').value,
                 pengumuman:        document.getElementById('editFaskesPengumuman').value,
+                jam_buka:          document.getElementById('editFaskesJamBuka').value,
+                jam_tutup:         document.getElementById('editFaskesJamTutup').value,
+                is_24_jam:         document.getElementById('editFaskesIs24Jam').checked,
                 layanan_tersedia:  checked,
             })
         })

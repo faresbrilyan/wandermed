@@ -28,6 +28,7 @@ class WisatawanRegistrationRequest extends FormRequest
             'gol_darah'        => 'nullable|in:A,B,AB,O',
             'kontak_darurat'   => 'nullable|string|max:15',
             'riwayat_alergi'   => 'nullable|string|max:200',
+            'riwayat_penyakit' => 'nullable|string|max:200',
         ];
     }
 

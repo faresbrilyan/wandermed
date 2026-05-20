@@ -27,13 +27,17 @@ document.addEventListener("DOMContentLoaded", function() {
             phone:    f.phone,
             jam:      f.status === 'open' ? 'Sedang Buka' : 'Sedang Tutup',
             notes:    f.notes,
+            jam_buka: f.jam_buka,
+            jam_tutup: f.jam_tutup,
+            is_24_jam: f.is_24_jam,
             ratingAvg: f.rating_avg || 0,
             ratingCount: f.rating_count || 0,
             facilities: (f.facilities || []).map(label => ({
                 icon:  getFacilityIcon(label),
                 ico:   getFacilityFaIcon(label),
                 label: label
-            }))
+            })),
+            jadwals: f.jadwals || []
         }));
     }
 
@@ -81,6 +85,8 @@ document.addEventListener("DOMContentLoaded", function() {
             'Laboratorium': 'fac-icon yellow', 'Dok. Spesialis': 'fac-icon orange',
             'Poli Anak': 'fac-icon purple', 'Poli Gigi': 'fac-icon blue',
             'Poli Umum': 'fac-icon green', 'Imunisasi': 'fac-icon teal',
+            'Poli Bedah': 'fac-icon yellow', 'Poli Penyakit Dalam': 'fac-icon orange',
+            'Poli Kandungan': 'fac-icon purple',
         };
         return map[label] || 'fac-icon orange';
     }
@@ -91,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
             'Laboratorium': 'fas fa-flask', 'Dok. Spesialis': 'fas fa-user-md',
             'Poli Anak': 'fas fa-baby', 'Poli Gigi': 'fas fa-tooth',
             'Poli Umum': 'fas fa-stethoscope', 'Imunisasi': 'fas fa-syringe',
+            'Poli Bedah': 'fas fa-scissors', 'Poli Penyakit Dalam': 'fas fa-stethoscope',
+            'Poli Kandungan': 'fas fa-female',
         };
         return map[label] || 'fas fa-clinic-medical';
     }
@@ -99,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // =========================================================
     // CUSTOM MARKER ICON per kategori Faskes
     // =========================================================
-    function createMarkerIcon(type) {
+    function createMarkerIcon(type, is_24_jam = false) {
         const colors = {
             "Rumah Sakit": { bg: "#e74a3b", icon: "fa-hospital-alt" },
             "Klinik":      { bg: "#4e73df", icon: "fa-clinic-medical" },
@@ -108,19 +116,27 @@ document.addEventListener("DOMContentLoaded", function() {
         };
         const c = colors[type] || { bg: "#ff7a00", icon: "fa-map-marker-alt" };
 
+        const indicator24H = is_24_jam 
+            ? `<div style="position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:9px; font-weight:bold; padding:2px 4px; border-radius:10px; transform: rotate(45deg); box-shadow:0 2px 4px rgba(0,0,0,0.5); z-index:10;">24J</div>` 
+            : ``;
+
         return L.divIcon({
             className: '',
             html: `
-                <div style="
-                    width: 40px; height: 40px;
-                    background: ${c.bg};
-                    border-radius: 50% 50% 50% 0;
-                    transform: rotate(-45deg);
-                    display: flex; align-items: center; justify-content: center;
-                    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-                    border: 3px solid rgba(255,255,255,0.3);
-                ">
-                    <i class="fas ${c.icon}" style="transform: rotate(45deg); color: #fff; font-size: 14px;"></i>
+                <div style="position: relative;">
+                    <div style="
+                        width: 40px; height: 40px;
+                        background: ${c.bg};
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        display: flex; align-items: center; justify-content: center;
+                        box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+                        border: 3px solid rgba(255,255,255,0.3);
+                        position: relative;
+                    ">
+                        <i class="fas ${c.icon}" style="transform: rotate(45deg); color: #fff; font-size: 14px;"></i>
+                        ${indicator24H}
+                    </div>
                 </div>`,
             iconSize: [40, 40],
             iconAnchor: [20, 40],
@@ -131,7 +147,42 @@ document.addEventListener("DOMContentLoaded", function() {
     // =========================================================
     // RENDER MARKER & FILTERING
     // =========================================================
-    var activeMarkers = [];
+    function matchFaskesSmart(f, searchQuery) {
+        if (!searchQuery) return true;
+        
+        const inNameOrAddress = f.name.toLowerCase().includes(searchQuery) || f.address.toLowerCase().includes(searchQuery);
+        
+        let inType = f.type.toLowerCase().includes(searchQuery);
+        if (searchQuery === 'rs') {
+            inType = inType || f.type.toLowerCase() === 'rumah sakit';
+        }
+
+        let in24Jam = false;
+        if (searchQuery.includes('24') || searchQuery.includes('buka 24') || searchQuery.includes('24 jam') || searchQuery.includes('24j')) {
+            in24Jam = f.is_24_jam;
+        }
+
+        let inJadwal = false;
+        if (f.jadwals && f.jadwals.length > 0) {
+            inJadwal = f.jadwals.some(j => {
+                const docName = j.dokter ? j.dokter.toLowerCase() : '';
+                const spec = j.spesialisasi ? j.spesialisasi.toLowerCase() : '';
+                
+                let hariList = '';
+                if (Array.isArray(j.hari)) {
+                    hariList = j.hari.map(h => h.toLowerCase()).join(' ');
+                } else if (typeof j.hari === 'string') {
+                    hariList = j.hari.toLowerCase();
+                }
+                
+                return docName.includes(searchQuery) || 
+                       spec.includes(searchQuery) || 
+                       hariList.includes(searchQuery);
+            });
+        }
+
+        return inNameOrAddress || inType || in24Jam || inJadwal;
+    }
 
     function updateMarkers() {
         // Bersihkan marker sebelumnya
@@ -162,10 +213,10 @@ document.addEventListener("DOMContentLoaded", function() {
             faskesData.forEach(f => {
                 const matchType   = (typeFilter === 'AllFaskes' || f.type === typeFilter);
                 const matchBPJS   = (!bpjsActive || f.bpjs);
-                const matchSearch = !searchQuery || f.name.toLowerCase().includes(searchQuery) || f.address.toLowerCase().includes(searchQuery);
+                const matchSearch = matchFaskesSmart(f, searchQuery);
 
                 if (matchType && matchBPJS && matchSearch) {
-                    const marker = L.marker([f.lat, f.lng], { icon: createMarkerIcon(f.type) }).addTo(map);
+                    const marker = L.marker([f.lat, f.lng], { icon: createMarkerIcon(f.type, f.is_24_jam) }).addTo(map);
 
                     marker.bindTooltip(`<b style="font-size:13px;">${f.name}</b><br><small style="color:rgba(0,0,0,0.5)">${f.type}</small>`, {
                         direction: 'top', offset: [0, -45], className: 'wm-tooltip'
@@ -253,11 +304,38 @@ document.addEventListener("DOMContentLoaded", function() {
             rowJam.classList.remove('jam-open');
         }
 
-        // Badges
+        // Logika Jam Operasional Dinamis
+        let isOpen = false;
+        let jamText = "";
+        
+        if (data.is_24_jam) {
+            isOpen = true;
+            jamText = "Buka 24 Jam";
+        } else if (data.jam_buka && data.jam_tutup) {
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const [bukaH, bukaM] = data.jam_buka.split(':').map(Number);
+            const [tutupH, tutupM] = data.jam_tutup.split(':').map(Number);
+            const bukaTime = bukaH * 60 + bukaM;
+            const tutupTime = tutupH * 60 + tutupM;
+            
+            if (tutupTime < bukaTime) {
+                // Kasus tutup lewat tengah malam (misal 08:00 - 02:00)
+                isOpen = currentTime >= bukaTime || currentTime <= tutupTime;
+            } else {
+                isOpen = currentTime >= bukaTime && currentTime <= tutupTime;
+            }
+            jamText = `${data.jam_buka} - ${data.jam_tutup}`;
+        } else {
+            // Fallback ke manual
+            isOpen = data.status === 'open';
+            jamText = isOpen ? "Buka Sekarang" : "Sekarang Tutup";
+        }
+
         const badgesEl = document.getElementById('detailBadges');
-        const statusChip = data.status === 'open'
-            ? `<span class="info-chip status-open"><i class="fas fa-circle" style="font-size:8px;"></i> Buka Sekarang</span>`
-            : `<span class="info-chip status-closed"><i class="fas fa-circle" style="font-size:8px;"></i> Sedang Tutup</span>`;
+        const statusChip = isOpen
+            ? `<span class="info-chip status-open"><i class="fas fa-circle" style="font-size:8px;"></i> Buka Sekarang ${jamText !== "Buka Sekarang" ? `(${jamText})` : ''}</span>`
+            : `<span class="info-chip status-closed"><i class="fas fa-circle" style="font-size:8px;"></i> Sekarang Tutup</span>`;
         const bpjsChip = data.bpjs
             ? `<span class="info-chip bpjs-yes"><i class="fas fa-shield-alt"></i> Terima BPJS</span>`
             : `<span class="info-chip bpjs-no"><i class="fas fa-times-circle"></i> Non-BPJS</span>`;
@@ -508,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Cari Faskes
         faskesData.forEach(f => {
-            if (f.name.toLowerCase().includes(query) || f.address.toLowerCase().includes(query)) {
+            if (matchFaskesSmart(f, query)) {
                 results.push({ ...f, isWisata: false });
             }
         });

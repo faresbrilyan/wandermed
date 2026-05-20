@@ -63,7 +63,7 @@
                                                 </span>
                                             </td>
                                             <td class="py-3 align-middle">
-                                                <i class="fas fa-calendar-day mr-1" style="color: #f6c23e;"></i> {{ $jadwal->hari }}
+                                                <i class="fas fa-calendar-day mr-1" style="color: #f6c23e;"></i> {{ is_array($jadwal->hari) ? implode(', ', $jadwal->hari) : $jadwal->hari }}
                                             </td>
                                             <td class="py-3 align-middle">
                                                 <div style="display: inline-block; background: #f8f9fa; border: 1px solid #eaecf4; padding: 5px 10px; border-radius: 6px; color: #5a5c69; font-weight: 600;">

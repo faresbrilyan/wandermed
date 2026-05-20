@@ -58,7 +58,7 @@ class FaskesController extends Controller
     public function updateStatus(Request $request)
     {
         $request->validate([
-            'field' => 'required|in:status_operasional,dukungan_bpjs,pengumuman',
+            'field' => 'required|in:status_operasional,dukungan_bpjs,pengumuman,jam_buka,jam_tutup,is_24_jam',
             'value' => 'required',
         ]);
 
@@ -70,6 +70,11 @@ class FaskesController extends Controller
             $faskes->status_operasional = $request->value === 'true' ? 'open' : 'closed';
         } elseif ($request->field === 'dukungan_bpjs') {
             $faskes->dukungan_bpjs = filter_var($request->value, FILTER_VALIDATE_BOOLEAN);
+        } elseif ($request->field === 'is_24_jam') {
+            $faskes->is_24_jam = filter_var($request->value, FILTER_VALIDATE_BOOLEAN);
+        } elseif ($request->field === 'jam_buka' || $request->field === 'jam_tutup') {
+            $field = $request->field;
+            $faskes->$field = $request->value;
         } elseif ($request->field === 'pengumuman') {
             $faskes->pengumuman = $request->value;
         }
@@ -79,7 +84,7 @@ class FaskesController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Status berhasil diperbarui di peta!',
-            'updated' => $faskes->only(['status_operasional', 'dukungan_bpjs', 'pengumuman']),
+            'updated' => $faskes->only(['status_operasional', 'dukungan_bpjs', 'pengumuman', 'jam_buka', 'jam_tutup', 'is_24_jam']),
         ]);
     }
 
@@ -188,14 +193,22 @@ class FaskesController extends Controller
         $request->validate([
             'nama_dokter' => 'required|string|max:100',
             'spesialisasi' => 'required|string|max:100',
-            'hari' => 'required|string',
+            'hari' => 'required|array',
+            'hari.*' => 'string',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
         ]);
 
         $faskes = Faskes::where('mitra_id', session('auth_user.id'))->firstOrFail();
 
-        \App\Models\JadwalDokter::create(array_merge($request->all(), ['faskes_id' => $faskes->id]));
+        \App\Models\JadwalDokter::create([
+            'faskes_id'    => $faskes->id,
+            'nama_dokter'  => $request->nama_dokter,
+            'spesialisasi' => $request->spesialisasi,
+            'hari'         => $request->hari,
+            'jam_mulai'    => $request->jam_mulai,
+            'jam_selesai'  => $request->jam_selesai,
+        ]);
         return back()->with('success', 'Jadwal dokter berhasil ditambahkan!');
     }
 
