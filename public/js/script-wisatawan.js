@@ -41,8 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             body.classList.toggle("light-mode");
             html.classList.toggle("light-mode");
-            localStorage.setItem("wanderMedTheme", body.classList.contains("light-mode") ? "light" : "dark");
+            var currentTheme = body.classList.contains("light-mode") ? "light" : "dark";
+            localStorage.setItem("wanderMedTheme", currentTheme);
             updateThemeUI();
+            
+            // Notify other components (like Leaflet map) of the theme change
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: currentTheme } }));
         });
     }
 

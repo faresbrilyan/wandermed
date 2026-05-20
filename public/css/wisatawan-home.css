@@ -32,10 +32,10 @@ body {
     padding-bottom: 60px !important;
 }
 body.light-mode .hero-slanted {
-    background: #1a2e50 !important;
+    background: var(--saas-bg-alt) !important;
 }
 body.light-mode .hero-map-overlay {
-    background: transparent !important;
+    background: rgba(255, 255, 255, 0.45) !important; /* Soft light overlay to ensure map features don't clash with content box */
 }
 /* Utility Classes untuk teks Hero agar adaptif Light/Dark mode */
 .hero-tag-text { font-size:12px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.5px; }

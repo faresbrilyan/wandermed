@@ -18,14 +18,21 @@
         attributionControl: false
     });
 
-    // Map Tile selalu menggunakan tema gelap/abu (Dark Matter) untuk kedua mode 
-    // agar kontras marker lebih baik dan kesan premium tetap terjaga.
-    var tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    // Map Tile adapts to light/dark mode and swaps on event trigger
+    var darkTileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    var lightTileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
-    L.tileLayer(tileUrl, {
+    var currentTileUrl = document.body.classList.contains('light-mode') ? lightTileUrl : darkTileUrl;
+
+    var tileLayer = L.tileLayer(currentTileUrl, {
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
+
+    window.addEventListener('themeChanged', function (e) {
+        var newUrl = e.detail.theme === 'light' ? lightTileUrl : darkTileUrl;
+        tileLayer.setUrl(newUrl);
+    });
 
     // Lokasi faskes nyata di Subang (demo markers)
     var spots = [

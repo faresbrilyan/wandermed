@@ -28,6 +28,47 @@
         --saas-slate: #f1f5f9;
     }
 
+    /* ── ADAPTIVE HERO COMPONENTS ── */
+    .hero-content-box {
+        border: 1px solid var(--saas-border) !important;
+        background: rgba(10, 20, 40, 0.85) !important;
+        backdrop-filter: blur(16px);
+        border-radius: 24px;
+        transition: all 0.3s ease;
+    }
+    body.light-mode .hero-content-box {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(10, 20, 40, 0.08) !important;
+        box-shadow: 0 20px 40px rgba(10, 20, 40, 0.05) !important;
+    }
+
+    .hero-logo-box {
+        border: 1px solid var(--saas-border) !important;
+        background: rgba(10, 20, 42, 0.6) !important;
+        backdrop-filter: blur(12px);
+        border-radius: 24px;
+        width: 280px;
+        height: 280px;
+        transition: all 0.3s ease;
+    }
+    body.light-mode .hero-logo-box {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(10, 20, 40, 0.08) !important;
+        box-shadow: 0 20px 40px rgba(10, 20, 40, 0.05) !important;
+    }
+
+    body.light-mode .hero-map-badge {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(10, 20, 40, 0.08) !important;
+        color: var(--saas-text-primary) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+    }
+
+    #hero-bg-map .leaflet-container {
+        background: var(--saas-bg) !important;
+        transition: background 0.3s ease;
+    }
+
     /* ── CARD STYLING ── */
     .saas-card {
         background: var(--saas-card-bg) !important;
@@ -233,10 +274,10 @@
         <div class="container px-4" style="position:relative; z-index:2;">
             <div class="row align-items-center">
                 <div class="col-lg-7 text-left mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="700">
-                    <div class="hero-content-box" style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 20, 40, 0.85); backdrop-filter: blur(16px); padding: 48px; border-radius: 24px;">
+                    <div class="hero-content-box" style="padding: 48px;">
                         <div class="mb-4" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,122,0,0.1); border:1px solid rgba(255,122,0,0.25); border-radius:30px; padding:6px 16px;">
                             <i data-lucide="map-pin" class="saas-icon saas-icon-orange" style="width: 14px; height: 14px;"></i>
-                            <span style="font-size:11px; font-weight:700; color:var(--saas-white); letter-spacing:1px; text-transform:uppercase;">GIS Medical Mapping System</span>
+                            <span style="font-size:11px; font-weight:700; color:var(--saas-orange); letter-spacing:1px; text-transform:uppercase;">GIS Medical Mapping System</span>
                         </div>
                         
                         <h1 class="font-weight-bold text-white mb-3" style="font-size: 3.2rem; line-height: 1.15; font-family:'Poppins', sans-serif;">
@@ -252,8 +293,8 @@
                             <a href="/peta-faskes" class="btn btn-saas-primary">
                                 <i data-lucide="map"></i> Buka Peta Interaktif
                             </a>
-                            <a href="#tentang" class="btn btn-saas-secondary" style="border-color: rgba(255,255,255,0.2) !important; color: #fff !important;">
-                                Pelajari Sistem <i data-lucide="arrow-down" style="width: 16px; height: 16px; stroke: #fff;"></i>
+                            <a href="#tentang" class="btn btn-saas-secondary">
+                                Pelajari Sistem <i data-lucide="arrow-down" class="saas-icon" style="width: 16px; height: 16px;"></i>
                             </a>
                         </div>
                     </div>
@@ -261,7 +302,7 @@
 
                 {{-- Hero Side Logo Panel --}}
                 <div class="col-lg-5 d-none d-lg-flex justify-content-center" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
-                    <div class="d-flex align-items-center justify-content-center hero-logo-box" style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 20, 42, 0.6); backdrop-filter: blur(12px);">
+                    <div class="d-flex align-items-center justify-content-center hero-logo-box">
                         <img src="{{ asset('img/wdm.png') }}" alt="WanderMed Logo" class="logo-for-light-bg" style="width: 180px; height: 180px; object-fit: contain;">
                         <img src="{{ asset('img/wdmlight.png') }}" alt="WanderMed Logo" class="logo-for-dark-bg" style="width: 180px; height: 180px; object-fit: contain;">
                     </div>
