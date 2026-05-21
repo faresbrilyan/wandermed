@@ -21,10 +21,53 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.admin-section').forEach(function(sec){sec.style.display='none';});
             var target = document.getElementById(sections[targetId]);
             if (target) { target.style.display='block'; target.classList.remove('wm-section-animate'); void target.offsetWidth; target.classList.add('wm-section-animate'); }
+            
+            // Update URL hash without scrolling
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, null, '#tab-' + sections[targetId]);
+            } else {
+                window.location.hash = 'tab-' + sections[targetId];
+            }
         });
     });
     var navValidasiLink = document.getElementById('navValidasiLink');
     if (navValidasiLink) { navValidasiLink.addEventListener('click',function(e){e.preventDefault();var n=document.getElementById('navValidasi');if(n)n.click();}); }
+
+    // 1b. RESTORE ACTIVE TAB ON PAGE LOAD
+    var hash = window.location.hash;
+    var activeTabId = null;
+    if (hash) {
+        // Reset scroll position to top immediately to prevent browser from auto-scrolling
+        window.scrollTo(0, 0);
+        var cleanSectionId = hash.replace('#tab-', '');
+        for (var tabId in sections) {
+            if (sections[tabId] === cleanSectionId) {
+                activeTabId = tabId;
+                break;
+            }
+        }
+    }
+    if (!activeTabId) {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('page_faskes')) {
+            activeTabId = 'navDataFaskes';
+        } else if (urlParams.has('page_users')) {
+            activeTabId = 'navDataWisatawan';
+        }
+    }
+    if (activeTabId) {
+        var activeTab = document.getElementById(activeTabId);
+        if (activeTab) {
+            activeTab.click();
+        }
+    }
+
+    // Extra guard: reset scroll on window load as well to ensure topbar and sidebar brand are fully visible
+    window.addEventListener('load', function() {
+        if (window.location.hash) {
+            window.scrollTo(0, 0);
+        }
+    });
 
     // 2. HELPER
     window.filterTable = function(inputId, tableId, colClass) {
@@ -216,6 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
         { name: 'Imunisasi',       icon: 'fa-syringe',           color: '#36b9cc' },
         { name: 'Fisioterapi',     icon: 'fa-hand-holding-heart',color: '#e74a3b' },
         { name: 'Radiologi',       icon: 'fa-x-ray',             color: '#6f42c1' },
+        { name: 'Poli Bedah',          icon: 'fa-scissors',          color: '#f6c23e' },
+        { name: 'Poli Penyakit Dalam', icon: 'fa-stethoscope',       color: '#858796' },
+        { name: 'Poli Kandungan',      icon: 'fa-female',            color: '#e83e8c' },
     ];
 
     window.openEditFaskes = function(data) {

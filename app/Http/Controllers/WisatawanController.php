@@ -39,7 +39,7 @@ class WisatawanController extends Controller
         })->count();
         $rekomendasiCount = $riwayats->where('label_warna', 'green')->count();
 
-        return view('dashboard_wisatawan', compact(
+        return view('dashboard.wisatawan', compact(
             'user',
             'riwayats',
             'totalKunjungan',

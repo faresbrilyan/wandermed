@@ -30,7 +30,7 @@ class FaskesController extends Controller
 
         // Jika mitra belum punya data faskes, arahkan untuk mengisi profil dulu
         if (!$faskes) {
-            return view('dashboard_faskes', ['mitra' => $mitra, 'faskes' => null]);
+            return view('dashboard.faskes', ['mitra' => $mitra, 'faskes' => null]);
         }
 
         // Statistik dashboard (kelak dari data nyata)
@@ -40,7 +40,7 @@ class FaskesController extends Controller
         $ulasans = \App\Models\UlasanFaskes::with('user')->where('faskes_id', $faskes->id)->latest()->get();
         $jadwals = \App\Models\JadwalDokter::where('faskes_id', $faskes->id)->orderBy('hari')->get();
 
-        return view('dashboard_faskes', compact(
+        return view('dashboard.faskes', compact(
             'mitra',
             'faskes',
             'totalPengunjung',

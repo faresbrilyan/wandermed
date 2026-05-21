@@ -10,39 +10,32 @@ class HomeController extends Controller
      * Menampilkan Splash Screen Wisatawan (Halaman Awal)
      */
     public function wisatawanHome() {
-        return view('v_wisatawan_home');
+        return view('home');
     }
 
     /**
      * Menampilkan Halaman Login
      */
     public function login() {
-        return view('v_login');
-    }
-
-    /**
-     * Menampilkan Dashboard Admin (Untuk Faskes/Mitra)
-     */
-    public function myHome() {
-        return view('myHome');
+        return view('login');
     }
 
     public function daftarPilihan() {
-        return view('v_daftar_pilihan');
+        return view('daftar.pilihan');
     }
 
     public function daftarPariwisata() {
-        return view('v_daftar_pariwisata');
+        return view('daftar.form_pariwisata');
     }
 
     public function daftarFaskes() {
-        return view('v_daftar_faskes');
+        return view('daftar.form_faskes');
     }
 
     // Tambahkan di dalam class HomeController
 
     public function daftarWisatawan() {
-        return view('v_daftar_wisatawan');
+        return view('daftar.form_wisatawan');
     }
 
     public function petaFaskes() {
@@ -98,7 +91,7 @@ class HomeController extends Controller
         $daftarFaskes = $faskes;
         $daftarPariwisata = $pariwisata;
 
-        return view('v_peta_faskes', compact('daftarFaskes', 'daftarPariwisata'));
+        return view('peta', compact('daftarFaskes', 'daftarPariwisata'));
     }
 
     public function jadwalFaskes($id) {
@@ -107,20 +100,20 @@ class HomeController extends Controller
             ->whereHas('mitra', fn($q) => $q->where('is_verified', true))
             ->firstOrFail();
             
-        return view('v_jadwal_faskes', compact('faskes'));
+        return view('jadwal', compact('faskes'));
     }
 
     // Dashboard Routes
     public function dashboardWisatawan() {
-        return view('dashboard_wisatawan');
+        return view('dashboard.wisatawan');
     }
 
     public function dashboardFaskes() {
-        return view('dashboard_faskes');
+        return view('dashboard.faskes');
     }
 
     public function dashboardAdmin() {
-        return view('dashboard_admin');
+        return view('dashboard.admin');
     }
 
     /**

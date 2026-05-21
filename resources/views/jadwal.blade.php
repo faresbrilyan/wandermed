@@ -1,8 +1,8 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 @section('title', 'Jadwal Praktik Dokter - ' . $faskes->nama_faskes)
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <section class="py-5" style="min-height: 80vh; padding-top: 120px !important;">
         <div class="container px-4">
@@ -91,6 +91,6 @@
     </section>
 
     <section class="bg-hnb-navy pt-5 pb-4 mt-5">
-        @include('theme.footer')
+        @include('partials.footer')
     </section>
 @endsection

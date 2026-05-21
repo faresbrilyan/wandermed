@@ -1,100 +1,8 @@
 {{-- ============================================================
      Dashboard Mitra Faskes – WanderMed
-     Layout: theme/dashboard_layout.blade.php (Kustom, no SB Admin)
+     Layout: layouts/faskes/main.blade.php (Kustom, no SB Admin)
      ============================================================ --}}
-@extends('theme.dashboard_layout')
-
-@section('page_title', 'Dashboard Faskes')
-@section('badge_role', 'Mitra Faskes')
-@section('user_name', $faskes && $faskes->nama_faskes ? $faskes->nama_faskes : $mitra->nama_penanggung_jawab)
-@section('user_role', 'Mitra Fasilitas Kesehatan')
-@section('user_initial', $faskes && $faskes->nama_faskes ? substr($faskes->nama_faskes, 0, 1) : substr($mitra->nama_penanggung_jawab, 0, 1))
-@section('topbar_title', 'Dashboard Operasional Faskes')
-
-@section('sidebar_nav')
-    <div class="wm-nav-label">Operasional</div>
-    <a href="#" class="wm-nav-link active" id="navDashboard">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-    </a>
-    <a href="#" class="wm-nav-link" id="navKontrolStatus">
-        <i class="fas fa-toggle-on"></i> Kontrol Status
-    </a>
-    <a href="#" class="wm-nav-link" id="navJadwal">
-        <i class="fas fa-calendar-alt"></i> Jadwal Praktik
-    </a>
-    <a href="#" class="wm-nav-link" id="navFasilitas">
-        <i class="fas fa-clipboard-list"></i> Fasilitas & Layanan
-    </a>
-    <div class="wm-nav-label">Feedback</div>
-    <a href="#" class="wm-nav-link" id="navUlasan">
-        <i class="fas fa-star"></i> Ulasan Wisatawan
-    </a>
-    <div class="wm-nav-label">Profil</div>
-    <a href="#" class="wm-nav-link" id="navProfilFaskes">
-        <i class="fas fa-hospital"></i> Profil Faskes
-    </a>
-    <a href="#" class="wm-nav-link" id="navKoordinat">
-        <i class="fas fa-map-pin"></i> Update Koordinat
-    </a>
-    <div class="wm-nav-label">Komunikasi</div>
-    <a href="#" class="wm-nav-link" id="navChat" style="position:relative;">
-        <i class="fas fa-comments"></i> Chat Admin
-        <span id="chatNavBadge" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#ff7a00;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;align-items:center;justify-content:center;">0</span>
-    </a>
-    <div class="wm-nav-label">Navigasi</div>
-    <a href="/peta-faskes" class="wm-nav-link">
-        <i class="fas fa-map-marked-alt"></i> Lihat di Peta
-    </a>
-
-    <div class="wm-nav-label" style="margin-top:20px;">Keamanan</div>
-    <div style="padding: 12px 20px; display:flex; flex-direction: column; background: rgba(0,0,0,0.1); border-left: 3px solid #ff7a00; margin-bottom: 8px;">
-        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;"><i class="fas fa-key" style="color:#ff7a00;"></i> PIN Pemulihan Akses</div>
-        <div title="Arahkan kursor untuk melihat PIN" style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 6px; color: var(--text-primary); filter: blur(6px); transition: filter 0.3s; user-select: none; cursor: crosshair;" onmouseover="this.style.filter='blur(0)'; this.style.userSelect='auto';" onmouseout="this.style.filter='blur(6px)'; this.style.userSelect='none';">
-            {{ $mitra->recovery_pin ?? '000000' }}
-        </div>
-    </div>
-
-    <a href="/logout" class="wm-nav-link">
-        <i class="fas fa-sign-out-alt"></i> Keluar
-    </a>
-@endsection
-
-@section('topbar_bell')
-@php $hasPesan = !empty($faskes->pesan_admin); @endphp
-<div class="wm-notif-bell" id="wmBellWrap">
-    <div class="wm-topbar-icon" onclick="toggleNotifPanel()" title="Notifikasi" style="cursor:pointer;">
-        <i class="fas fa-bell"></i>
-        @if($hasPesan)
-        <span class="wm-notif-badge">1</span>
-        @endif
-    </div>
-    <div class="wm-notif-panel" id="wmNotifPanel">
-        {{-- Header --}}
-        <div class="wm-notif-header">
-            <span><i class="fas fa-bell"></i> Notifikasi</span>
-            @if($hasPesan)
-            <span class="wm-notif-header-count">1 Baru</span>
-            @endif
-        </div>
-        {{-- Content --}}
-        @if($hasPesan)
-        <div class="wm-notif-item unread">
-            <div class="wm-notif-icon orange"><i class="fas fa-envelope-open-text"></i></div>
-            <div class="wm-notif-content">
-                <div class="wm-notif-title">Pesan dari Admin WanderMed</div>
-                <div class="wm-notif-body">{{ $faskes->pesan_admin }}</div>
-                <div class="wm-notif-meta"><i class="fas fa-shield-alt"></i> Dikirim oleh Administrator</div>
-            </div>
-        </div>
-        @else
-        <div class="wm-notif-empty">
-            <i class="fas fa-bell-slash"></i>
-            <p>Tidak ada notifikasi baru</p>
-        </div>
-        @endif
-    </div>
-</div>
-@endsection
+@extends('layouts.faskes.main')
 
 @section('content')
 
@@ -199,7 +107,7 @@
 
     <!-- Pesan dari Admin (tampil hanya jika ada pesan) -->
 
-    @if(!empty($faskes->pesan_admin))
+    @if(!empty($faskes?->pesan_admin))
     <div class="wm-card mt-4" style="border-left: 4px solid #f6c23e; background: rgba(246,194,62,0.06);">
         <div class="wm-card-header" style="border-bottom: 1px solid rgba(246,194,62,0.2);">
             <div class="wm-card-title">
@@ -210,7 +118,7 @@
         </div>
         <div class="wm-card-body" style="padding: 16px 22px;">
             <p style="font-size: 14px; line-height: 1.6; margin: 0; color: var(--text-secondary);">
-                {{ $faskes->pesan_admin }}
+                {{ $faskes?->pesan_admin }}
             </p>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">
                 <i class="fas fa-clock"></i> Dikirim oleh Administrator WanderMed
@@ -611,33 +519,33 @@
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px;">
                     <div class="wm-form-group" style="grid-column: 1/-1;">
                         <label class="wm-label">Nama Faskes <span style="color:#e74a3b">*</span></label>
-                        <input type="text" name="nama_faskes" class="wm-input" value="{{ $faskes->nama_faskes ?? '' }}" placeholder="Contoh: RSUD Subang" required maxlength="100">
+                        <input type="text" name="nama_faskes" class="wm-input" value="{{ $faskes?->nama_faskes ?? '' }}" placeholder="Contoh: RSUD Subang" required maxlength="100">
                     </div>
                     <div class="wm-form-group">
                         <label class="wm-label">Kategori / Jenis <span style="color:#e74a3b">*</span></label>
                         <select name="jenis_faskes" class="wm-input" required>
                             @foreach(['Rumah Sakit','Klinik','Apotek','Puskesmas','Lainnya'] as $jenis)
-                            <option value="{{ $jenis }}" {{ ($faskes->jenis_faskes ?? '') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
+                            <option value="{{ $jenis }}" {{ ($faskes?->jenis_faskes ?? '') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="wm-form-group">
                         <label class="wm-label">Nomor Telepon</label>
-                        <input type="tel" name="no_telp" class="wm-input" value="{{ $faskes->no_telp ?? '' }}" placeholder="0260-xxxxxx" maxlength="15">
+                        <input type="tel" name="no_telp" class="wm-input" value="{{ $faskes?->no_telp ?? '' }}" placeholder="0260-xxxxxx" maxlength="15">
                     </div>
                     <div class="wm-form-group" style="grid-column: 1/-1;">
                         <label class="wm-label">Alamat Lengkap <span style="color:#e74a3b">*</span></label>
-                        <textarea name="alamat" class="wm-textarea" rows="2" required maxlength="200">{{ $faskes->alamat ?? '' }}</textarea>
+                        <textarea name="alamat" class="wm-textarea" rows="2" required maxlength="200">{{ $faskes?->alamat ?? '' }}</textarea>
                     </div>
                 </div>
                 <div style="margin-top: 18px;">
                     <label class="wm-label">Dukungan BPJS Kesehatan</label>
                     <div style="display:flex; gap: 16px; margin-top: 8px;">
                         <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px;">
-                            <input type="radio" name="dukungan_bpjs" value="1" {{ ($faskes->dukungan_bpjs ?? false) ? 'checked' : '' }}> Ya, Menerima BPJS
+                            <input type="radio" name="dukungan_bpjs" value="1" {{ ($faskes?->dukungan_bpjs ?? false) ? 'checked' : '' }}> Ya, Menerima BPJS
                         </label>
                         <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px;">
-                            <input type="radio" name="dukungan_bpjs" value="0" {{ !($faskes->dukungan_bpjs ?? false) ? 'checked' : '' }}> Tidak Menerima
+                            <input type="radio" name="dukungan_bpjs" value="0" {{ !($faskes?->dukungan_bpjs ?? false) ? 'checked' : '' }}> Tidak Menerima
                         </label>
                     </div>
                 </div>
@@ -701,26 +609,26 @@
         </div>
         <div class="wm-card-body">
             <div style="background: rgba(246,194,62,0.08); border: 1px solid rgba(246,194,62,0.3); border-radius:8px; padding:16px; margin-bottom:20px; font-family:monospace; font-size:15px; text-align:center;">
-                📍 Lat: <strong>{{ $faskes->latitude ?? '0.000000' }}</strong> &nbsp;|&nbsp; Lng: <strong>{{ $faskes->longitude ?? '0.000000' }}</strong>
+                📍 Lat: <strong>{{ $faskes?->latitude ?? '0.000000' }}</strong> &nbsp;|&nbsp; Lng: <strong>{{ $faskes?->longitude ?? '0.000000' }}</strong>
             </div>
 
             <form action="{{ route('faskes.profil.update') }}" method="POST">
                 @csrf
                 {{-- Kirim semua field lain sebagai hidden agar validasi lolos --}}
-                <input type="hidden" name="nama_faskes" value="{{ $faskes->nama_faskes ?? '' }}">
-                <input type="hidden" name="jenis_faskes" value="{{ $faskes->jenis_faskes ?? 'Klinik' }}">
-                <input type="hidden" name="alamat" value="{{ $faskes->alamat ?? '-' }}">
-                <input type="hidden" name="no_telp" value="{{ $faskes->no_telp ?? '' }}">
-                <input type="hidden" name="dukungan_bpjs" value="{{ $faskes->dukungan_bpjs ? '1' : '0' }}">
+                <input type="hidden" name="nama_faskes" value="{{ $faskes?->nama_faskes ?? '' }}">
+                <input type="hidden" name="jenis_faskes" value="{{ $faskes?->jenis_faskes ?? 'Klinik' }}">
+                <input type="hidden" name="alamat" value="{{ $faskes?->alamat ?? '-' }}">
+                <input type="hidden" name="no_telp" value="{{ $faskes?->no_telp ?? '' }}">
+                <input type="hidden" name="dukungan_bpjs" value="{{ $faskes?->dukungan_bpjs ? '1' : '0' }}">
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
                     <div class="wm-form-group">
                         <label class="wm-label">Latitude Baru <span style="color:#e74a3b">*</span></label>
-                        <input type="number" step="any" name="latitude" id="quickLat" class="wm-input" value="{{ $faskes->latitude ?? '' }}" placeholder="-6.571..." required>
+                        <input type="number" step="any" name="latitude" id="quickLat" class="wm-input" value="{{ $faskes?->latitude ?? '' }}" placeholder="-6.571..." required>
                     </div>
                     <div class="wm-form-group">
                         <label class="wm-label">Longitude Baru <span style="color:#e74a3b">*</span></label>
-                        <input type="number" step="any" name="longitude" id="quickLng" class="wm-input" value="{{ $faskes->longitude ?? '' }}" placeholder="107.760..." required>
+                        <input type="number" step="any" name="longitude" id="quickLng" class="wm-input" value="{{ $faskes?->longitude ?? '' }}" placeholder="107.760..." required>
                     </div>
                 </div>
                 <div style="margin-top: 14px; display:flex; gap:12px;">

@@ -1,7 +1,7 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px;">
         <div class="container px-4" style="position: relative; z-index: 5;">
@@ -135,6 +135,6 @@
         </div>
     </section>
 
-    @include('theme.footer')
+    @include('partials.footer')
     <script src="{{ asset('js/wizard-wisatawan.js') }}"></script>
 @endsection

@@ -1,8 +1,8 @@
 {{-- ============================================================
      Dashboard Administrator – WanderMed
-     Layout: theme/dashboard_layout.blade.php
+     Layout: layouts/admin/main.blade.php
      ============================================================ --}}
-@extends('theme.dashboard_layout')
+@extends('layouts.admin.main')
 @php 
     use Illuminate\Support\Facades\Storage; 
     /** @var \Illuminate\Support\Collection|\App\Models\Mitra[] $mitraPending */
@@ -13,156 +13,6 @@
     /** @var \Illuminate\Support\Collection|\App\Models\LaporanMasalah[] $laporans */
     /** @var \Illuminate\Support\Collection|\App\Models\UlasanFaskes[] $allUlasan */
 @endphp
-
-@section('page_title', 'Admin Dashboard')
-@section('badge_role', 'Administrator')
-@section('user_name', 'Administrator')
-@section('user_role', 'Super Administrator')
-@section('user_initial', 'A')
-@section('topbar_title')
-    Pusat <span style="color:#ff7a00;">Kendali Utama</span>
-@endsection
-
-@section('sidebar_nav')
-    <div class="wm-nav-label">Overview</div>
-    <a href="#" class="wm-nav-link active" id="navDashboard">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-    </a>
-
-    <div class="wm-nav-label">Validasi & Moderasi</div>
-    <a href="#" class="wm-nav-link" id="navValidasi">
-        <i class="fas fa-user-check"></i> Validasi Mitra
-        <span class="badge-pill-side" id="navPendingCount">{{ $pendingMitra }}</span>
-    </a>
-    <a href="#" class="wm-nav-link" id="navLaporan">
-        <i class="fas fa-exclamation-triangle"></i> Laporan Masalah
-        <span class="badge-pill-side">{{ $laporans->where('status', 'pending')->count() }}</span>
-    </a>
-
-    <div class="wm-nav-label">Data Master</div>
-    <a href="#" class="wm-nav-link" id="navDataFaskes">
-        <i class="fas fa-clinic-medical"></i> Fasilitas Kesehatan
-    </a>
-    <a href="#" class="wm-nav-link" id="navDataPariwisata">
-        <i class="fas fa-mountain"></i> Destinasi Pariwisata
-    </a>
-    <a href="#" class="wm-nav-link" id="navDataWisatawan">
-        <i class="fas fa-users"></i> Data Wisatawan
-    </a>
-    <a href="#" class="wm-nav-link" id="navAllUlasan">
-        <i class="fas fa-star"></i> Ulasan Faskes
-    </a>
-
-    <div class="wm-nav-label">Komunikasi</div>
-    <a href="#" class="wm-nav-link" id="navChat" style="position:relative;">
-        <i class="fas fa-comments"></i> Chat Faskes
-        <span id="adminChatBadge" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#ff7a00;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;">0</span>
-    </a>
-
-    <div class="wm-nav-label">Sistem</div>
-    <a href="/peta-faskes" class="wm-nav-link">
-        <i class="fas fa-map-marked-alt"></i> Lihat Peta Publik
-    </a>
-    <a href="/logout" class="wm-nav-link">
-        <i class="fas fa-sign-out-alt"></i> Keluar
-    </a>
-@endsection
-
-@section('topbar_bell')
-@php
-    $bellMitraCount   = $mitraPending->count() + $wisataPending->count();
-    $bellTicketCount  = $laporans->where('status', 'pending')->count();
-    $bellTotal        = $bellMitraCount + $bellTicketCount;
-    $recentMitra      = $mitraPending->take(2);
-    $recentWisata     = $wisataPending->take(2);
-    $recentTickets    = $laporans->where('status', 'pending')->take(3);
-@endphp
-<div class="wm-notif-bell" id="wmBellWrap">
-    <div class="wm-topbar-icon" onclick="toggleNotifPanel()" title="Notifikasi" style="cursor:pointer;">
-        <i class="fas fa-bell"></i>
-        @if($bellTotal > 0)
-        <span class="wm-notif-badge">{{ $bellTotal > 9 ? '9+' : $bellTotal }}</span>
-        @endif
-    </div>
-    <div class="wm-notif-panel" id="wmNotifPanel">
-        {{-- Header --}}
-        <div class="wm-notif-header">
-            <span><i class="fas fa-bell"></i> Notifikasi</span>
-            @if($bellTotal > 0)
-            <span class="wm-notif-header-count">{{ $bellTotal }} Baru</span>
-            @endif
-        </div>
-
-        @if($bellTotal === 0)
-        <div class="wm-notif-empty">
-            <i class="fas fa-bell-slash"></i>
-            <p>Tidak ada notifikasi baru</p>
-        </div>
-        @else
-
-        {{-- SECTION: VALIDASI MITRA --}}
-        @if($bellMitraCount > 0)
-        <div class="wm-notif-section-label">
-            <i class="fas fa-user-check" style="margin-right:5px;color:var(--orange);"></i>
-            Validasi Mitra ({{ $bellMitraCount }})
-        </div>
-        @foreach($recentMitra as $mp)
-        <div class="wm-notif-item unread" onclick="wmSearchNavigate(document.querySelector('[data-nav-id=navValidasi]') ? {getAttribute:()=>'navValidasi'} : this)">
-            <div class="wm-notif-icon orange"><i class="fas fa-clinic-medical"></i></div>
-            <div class="wm-notif-content">
-                <div class="wm-notif-title">{{ $mp->nama_penanggung_jawab }}</div>
-                <div class="wm-notif-body">{{ $mp->faskes ? $mp->faskes->nama_faskes : 'Mitra Faskes' }} · Menunggu persetujuan</div>
-                <div class="wm-notif-meta"><i class="fas fa-clock"></i> {{ $mp->created_at->diffForHumans() }}</div>
-            </div>
-        </div>
-        @endforeach
-        @foreach($recentWisata as $wp)
-        <div class="wm-notif-item unread">
-            <div class="wm-notif-icon teal"><i class="fas fa-mountain"></i></div>
-            <div class="wm-notif-content">
-                <div class="wm-notif-title">{{ $wp->nama_pengelola }}</div>
-                <div class="wm-notif-body">{{ $wp->nama_wisata }} · Menunggu persetujuan</div>
-                <div class="wm-notif-meta"><i class="fas fa-clock"></i> {{ $wp->created_at->diffForHumans() }}</div>
-            </div>
-        </div>
-        @endforeach
-        @endif
-
-        {{-- SECTION: LAPORAN MASALAH --}}
-        @if($bellTicketCount > 0)
-        <div class="wm-notif-section-label">
-            <i class="fas fa-exclamation-triangle" style="margin-right:5px;color:#f6c23e;"></i>
-            Laporan Masalah ({{ $bellTicketCount }})
-        </div>
-        @foreach($recentTickets as $tk)
-        <div class="wm-notif-item unread">
-            <div class="wm-notif-icon yellow"><i class="fas fa-ticket-alt"></i></div>
-            <div class="wm-notif-content">
-                <div class="wm-notif-title">#TKT-{{ str_pad($tk->id, 4, '0', STR_PAD_LEFT) }} · {{ $tk->user->name ?? 'Wisatawan' }}</div>
-                <div class="wm-notif-body">{{ Str::limit($tk->deskripsi, 70) }}</div>
-                <div class="wm-notif-meta"><i class="fas fa-clock"></i> {{ $tk->created_at->diffForHumans() }}</div>
-            </div>
-        </div>
-        @endforeach
-        @endif
-
-        {{-- Footer --}}
-        <div class="wm-notif-footer">
-            @if($bellMitraCount > 0)
-            <a href="#" onclick="wmSearchNavigate({getAttribute:()=>'navValidasi'});return false;">
-                <i class="fas fa-user-check"></i> Validasi
-            </a>
-            @endif
-            @if($bellTicketCount > 0)
-            <a href="#" onclick="wmSearchNavigate({getAttribute:()=>'navLaporan'});return false;">
-                <i class="fas fa-exclamation-triangle"></i> Laporan
-            </a>
-            @endif
-        </div>
-        @endif
-    </div>
-</div>
-@endsection
 
 @section('content')
 
@@ -554,7 +404,7 @@
             </table>
         </div>
         <div style="padding: 15px; border-top: 1px solid var(--border);">
-            {{ $faskesList->links('pagination::bootstrap-4') }}
+            {{ $faskesList->fragment('tab-sectionFaskes')->links('pagination::bootstrap-4') }}
         </div>
     </div>
 </div>
@@ -698,7 +548,7 @@
             </table>
         </div>
         <div style="padding: 15px; border-top: 1px solid var(--border);">
-            {{ $users->links('pagination::bootstrap-4') }}
+            {{ $users->fragment('tab-sectionWisatawan')->links('pagination::bootstrap-4') }}
         </div>
     </div>
 </div>

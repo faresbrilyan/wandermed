@@ -7,7 +7,7 @@
     <meta name="msapplication-navbutton-color" content="#112240">
     <meta name="apple-mobile-web-app-status-bar-style" content="#112240">
 
-    <title>WanderMed - Bantuan Medis Wisatawan</title>
+    <title>@yield('title', 'WanderMed - Bantuan Medis Wisatawan')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

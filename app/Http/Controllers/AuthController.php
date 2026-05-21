@@ -30,7 +30,7 @@ class AuthController extends Controller
         if (session()->has('auth_user')) {
             return $this->redirectByRole(session('auth_user.role'));
         }
-        return view('v_login');
+        return view('login');
     }
 
     /**

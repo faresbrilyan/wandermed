@@ -1,8 +1,8 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @section('content')
 
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px;">
         <div class="container px-5" style="position: relative; z-index: 5;">
@@ -74,7 +74,7 @@
     </section>
 
     <section class="bg-hnb-navy pt-5 pb-4 mt-5">
-        @include('theme.footer')
+        @include('partials.footer')
     </section>
 
 @endsection

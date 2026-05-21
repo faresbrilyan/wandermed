@@ -1,153 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Portal Wisatawan – WanderMed</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="{{ asset('css/dashboard-wisatawan.css') }}" rel="stylesheet">
-    {{-- Inline script tema: set SEBELUM render agar tidak flash --}}
-    <script>
-        (function() {
-            var t = localStorage.getItem('wanderMedTheme') || 'dark';
-            if (t === 'dark') document.write('<style>body{background:#0f172a;color:#f1f5f9}</style>');
-        })();
-    </script>
-</head>
-<body id="appBody">
-<script>
-    // Set class tema sebelum konten dirender
-    (function() {
-        var t = localStorage.getItem('wanderMedTheme') || 'dark';
-        document.getElementById('appBody').className = t === 'dark' ? 'dark' : '';
-    })();
-</script>
+@extends('layouts.wisatawan.main')
 
-{{-- ═══════════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════════ --}}
-<nav class="w-nav">
-    <div class="w-nav-inner">
-        <div class="w-nav-left">
-            <a href="/" class="w-nav-brand">
-                <i class="fas fa-heartbeat"></i>
-                WanderMed
-            </a>
-        </div>
-        <div class="w-nav-actions">
-            <a href="/peta-faskes" class="w-btn w-btn-ghost" title="Peta Faskes">
-                <i class="fas fa-map-marked-alt"></i>
-                <span class="d-none-xs">Peta</span>
-            </a>
-            <button class="w-btn w-btn-ghost" onclick="toggleTheme()" title="Ganti Tema" id="themeBtn">
-                <i class="fas fa-moon" id="themeIco"></i>
-            </button>
-            <a href="/logout" class="w-btn w-btn-red" id="logoutBtn" title="Keluar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="d-none-xs">Keluar</span>
-            </a>
-        </div>
-    </div>
-</nav>
-
-{{-- ═══════════════════════════════════════════
-     KONTEN UTAMA (dibatasi max-width 1280px)
-═══════════════════════════════════════════ --}}
-<div class="w-page-wrapper">
-
-{{-- ── PROFILE STRIP (mobile only — menggantikan sidebar) ── --}}
-<div class="profile-strip">
-    <div class="ps-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-    <div class="ps-info">
-        <div class="ps-name">{{ $user->name }}</div>
-        <div class="ps-email">{{ $user->email }}</div>
-        <div class="ps-badge"><i class="fas fa-check-circle"></i> Wisatawan Aktif</div>
-    </div>
-    <div class="ps-quick-links">
-        <a href="/peta-faskes" class="ps-link" title="Peta Faskes">
-            <i class="fas fa-map-marked-alt"></i>
-        </a>
-        <button class="ps-link" onclick="switchTab('medis'); scrollToMain();" title="Rekam Medis">
-            <i class="fas fa-notes-medical"></i>
-        </button>
-    </div>
-</div>
-
-{{-- ═══════════════════════════════════════════
-     LAYOUT UTAMA: Sidebar + Main
-═══════════════════════════════════════════ --}}
-<div class="w-layout">
-
-    {{-- ── SIDEBAR KIRI (Desktop) ── --}}
-    <aside class="w-sidebar" id="wSidebar">
-
-        {{-- Profil --}}
-        <div class="profile-main">
-            <div class="p-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-            <div class="p-name">{{ $user->name }}</div>
-            <div class="p-email">{{ $user->email }}</div>
-            <div class="p-badge"><i class="fas fa-check-circle"></i> Wisatawan Aktif</div>
-            <div class="p-join"><i class="fas fa-calendar-alt"></i> Bergabung {{ $user->created_at->format('M Y') }}</div>
-        </div>
-
-        <div class="sidebar-divider"></div>
-
-        {{-- Navigasi Tab --}}
-        <nav class="sidebar-nav">
-            <button class="sidebar-nav-item active" id="sn-riwayat" onclick="switchTab('riwayat')">
-                <i class="fas fa-history"></i> Riwayat Kunjungan
-            </button>
-            <button class="sidebar-nav-item" id="sn-profil" onclick="switchTab('profil')">
-                <i class="fas fa-user-cog"></i> Pengaturan Akun
-            </button>
-            <button class="sidebar-nav-item" id="sn-medis" onclick="switchTab('medis')">
-                <i class="fas fa-notes-medical"></i> Rekam Medis
-            </button>
-        </nav>
-
-        <div class="sidebar-divider"></div>
-
-        {{-- Info Medis Darurat --}}
-        <div class="medis-summary">
-            <div class="medis-summary-title">Info Medis Darurat</div>
-            <div class="med-row">
-                <div class="med-lbl"><i class="fas fa-tint" style="color:var(--red)"></i> Gol. Darah</div>
-                <div class="med-val red">{{ $user->gol_darah ?: '—' }}</div>
-            </div>
-            <div class="med-row">
-                <div class="med-lbl"><i class="fas fa-phone-alt" style="color:var(--orange)"></i> Kontak Darurat</div>
-                <div class="med-val" style="font-size:11px; text-align:right; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                    {{ $user->kontak_darurat ?: '—' }}
-                </div>
-            </div>
-        </div>
-
-        <div class="sidebar-divider"></div>
-
-        {{-- PIN Pemulihan --}}
-        <div class="medis-summary">
-            <div class="pin-toggle-row">
-                <span><i class="fas fa-key"></i> PIN Pemulihan</span>
-                <label class="switch">
-                    <input type="checkbox" id="togglePinWisatawan" onchange="togglePinVisibility()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="pin-display">
-                <span id="pinValueWisatawan" style="filter:blur(5px); transition:filter 0.3s; user-select:none;">
-                    {{ $user->recovery_pin ?? '000000' }}
-                </span>
-            </div>
-            <div class="pin-hint">Gunakan 6-digit PIN ini jika lupa password akun Anda.</div>
-        </div>
-
-    </aside>
-
-    {{-- ── KONTEN UTAMA ── --}}
-    <main class="w-main" id="wMain">
+@section('content')
 
         @if(session('success'))
         <div class="alert-success">
@@ -383,17 +236,13 @@
             </div>
         </div>
 
-    </main>
-</div>
+@endsection
 
+@section('additional_styles')
 <style>
 /* Utility: sembunyikan teks di navbar pada layar xs */
 @media (max-width: 480px) {
     .d-none-xs { display: none !important; }
 }
 </style>
-
-<script src="{{ asset('js/dashboard-wisatawan.js') }}"></script>
-</div>{{-- /.w-page-wrapper --}}
-</body>
-</html>
+@endsection

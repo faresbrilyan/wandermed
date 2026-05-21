@@ -36,7 +36,7 @@ class AdminController extends Controller
      */
     public function dashboard(): View
     {
-        return view('dashboard_admin', [
+        return view('dashboard.admin', [
             'totalWisatawan'  => User::count(),
             'totalFaskes'     => Faskes::count(),
             'totalPariwisata' => PendaftaranPariwisata::disetujui()->count(),

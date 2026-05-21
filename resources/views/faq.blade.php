@@ -1,9 +1,9 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @section('title', 'FAQ Kemitraan - WanderMed')
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <section class="hero-slanted" style="min-height: 40vh; display: flex; align-items: center; padding-top: 120px; padding-bottom: 100px;">
         <div class="container px-4" style="position: relative; z-index: 5;">
@@ -204,6 +204,6 @@
     </section>
 
     <section class="bg-hnb-navy pt-5 pb-4 mt-5">
-        @include('theme.footer')
+        @include('partials.footer')
     </section>
 @endsection

@@ -1,4 +1,4 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -7,7 +7,7 @@
 
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     {{-- Modal Panduan Koordinat --}}
     <div class="modal fade" id="modalKoordinat" tabindex="-1" role="dialog" aria-hidden="true">
@@ -274,7 +274,7 @@
         </div>
     </section>
 
-    @include('theme.footer')
+    @include('partials.footer')
 @endsection
 
 @push('scripts')

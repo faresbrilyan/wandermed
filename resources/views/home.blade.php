@@ -1,4 +1,4 @@
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -255,7 +255,7 @@
 @endpush
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <div id="page-top"></div>
 
@@ -555,7 +555,7 @@
         </div>
     </section>
 
-    @include('theme.footer')
+    @include('partials.footer')
 @endsection
 
 @push('scripts')

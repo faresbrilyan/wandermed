@@ -3,7 +3,7 @@
      Dirombak total: UI friendly, bottom sheet informatif,
      marker custom, filter visual, dan info fasilitas lengkap.
      ============================================================ --}}
-@extends('theme.wisatawan')
+@extends('layouts.public')
 
 @push('styles')
     {{-- Leaflet CSS --}}
@@ -13,7 +13,7 @@
 @endpush
 
 @section('content')
-    @include('theme.navbar')
+    @include('partials.navbar')
 
     <div class="map-page-wrapper">
 
