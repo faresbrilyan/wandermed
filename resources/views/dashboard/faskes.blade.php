@@ -4,6 +4,10 @@
      ============================================================ --}}
 @extends('layouts.faskes.main')
 
+@push('styles')
+<link href="{{ asset('css/doctor-schedule.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
 
 {{-- Data URLs untuk dashboard-faskes.js (menghindari Blade route helper di file .js statis) --}}
@@ -344,73 +348,185 @@
         @endif
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-12 mb-4">
             <div class="wm-card">
-                <div class="wm-card-header"><div class="wm-card-title">Tambah Jadwal Baru</div></div>
-                <div class="wm-card-body">
+                <div class="wm-card-header">
+                    <div class="wm-card-title">
+                        <i class="fas fa-calendar-plus mr-2" style="color: var(--orange);"></i> Tambah Jadwal Baru
+                    </div>
+                </div>
+                <div class="wm-card-body" style="padding: 24px 28px;">
                     <form action="{{ route('faskes.jadwal.store') }}" method="POST">
                         @csrf
-                        <div class="wm-form-group mb-2">
-                            <label class="wm-label">Nama Dokter</label>
-                            <input type="text" name="nama_dokter" class="wm-input" required maxlength="100">
-                        </div>
-                        <div class="wm-form-group mb-2">
-                            <label class="wm-label">Spesialisasi</label>
-                            <input type="text" name="spesialisasi" class="wm-input" placeholder="Misal: Poli Umum, Dokter Gigi" required maxlength="100">
-                        </div>
-                        <div class="wm-form-group mb-2">
-                            <label class="wm-label">Hari Praktik</label>
-                            <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $h)
-                                <label style="display:inline-flex; align-items:center; gap:4px; font-size:13px; cursor:pointer;">
-                                    <input type="checkbox" name="hari[]" value="{{ $h }}"> {{ $h }}
-                                </label>
-                                @endforeach
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="wm-label-modern">Nama Dokter</label>
+                                <div class="wm-input-wrapper">
+                                    <i class="fas fa-user-md input-icon"></i>
+                                    <input type="text" name="nama_dokter" class="wm-input-modern" placeholder="Nama Lengkap Dokter" required maxlength="100">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="wm-label-modern">Spesialisasi / Poli</label>
+                                <div class="wm-input-wrapper">
+                                    <i class="fas fa-stethoscope input-icon"></i>
+                                    <input type="text" name="spesialisasi" class="wm-input-modern" placeholder="Misal: Poli Anak, Poli Gigi, Poli Umum" required maxlength="100">
+                                </div>
                             </div>
                         </div>
-                        <div style="display:flex;gap:10px;" class="mb-3">
-                            <div class="wm-form-group flex-1">
-                                <label class="wm-label">Jam Mulai</label>
-                                <input type="time" name="jam_mulai" class="wm-input" required>
-                            </div>
-                            <div class="wm-form-group flex-1">
-                                <label class="wm-label">Jam Selesai</label>
-                                <input type="time" name="jam_selesai" class="wm-input" required>
+
+                        <!-- Row 2: Hari Praktik (Dedicated full row, highly visible & spacious) -->
+                        <div class="row mt-2">
+                            <div class="col-12 mb-3">
+                                <label class="wm-label-modern">Hari Praktik</label>
+                                <div class="wm-days-selector">
+                                    @foreach([
+                                        'Senin' => 'Sen', 
+                                        'Selasa' => 'Sel', 
+                                        'Rabu' => 'Rab', 
+                                        'Kamis' => 'Kam', 
+                                        'Jumat' => 'Jum', 
+                                        'Sabtu' => 'Sab', 
+                                        'Minggu' => 'Min'
+                                    ] as $fullName => $shortName)
+                                    <label class="wm-day-pill">
+                                        <input type="checkbox" name="hari[]" value="{{ $fullName }}">
+                                        <span class="day-text">{{ $shortName }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
-                        <button type="submit" class="wm-btn blue w-100"><i class="fas fa-plus"></i> Tambah Jadwal</button>
+
+                        <!-- Row 3: Jam Mulai, Jam Selesai, dan Tombol Submit (Perfect horizontal alignment) -->
+                        <div class="row align-items-end mt-2">
+                            <div class="col-md-4 mb-3">
+                                <label class="wm-label-modern">Jam Mulai</label>
+                                <div class="wm-input-wrapper">
+                                    <input type="time" name="jam_mulai" class="wm-input-modern-noicon" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="wm-label-modern">Jam Selesai</label>
+                                <div class="wm-input-wrapper">
+                                    <input type="time" name="jam_selesai" class="wm-input-modern-noicon" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button type="submit" class="wm-btn-premium" style="height: 42px; display: inline-flex; align-items: center; justify-content: center; width: 100%;">
+                                    <i class="fas fa-plus"></i> Tambah Jadwal Praktik
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-12">
             <div class="wm-card">
-                <div class="wm-card-header"><div class="wm-card-title">Daftar Jadwal Praktik</div></div>
-                <div class="wm-table-wrap">
-                    <table class="wm-table">
-                        <thead>
-                            <tr><th>Dokter</th><th>Spesialis</th><th>Hari</th><th>Jam</th><th>Aksi</th></tr>
-                        </thead>
-                        <tbody>
-                            @forelse($jadwals ?? [] as $jadwal)
-                            <tr>
-                                <td class="bold">{{ $jadwal->nama_dokter }}</td>
-                                <td>{{ $jadwal->spesialisasi }}</td>
-                                <td>{{ is_array($jadwal->hari) ? implode(', ', $jadwal->hari) : $jadwal->hari }}</td>
-                                <td>{{ substr($jadwal->jam_mulai,0,5) }} - {{ substr($jadwal->jam_selesai,0,5) }}</td>
-                                <td>
-                                    <form action="{{ route('faskes.jadwal.destroy', $jadwal->id) }}" method="POST">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="wm-btn danger sm" onclick="return confirm('Hapus jadwal?')"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr><td colspan="5" class="text-center text-muted py-3">Belum ada jadwal praktik ditambahkan.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="wm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="wm-card-title">
+                        <i class="fas fa-list-ul mr-2" style="color: var(--orange);"></i> Daftar Jadwal Praktik
+                    </div>
+                    <span class="badge" style="background: rgba(255,122,0,0.1); color: var(--orange); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px;">
+                        {{ count($jadwals ?? []) }} Dokter Aktif
+                    </span>
                 </div>
+                
+                @if(empty($jadwals) || $jadwals->isEmpty())
+                    <div class="text-center py-5" style="color: var(--text-muted);">
+                        <div style="background: rgba(0,0,0,0.02); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+                            <i class="fas fa-calendar-times fa-2x" style="opacity: 0.3; color: var(--text-muted);"></i>
+                        </div>
+                        <div class="font-weight-bold" style="font-size: 14px; color: var(--text-primary);">Belum Ada Jadwal</div>
+                        <div style="font-size: 12px; margin-top: 4px;">Tambahkan jadwal dokter menggunakan form di atas.</div>
+                    </div>
+                @else
+                    <div class="wm-table-wrap" style="border-radius: 0 0 16px 16px; overflow: hidden; border-top: 1px solid var(--border);">
+                        <table class="wm-table-modern">
+                            <thead>
+                                <tr>
+                                    <th>Dokter & Spesialisasi</th>
+                                    <th>Hari Praktik</th>
+                                    <th>Jam Kerja</th>
+                                    <th style="text-align: right; padding-right: 24px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($jadwals as $jadwal)
+                                @php
+                                    $doctorName = $jadwal->nama_dokter;
+                                    $initial = strtoupper(substr($doctorName, 0, 1));
+                                    // Generate a stable aesthetic gradient color based on doctor name
+                                    $hash = md5($doctorName);
+                                    $colorIndex = hexdec(substr($hash, 0, 2)) % 4;
+                                    $gradients = [
+                                        'linear-gradient(135deg, #4e73df, #224abe)', // Blue
+                                        'linear-gradient(135deg, #1cc88a, #13855c)', // Emerald
+                                        'linear-gradient(135deg, #36b9cc, #258391)', // Teal
+                                        'linear-gradient(135deg, #e83e8c, #ab1859)'  // Pink/Kandungan style
+                                    ];
+                                    $gradient = $gradients[$colorIndex];
+                                    $activeDays = is_array($jadwal->hari) ? $jadwal->hari : [$jadwal->hari];
+                                @endphp
+                                <tr class="wm-table-row-modern">
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div class="doctor-avatar" style="background: {{ $gradient }};">
+                                                {{ $initial }}
+                                            </div>
+                                            <div>
+                                                <div class="doctor-name">{{ $doctorName }}</div>
+                                                <span class="doctor-specialty">{{ $jadwal->spesialisasi }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="weekly-mini-calendar">
+                                            @foreach([
+                                                'Senin' => 'Sen', 
+                                                'Selasa' => 'Sel', 
+                                                'Rabu' => 'Rab', 
+                                                'Kamis' => 'Kam', 
+                                                'Jumat' => 'Jum', 
+                                                'Sabtu' => 'Sab', 
+                                                'Minggu' => 'Min'
+                                            ] as $fullName => $shortName)
+                                                @php
+                                                    $isActive = false;
+                                                    foreach($activeDays as $ad) {
+                                                        if (strcasecmp($ad, $fullName) === 0) {
+                                                            $isActive = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                <span class="mini-day-dot {{ $isActive ? 'active' : '' }}" title="{{ $fullName }}">
+                                                    {{ $shortName }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="schedule-time-badge">
+                                            <i class="far fa-clock clock-icon"></i>
+                                            {{ substr($jadwal->jam_mulai, 0, 5) }} - {{ substr($jadwal->jam_selesai, 0, 5) }}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right; padding-right: 24px;">
+                                        <form action="{{ route('faskes.jadwal.destroy', $jadwal->id) }}" method="POST" style="display:inline;">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="wm-action-delete" title="Hapus Jadwal" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal untuk {{ $doctorName }}?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

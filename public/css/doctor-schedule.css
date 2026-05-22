@@ -1,0 +1,259 @@
+/* public/css/doctor-schedule.css */
+
+.wm-days-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.wm-day-pill {
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.wm-day-pill input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.wm-day-pill .day-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--navy);
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+.wm-day-pill input[type="checkbox"]:checked + .day-text {
+    background: linear-gradient(135deg, var(--orange), #ff9a44);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px var(--orange-glow);
+    transform: translateY(-2px);
+}
+.wm-day-pill:hover .day-text {
+    background: var(--navy-hover);
+    border-color: var(--orange);
+    color: var(--orange);
+}
+.wm-day-pill input[type="checkbox"]:checked:hover + .day-text {
+    background: linear-gradient(135deg, var(--orange), #ff9a44);
+    color: #ffffff;
+    box-shadow: 0 6px 14px var(--orange-glow);
+}
+
+.wm-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.wm-input-wrapper .input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--text-muted);
+    font-size: 13px;
+    pointer-events: none;
+    transition: var(--transition);
+}
+.wm-input-modern {
+    width: 100%;
+    padding: 11px 16px 11px 40px;
+    background: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: var(--transition);
+}
+.wm-input-modern:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: var(--navy-light);
+    box-shadow: 0 0 0 4px var(--orange-glow);
+}
+.wm-input-modern:focus ~ .input-icon,
+.wm-input-modern:focus + .input-icon {
+    color: var(--orange);
+}
+
+.wm-input-modern-noicon {
+    width: 100%;
+    padding: 11px 16px;
+    background: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: var(--transition);
+}
+.wm-input-modern-noicon:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: var(--navy-light);
+    box-shadow: 0 0 0 4px var(--orange-glow);
+}
+
+.wm-label-modern {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.wm-btn-premium {
+    width: 100%;
+    background: linear-gradient(135deg, var(--orange), #ff9100);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.2);
+    transition: var(--transition);
+    cursor: pointer;
+}
+.wm-btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 122, 0, 0.3);
+}
+.wm-btn-premium:active {
+    transform: scale(0.97);
+}
+
+.wm-table-modern {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.wm-table-modern th {
+    background: var(--navy-hover);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 20px;
+    border-bottom: 1.5px solid var(--border);
+}
+.wm-table-row-modern {
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+.wm-table-row-modern:hover {
+    background: rgba(255, 122, 0, 0.015);
+}
+.wm-table-row-modern:last-child {
+    border-bottom: none;
+}
+.wm-table-row-modern td {
+    padding: 16px 20px;
+    vertical-align: middle;
+}
+.doctor-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+.doctor-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13.5px;
+    line-height: 1.3;
+}
+.doctor-specialty {
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: rgba(78, 115, 223, 0.08);
+    color: #4e73df;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 2px;
+}
+.weekly-mini-calendar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.mini-day-dot {
+    padding: 3px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--navy);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    user-select: none;
+    transition: var(--transition);
+}
+.mini-day-dot.active {
+    background: linear-gradient(135deg, #1cc88a, #109b68);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 2px 6px rgba(28, 200, 138, 0.2);
+}
+.schedule-time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.schedule-time-badge .clock-icon {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.wm-action-delete {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+.wm-action-delete:hover {
+    background: rgba(231, 74, 59, 0.1);
+    color: #e74a3b;
+}

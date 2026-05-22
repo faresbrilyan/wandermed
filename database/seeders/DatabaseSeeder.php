@@ -30,9 +30,12 @@ class DatabaseSeeder extends Seeder
         // Buat 40 wisatawan random lokal
         $users = [];
         for ($i = 0; $i < 40; $i++) {
+            $firstName = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($faker->firstName()));
+            $email = $firstName . ($i + 1) . '@gmail.com';
+
             $users[] = User::create([
                 'name'              => $faker->name(),
-                'email'             => $faker->unique()->safeEmail(),
+                'email'             => $email,
                 'password'          => Hash::make('password123'),
                 'recovery_pin'      => str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT),
                 'gol_darah'         => $faker->randomElement(['A', 'B', 'AB', 'O']),
