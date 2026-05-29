@@ -1328,3 +1328,152 @@ body.light-mode .faskes-detail-panel {
 body.light-mode .detail-header-row h3 {
     color: var(--hnb-navy) !important;
 }
+
+/* --- F. Doctor Schedule (Jadwal Praktik) Page Adaptive Styles --- */
+.faskes-title {
+    color: #ffffff;
+    transition: var(--transition);
+}
+body.light-mode .faskes-title {
+    color: #2b3674;
+}
+
+.faskes-address {
+    color: rgba(255, 255, 255, 0.6) !important;
+    transition: var(--transition);
+}
+body.light-mode .faskes-address {
+    color: #64748b !important;
+}
+
+.history-badge {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+body.light-mode .history-badge {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #e9ecef;
+}
+
+.faskes-table {
+    background: rgba(255, 255, 255, 0.02) !important;
+    color: #ffffff !important;
+    transition: var(--transition);
+}
+body.light-mode .faskes-table {
+    background: #ffffff !important;
+    color: var(--hnb-navy) !important;
+}
+.faskes-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+body.light-mode .faskes-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.faskes-table-thead {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+    transition: var(--transition);
+}
+body.light-mode .faskes-table-thead {
+    background: #f4f7fe !important;
+    color: #2b3674 !important;
+}
+.faskes-table-thead th {
+    border: none !important;
+}
+
+.doctor-name {
+    color: #ffffff !important;
+    transition: var(--transition);
+}
+body.light-mode .doctor-name {
+    color: var(--hnb-navy) !important;
+}
+
+.spec-badge {
+    background: rgba(78, 115, 223, 0.15) !important;
+    color: #85a2ff !important;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 6px 12px;
+    transition: var(--transition);
+}
+body.light-mode .spec-badge {
+    background: #e0e8ff !important;
+    color: #2b3674 !important;
+}
+
+.time-block {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: #dddfeb;
+    font-weight: 600;
+    transition: var(--transition);
+}
+body.light-mode .time-block {
+    background: #f8f9fa;
+    border: 1px solid #eaecf4;
+    color: #5a5c69;
+}
+
+.faskes-alert {
+    background: rgba(54, 185, 204, 0.1) !important;
+    border: 1px solid rgba(54, 185, 204, 0.2) !important;
+    color: #81e6d9 !important;
+    transition: var(--transition);
+}
+.faskes-alert i {
+    color: #4fd1c5 !important;
+}
+body.light-mode .faskes-alert {
+    background: #e6fffa !important;
+    border: 1px solid #b2f5ea !important;
+    color: #234e52 !important;
+}
+body.light-mode .faskes-alert i {
+    color: #319795 !important;
+}
+
+.btn-back-map {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px;
+    font-weight: bold;
+    min-width: 200px;
+    transition: var(--transition);
+}
+.btn-back-map:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+body.light-mode .btn-back-map {
+    background: #cbd5e1 !important;
+    color: var(--hnb-navy) !important;
+    border: 1px solid #cbd5e1 !important;
+}
+body.light-mode .btn-back-map:hover {
+    background: #94a3b8 !important;
+    color: var(--hnb-navy) !important;
+}
+
+/* Custom dashed outline button for faskes schedule on map detail panel */
+.btn-outline-hnb-orange {
+    color: var(--hnb-orange) !important;
+    border: 1.5px dashed var(--hnb-orange) !important;
+    background: transparent !important;
+    transition: var(--transition);
+}
+.btn-outline-hnb-orange:hover {
+    background: rgba(255, 122, 0, 0.1) !important;
+    color: var(--hnb-orange) !important;
+}

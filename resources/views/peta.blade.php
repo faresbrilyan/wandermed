@@ -224,7 +224,7 @@
                             <i class="fas fa-share-alt mr-1"></i> Bagikan
                         </button>
                     </div>
-                    <a id="btnJadwal" href="#" class="btn btn-outline-primary py-2" style="border-radius:10px; display:none; border-style: dashed;">
+                    <a id="btnJadwal" href="#" class="btn btn-outline-hnb-orange py-2" style="border-radius:10px; display:none; border-style: dashed;">
                         <i class="fas fa-user-md mr-1"></i> Lihat Jadwal Praktik
                     </a>
                     <button id="btnDeteksiFaskes" class="btn btn-danger py-2 mt-1" style="border-radius:10px; display:none; border: none; background: linear-gradient(135deg, #e74a3b, #c0392b); color: #fff; box-shadow: 0 4px 15px rgba(231,74,59,0.3);">
