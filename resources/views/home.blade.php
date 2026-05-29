@@ -303,8 +303,8 @@
                 {{-- Hero Side Logo Panel --}}
                 <div class="col-lg-5 d-none d-lg-flex justify-content-center" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
                     <div class="d-flex align-items-center justify-content-center hero-logo-box">
-                        <img src="{{ asset('img/wdm.png') }}" alt="WanderMed Logo" class="logo-for-light-bg" style="width: 180px; height: 180px; object-fit: contain;">
-                        <img src="{{ asset('img/wdmlight.png') }}" alt="WanderMed Logo" class="logo-for-dark-bg" style="width: 180px; height: 180px; object-fit: contain;">
+                        <img src="{{ asset('img/wdm.png') }}" alt="WanderMed Logo" class="logo-for-light-bg" style="width: 240px; height: 240px; object-fit: contain;">
+                        <img src="{{ asset('img/wdmlight.png') }}" alt="WanderMed Logo" class="logo-for-dark-bg" style="width: 240px; height: 240px; object-fit: contain;">
                     </div>
                 </div>
             </div>
