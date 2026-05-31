@@ -4,7 +4,7 @@
 
     @include('partials.navbar')
 
-    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px;">
+    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px; clip-path: none;">
         <div class="container px-5" style="position: relative; z-index: 5;">
 
             <div class="text-center mb-5 animate-fade-up">

@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.navbar')
 
-    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px;">
+    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px; clip-path: none;">
         <div class="container px-4" style="position: relative; z-index: 5;">
             <div class="row justify-content-center">
                 <div class="col-lg-5 col-md-8 col-sm-10 animate-fade-up">

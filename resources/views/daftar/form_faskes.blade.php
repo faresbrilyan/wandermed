@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px;">
+    <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px; clip-path: none;">
         <div class="container px-4" style="position: relative; z-index: 5;">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-xl-7 animate-fade-up">
