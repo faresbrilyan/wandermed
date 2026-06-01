@@ -29,13 +29,7 @@
     <i class="fas fa-map-marked-alt"></i> Lihat di Peta
 </a>
 
-<div class="wm-nav-label" style="margin-top:20px;">Keamanan</div>
-<div style="padding: 12px 20px; display:flex; flex-direction: column; background: rgba(0,0,0,0.1); border-left: 3px solid #ff7a00; margin-bottom: 8px;">
-    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;"><i class="fas fa-key" style="color:#ff7a00;"></i> PIN Pemulihan Akses</div>
-    <div title="Arahkan kursor untuk melihat PIN" style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 6px; color: var(--text-primary); filter: blur(6px); transition: filter 0.3s; user-select: none; cursor: crosshair;" onmouseover="this.style.filter='blur(0)'; this.style.userSelect='auto';" onmouseout="this.style.filter='blur(6px)'; this.style.userSelect='none';">
-        {{ $mitra?->recovery_pin ?? '000000' }}
-    </div>
-</div>
+
 
 <div style="padding: 12px 20px 5px 20px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 15px; line-height: 1.6;">
     <i class="fas fa-history" style="color: #ff7a00; margin-right: 4px;"></i> Terakhir Login: <br>

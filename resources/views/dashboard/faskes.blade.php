@@ -746,6 +746,61 @@
             </form>
         </div>
     </div>
+
+    <!-- Integrasi Bot Telegram -->
+    <div class="wm-card mt-4">
+        <div class="wm-card-header">
+            <div class="wm-card-title">
+                <i class="fab fa-telegram-plane" style="color:#0088cc;"></i> Integrasi Bot Telegram
+            </div>
+        </div>
+        <div class="wm-card-body">
+            @if(isset($mitra) && $mitra)
+                @if($mitra->telegram_chat_id)
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <p style="font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">
+                                <i class="fas fa-check-circle" style="color:#28a745; margin-right:4px;"></i> Status: Terhubung dengan Telegram
+                            </p>
+                            <p style="font-size:12px; color:var(--text-muted); margin-bottom:0;">
+                                ID Chat Telegram Anda: <code>{{ $mitra->telegram_chat_id }}</code>. Anda sekarang dapat menggunakan bot untuk reset sandi secara instan.
+                            </p>
+                        </div>
+                        <form action="{{ route('faskes.telegram.unlink') }}" method="POST" style="margin:0;">
+                            @csrf
+                            <button type="submit" class="wm-btn" style="padding:10px 20px; background:rgba(239,68,68,0.1); color:#ff6b6b; border:1px solid rgba(239,68,68,0.3); font-size:13px; font-weight:600;">
+                                <i class="fas fa-unlink"></i> Putuskan Hubungan
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px; line-height:1.5;">
+                        Hubungkan akun Mitra Faskes Anda dengan bot Telegram kami untuk kemudahan pemulihan akun instan secara mandiri.
+                    </p>
+                    @if($mitra->telegram_verification_code)
+                        <div style="background:rgba(255,255,255,0.03); border-left:4px solid #0088cc; padding:12px; border-radius:6px; margin-bottom:14px;">
+                            <p style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Langkah Menghubungkan:</p>
+                            <ol style="font-size:12.5px; color:var(--text-muted); padding-left:20px; margin-bottom:0; line-height:1.6;">
+                                <li>Buka bot Telegram kami di: <a href="https://t.me/{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }}" target="_blank" style="color:#0088cc; font-weight:700;">@{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }} <i class="fas fa-external-link-alt" style="font-size:10px;"></i></a></li>
+                                <li>Kirimkan perintah ini ke bot: <code style="color:#ff7a00; font-weight:bold; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:4px;">/start {{ $mitra->telegram_verification_code }}</code></li>
+                                <li>Akun Mitra Anda akan langsung terhubung secara otomatis!</li>
+                            </ol>
+                        </div>
+                    @endif
+                    <form action="{{ route('faskes.telegram.generate') }}" method="POST" style="margin:0;">
+                        @csrf
+                        <button type="submit" class="wm-btn blue" style="width:100%;">
+                            <i class="fas fa-link"></i> {{ $mitra->telegram_verification_code ? 'Generate Kode Baru' : 'Hubungkan Telegram' }}
+                        </button>
+                    </form>
+                @endif
+            @else
+                <p style="font-size:12.5px; color:var(--text-muted); margin:0;">
+                    Informasi akun Mitra tidak tersedia. Silakan hubungi admin.
+                </p>
+            @endif
+        </div>
+    </div>
 </div>
 
 {{-- ===== SECTION CHAT ADMIN ===== --}}

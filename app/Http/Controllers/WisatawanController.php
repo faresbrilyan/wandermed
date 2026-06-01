@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\RiwayatKunjungan;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 /**
  * WisatawanController
@@ -112,5 +113,34 @@ class WisatawanController extends Controller
         session(['auth_user.name' => $user->name]);
 
         return back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    /**
+     * Generate a new verification code for linking Telegram.
+     */
+    public function generateTelegramCode(Request $request)
+    {
+        $user = User::find(session('auth_user.id'));
+        
+        // Generate random verification code
+        $code = 'WDM-' . strtoupper(Str::random(6));
+        
+        $user->telegram_verification_code = $code;
+        $user->save();
+
+        return back()->with('success', "Kode verifikasi Telegram Anda: {$code}. Silakan kirimkan kode ini ke bot Telegram kami.");
+    }
+
+    /**
+     * Unlink the linked Telegram account.
+     */
+    public function unlinkTelegram(Request $request)
+    {
+        $user = User::find(session('auth_user.id'));
+        $user->telegram_chat_id = null;
+        $user->telegram_verification_code = null;
+        $user->save();
+
+        return back()->with('success', 'Akun Telegram Anda berhasil dilepas.');
     }
 }

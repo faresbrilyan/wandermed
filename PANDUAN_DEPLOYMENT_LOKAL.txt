@@ -1,0 +1,77 @@
+========================================================================
+   PANDUAN DEPLOY & MENJALANKAN WANDERMED SECARA LOKAL (DENGAN TELEGRAM BOT)
+========================================================================
+
+Karena fitur pemulihan akun WanderMed kini menggunakan Telegram Bot, Anda tidak 
+bisa hanya menggunakan `php artisan serve` saja agar Bot-nya berfungsi. Telegram 
+memerlukan URL publik berbasis HTTPS yang aktif untuk mengirim pesan ke aplikasi Anda.
+
+Berikut adalah panduan lengkap cara menjalankan dan menghubungkan semuanya:
+
+------------------------------------------------------------------------
+LANGKAH 1: MENJALANKAN SERVER LARAVEL LOKAL
+------------------------------------------------------------------------
+1. Buka Terminal/CMD Anda di folder project `wandermed`.
+2. Jalankan perintah server lokal Laravel:
+   
+   php artisan serve
+   
+3. Biarkan terminal ini tetap terbuka. Aplikasi Anda sekarang berjalan lokal 
+   di alamat: http://127.0.0.1:8000
+
+------------------------------------------------------------------------
+LANGKAH 2: SETUP NGROK & MEMBUAT TEROWONGAN HTTPS (Hanya Sekali)
+------------------------------------------------------------------------
+Ngrok digunakan untuk menyalurkan website lokal Anda agar bisa diakses oleh 
+server Telegram di internet melalui koneksi HTTPS yang aman.
+
+1. Buka browser dan login/daftar gratis di https://dashboard.ngrok.com
+2. Masuk ke menu "Your Authtoken" lalu Salin (Copy) token Anda.
+3. Buka Terminal/CMD baru (masuk ke folder tempat file ngrok.exe berada).
+4. Daftarkan token Anda ke Ngrok dengan mengetik:
+   
+   .\ngrok.exe config add-authtoken <TOKEN_ANDA_DARI_WEBSITE>
+   
+   *(Tekan Enter)*
+
+------------------------------------------------------------------------
+LANGKAH 3: MENJALANKAN TEROWONGAN NGROK (Setiap Kali Ingin Menguji Bot)
+------------------------------------------------------------------------
+1. Di terminal tempat ngrok.exe berada, ketik perintah untuk membuka port 8000:
+   
+   .\ngrok.exe http 8000
+   
+2. Layar terminal akan berubah dan menampilkan baris "Forwarding" seperti ini:
+   Forwarding -> https://xxxx-xxx-xxx.ngrok-free.app -> http://localhost:8000
+
+3. Salin (Copy) URL HTTPS yang diberikan (Contoh: https://xxxx-xxx-xxx.ngrok-free.app).
+4. Biarkan terminal Ngrok ini tetap terbuka selama Anda menguji aplikasi.
+
+------------------------------------------------------------------------
+LANGKAH 4: KONFIGURASI .ENV & AKTIFKAN WEBHOOK TELEGRAM
+------------------------------------------------------------------------
+Setiap kali Anda menjalankan ulang Ngrok, URL terowongannya akan berubah (kecuali 
+jika Anda menggunakan ngrok berbayar dengan custom domain). Lakukan langkah ini:
+
+1. Buka file `.env` di proyek WanderMed Anda.
+2. Cari baris `APP_URL` (biasanya di baris ke-5), lalu ubah nilainya dengan 
+   URL HTTPS ngrok terbaru yang Anda salin pada Langkah 3:
+   
+   APP_URL=https://xxxx-xxx-xxx.ngrok-free.app
+   
+   *(Simpan/Save file .env)*
+
+3. Buka browser Anda (Chrome/Firefox/Edge), lalu akses URL aktivasi berikut:
+   
+   https://xxxx-xxx-xxx.ngrok-free.app/telegram/set-webhook
+   
+4. Jika berhasil, Anda akan melihat tulisan di layar:
+   {"ok":true,"result":true,"description":"Webhook was set"}
+
+SELESAI! Bot Telegram Anda sekarang sudah terhubung sepenuhnya dengan server 
+lokal laptop Anda. Anda sudah bisa mencoba fitur reset password dan integrasi 
+Telegram dari Dashboard Wisatawan.
+
+========================================================================
+HEAR & BUILD STUDIO - WANDERMED DEVELOPER TEAM
+========================================================================

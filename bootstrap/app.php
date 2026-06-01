@@ -11,6 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: [
+            '/telegram/webhook',
+        ]);
+
         // Daftarkan alias middleware agar bisa digunakan di route
         $middleware->alias([
             'auth.session' => \App\Http\Middleware\AuthSession::class,

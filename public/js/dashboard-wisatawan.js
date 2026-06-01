@@ -28,35 +28,7 @@ function toggleTheme() {
     }
 }
 
-// ── TOGGLE PIN (Sidebar Desktop) ──
-function togglePinVisibility() {
-    const pinEl  = document.getElementById('pinValueWisatawan');
-    const toggle = document.getElementById('togglePinWisatawan');
-    if (!pinEl || !toggle) return;
 
-    if (toggle.checked) {
-        pinEl.style.filter     = 'blur(0)';
-        pinEl.style.userSelect = 'auto';
-    } else {
-        pinEl.style.filter     = 'blur(5px)';
-        pinEl.style.userSelect = 'none';
-    }
-}
-
-// ── TOGGLE PIN (Mobile Card) ──
-function togglePinMobile() {
-    const pinEl  = document.getElementById('pinValueMobile');
-    const toggle = document.getElementById('togglePinMobile');
-    if (!pinEl || !toggle) return;
-
-    if (toggle.checked) {
-        pinEl.style.filter     = 'blur(0)';
-        pinEl.style.userSelect = 'auto';
-    } else {
-        pinEl.style.filter     = 'blur(5px)';
-        pinEl.style.userSelect = 'none';
-    }
-}
 
 // ── SWITCH TAB ──
 function switchTab(name) {

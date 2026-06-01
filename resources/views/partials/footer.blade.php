@@ -24,6 +24,7 @@
                     <li><a href="/peta-faskes">Peta Faskes Live</a></li>
                     <li><a href="/daftar">Gabung Mitra</a></li>
                     <li><a href="/login">Masuk Akun</a></li>
+                    <li><a href="{{ route('panduan.telegram') }}">Panduan Telegram</a></li>
                 </ul>
             </div>
 

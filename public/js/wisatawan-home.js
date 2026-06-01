@@ -73,4 +73,23 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+
+    // Smooth scroll for "Pelajari Sistem" and "Scroll Down" indicator
+    var scrollIndicator = document.getElementById('heroScrollIndicator');
+    var pelajariBtn = document.querySelector('a[href="#tentang"]');
+
+    function scrollToTentang(e) {
+        e.preventDefault();
+        var targetSection = document.getElementById('tentang');
+        if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', scrollToTentang);
+    }
+    if (pelajariBtn) {
+        pelajariBtn.addEventListener('click', scrollToTentang);
+    }
 });

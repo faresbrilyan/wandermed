@@ -164,38 +164,7 @@ class AuthController extends Controller
         );
     }
 
-    /**
-     * Memproses reset password menggunakan PIN.
-     */
-    public function resetPasswordViaPin(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'recovery_pin' => 'required|string|size:6',
-            'password' => 'required|min:8|confirmed'
-        ]);
 
-        $email = $request->email;
-        $pin = $request->recovery_pin;
-
-        // Cek Wisatawan
-        $user = User::where('email', $email)->where('recovery_pin', $pin)->first();
-        if ($user) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return response()->json(['success' => true, 'message' => 'Password akun Wisatawan berhasil direset!']);
-        }
-
-        // Cek Mitra
-        $mitra = Mitra::where('email', $email)->where('recovery_pin', $pin)->first();
-        if ($mitra) {
-            $mitra->password = Hash::make($request->password);
-            $mitra->save();
-            return response()->json(['success' => true, 'message' => 'Password akun Mitra berhasil direset!']);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Email atau PIN rahasia tidak cocok!']);
-    }
 
     // =========================================================
     // PRIVATE HELPERS

@@ -54,11 +54,6 @@
                                 <div class="form-group mb-5">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <label class="text-white font-weight-bold ml-1 mb-0" style="font-size: 0.9rem; opacity: 0.9;">Kata Sandi</label>
-                                        <div>
-                                            <a href="#" onclick="forgotPassword(event)" class="text-hnb-orange text-decoration-none hover-orange mr-1" style="font-size: 0.85rem;">Lupa Password?</a>
-                                            <span class="text-white-50" style="font-size: 0.85rem;">|</span>
-                                            <a href="#" onclick="requestDeleteAccount(event)" class="text-danger text-decoration-none hover-orange ml-1" style="font-size: 0.85rem;">Lupa PIN?</a>
-                                        </div>
                                     </div>
                                     <div class="input-group" style="border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
                                         <div class="input-group-prepend">
@@ -70,6 +65,14 @@
                                                 <i class="fas fa-eye" id="ikonMata"></i>
                                             </button>
                                         </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between flex-wrap align-items-center mt-2 px-1 gap-2" style="font-size: 0.82rem;">
+                                        <a href="#" onclick="forgotPasswordTelegram(event)" class="text-hnb-orange text-decoration-none hover-orange" style="font-weight: 500;">
+                                            <i class="fab fa-telegram-plane"></i> Lupa Password?
+                                        </a>
+                                        <a href="#" onclick="requestDeleteAccount(event)" class="text-danger text-decoration-none hover-orange" style="font-weight: 500;">
+                                            <i class="fas fa-trash-alt"></i> Ajukan Hapus Akun
+                                        </a>
                                     </div>
                                     @error('password')
                                         <small class="text-danger ml-1 mt-1 d-block">{{ $message }}</small>
@@ -107,7 +110,7 @@
 @push('scripts')
 <script>
     window.WanderMedConfig = {
-        resetPasswordPinUrl: `{{ route('password.pin.reset') }}`,
+        telegramBotUsername: `{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }}`,
         requestDeleteUrl: `{{ route('wisatawan.request-delete') }}`,
         csrfToken: `{{ csrf_token() }}`
     };

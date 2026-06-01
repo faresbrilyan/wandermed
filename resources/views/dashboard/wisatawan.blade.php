@@ -22,28 +22,7 @@
             </div>
         </div>
 
-        {{-- ── PIN PEMULIHAN (Mobile only — sidebar tidak tersedia di hp) ── --}}
-        <div class="pin-mobile-card">
-            <div class="pin-mobile-header">
-                <div class="pin-mobile-label">
-                    <i class="fas fa-key"></i>
-                    <span>PIN Pemulihan Akun</span>
-                </div>
-                <label class="switch">
-                    <input type="checkbox" id="togglePinMobile" onchange="togglePinMobile()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="pin-mobile-value">
-                <span id="pinValueMobile" style="filter:blur(5px); transition:filter 0.3s; user-select:none; letter-spacing:8px;">
-                    {{ $user->recovery_pin ?? '000000' }}
-                </span>
-            </div>
-            <div class="pin-mobile-hint">
-                <i class="fas fa-shield-alt"></i>
-                Aktifkan toggle di atas untuk melihat PIN 6-digit Anda
-            </div>
-        </div>
+
 
         {{-- Stats Grid --}}
         <div class="stats-grid">
@@ -180,6 +159,52 @@
                             </button>
                         </div>
                     </form>
+
+                    <hr style="border-color:var(--border); margin:24px 0;">
+
+                    <h5 style="font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                        <i class="fab fa-telegram-plane" style="color:#0088cc"></i> Integrasi Bot Telegram
+                    </h5>
+                    <div style="background:rgba(0,136,204,0.05); border:1px solid rgba(0,136,204,0.2); border-radius:10px; padding:18px; margin-bottom: 24px;">
+                        @if($user->telegram_chat_id)
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                                <div>
+                                    <p style="font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">
+                                        <i class="fas fa-check-circle" style="color:#28a745; margin-right:4px;"></i> Status: Terhubung dengan Telegram
+                                    </p>
+                                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:0;">
+                                        ID Chat Telegram Anda: <code>{{ $user->telegram_chat_id }}</code>. Anda sekarang dapat menggunakan bot untuk reset sandi secara instan.
+                                    </p>
+                                </div>
+                                <form action="{{ route('wisatawan.telegram.unlink') }}" method="POST" style="margin:0;">
+                                    @csrf
+                                    <button type="submit" class="w-btn" style="padding:10px 20px; background:rgba(239,68,68,0.1); color:var(--red); border:1px solid rgba(239,68,68,0.3); font-size:13px; font-weight:600;">
+                                        <i class="fas fa-unlink"></i> Putuskan Hubungan
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5;">
+                                Hubungkan akun Anda dengan bot Telegram kami untuk kemudahan pemulihan akun instan secara mandiri.
+                            </p>
+                            @if($user->telegram_verification_code)
+                                <div style="background:rgba(0,0,0,0.1); border-left:4px solid #0088cc; padding:12px; border-radius:6px; margin-bottom:14px;">
+                                    <p style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Langkah Menghubungkan:</p>
+                                    <ol style="font-size:12.5px; color:var(--text-secondary); padding-left:20px; margin-bottom:0; line-height:1.6;">
+                                        <li>Buka bot Telegram kami di: <a href="https://t.me/{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }}" target="_blank" style="color:#0088cc; font-weight:700;">@{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }} <i class="fas fa-external-link-alt" style="font-size:10px;"></i></a></li>
+                                        <li>Kirimkan perintah ini ke bot: <code style="color:#ff7a00; font-weight:bold; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:4px;">/start {{ $user->telegram_verification_code }}</code></li>
+                                        <li>Akun Anda akan langsung terhubung secara otomatis!</li>
+                                    </ol>
+                                </div>
+                            @endif
+                            <form action="{{ route('wisatawan.telegram.generate') }}" method="POST" style="margin:0;">
+                                @csrf
+                                <button type="submit" class="w-btn w-btn-orange" style="padding:11px 28px; background:#0088cc; border-color:#0088cc;">
+                                    <i class="fas fa-link"></i> {{ $user->telegram_verification_code ? 'Generate Kode Baru' : 'Hubungkan Telegram' }}
+                                </button>
+                            </form>
+                        @endif
+                    </div>
 
                     <hr style="border-color:var(--border); margin:24px 0;">
 

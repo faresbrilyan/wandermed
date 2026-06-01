@@ -44,21 +44,4 @@
 
     <div class="sidebar-divider"></div>
 
-    {{-- PIN Pemulihan --}}
-    <div class="medis-summary">
-        <div class="pin-toggle-row">
-            <span><i class="fas fa-key"></i> PIN Pemulihan</span>
-            <label class="switch">
-                <input type="checkbox" id="togglePinWisatawan" onchange="togglePinVisibility()">
-                <span class="slider"></span>
-            </label>
-        </div>
-        <div class="pin-display">
-            <span id="pinValueWisatawan" style="filter:blur(5px); transition:filter 0.3s; user-select:none;">
-                {{ $user?->recovery_pin ?? '000000' }}
-            </span>
-        </div>
-        <div class="pin-hint">Gunakan 6-digit PIN ini jika lupa password akun Anda.</div>
-    </div>
-
 </aside>

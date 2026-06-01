@@ -8,6 +8,13 @@ use App\Http\Controllers\FaskesController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PariwisataController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\TelegramController;
+
+// =========================================================
+// TELEGRAM BOT WEBHOOK RUTES
+// =========================================================
+Route::post('/telegram/webhook', [TelegramController::class, 'handleWebhook']);
+Route::get('/telegram/set-webhook', [TelegramController::class, 'setWebhook']);
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +36,7 @@ use App\Http\Controllers\ChatController;
 Route::get('/', [HomeController::class, 'wisatawanHome']);
 Route::get('/mitra', fn() => view('v_mitra_home'))->name('mitra.home');
 Route::get('/faq', fn() => view('faq'))->name('faq');
+Route::get('/panduan-telegram', fn() => view('panduan_telegram'))->name('panduan.telegram');
 Route::get('/peta-faskes', [HomeController::class, 'petaFaskes'])->name('peta.faskes');
 Route::get('/faskes/{id}/jadwal', [HomeController::class, 'jadwalFaskes'])->name('faskes.jadwal');
 Route::post('/lapor-masalah', [HomeController::class, 'submitLaporan'])->name('lapor.masalah');
@@ -53,8 +61,7 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Lupa Password (PIN)
-Route::post('/reset-password-pin', [AuthController::class, 'resetPasswordViaPin'])->name('password.pin.reset');
+
 
 // Request Hapus Akun (Lupa PIN)
 Route::post('/wisatawan/request-delete', [AuthController::class, 'requestDeleteAccount'])->name('wisatawan.request-delete');
@@ -90,6 +97,12 @@ Route::middleware(['auth.session', 'role:wisatawan'])->group(function () {
     // Update profil & data medis
     Route::post('/wisatawan/profil', [WisatawanController::class, 'updateProfil'])
          ->name('wisatawan.profil.update');
+
+    // Telegram Bot Integration
+    Route::post('/wisatawan/telegram/generate', [WisatawanController::class, 'generateTelegramCode'])
+         ->name('wisatawan.telegram.generate');
+    Route::post('/wisatawan/telegram/unlink', [WisatawanController::class, 'unlinkTelegram'])
+         ->name('wisatawan.telegram.unlink');
 });
 
 
@@ -114,6 +127,12 @@ Route::middleware(['auth.session', 'role:mitra_faskes,mitra_pariwisata'])->group
     Route::post('/faskes/ulasan/{id}/reply', [FaskesController::class, 'replyUlasan'])->name('faskes.ulasan.reply');
     Route::post('/faskes/jadwal', [FaskesController::class, 'storeJadwal'])->name('faskes.jadwal.store');
     Route::delete('/faskes/jadwal/{id}', [FaskesController::class, 'destroyJadwal'])->name('faskes.jadwal.destroy');
+
+    // Telegram Bot Integration
+    Route::post('/faskes/telegram/generate', [FaskesController::class, 'generateTelegramCode'])
+         ->name('faskes.telegram.generate');
+    Route::post('/faskes/telegram/unlink', [FaskesController::class, 'unlinkTelegram'])
+         ->name('faskes.telegram.unlink');
 });
 
 // Route Submit Ulasan Wisatawan (harus login)

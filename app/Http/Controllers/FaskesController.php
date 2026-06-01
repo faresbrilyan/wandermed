@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mitra;
 use App\Models\Faskes;
+use Illuminate\Support\Str;
 
 /**
  * FaskesController
@@ -217,5 +218,34 @@ class FaskesController extends Controller
         $jadwal = \App\Models\JadwalDokter::findOrFail($id);
         $jadwal->delete();
         return back()->with('success', 'Jadwal dokter berhasil dihapus!');
+    }
+
+    /**
+     * Generate a new verification code for linking Telegram for Mitra/Faskes.
+     */
+    public function generateTelegramCode(Request $request)
+    {
+        $mitra = Mitra::find(session('auth_user.id'));
+        
+        // Generate random verification code
+        $code = 'WDM-' . strtoupper(Str::random(6));
+        
+        $mitra->telegram_verification_code = $code;
+        $mitra->save();
+
+        return back()->with('success', "Kode verifikasi Telegram Anda: {$code}. Silakan kirimkan kode ini ke bot Telegram kami.");
+    }
+
+    /**
+     * Unlink the linked Telegram account for Mitra/Faskes.
+     */
+    public function unlinkTelegram(Request $request)
+    {
+        $mitra = Mitra::find(session('auth_user.id'));
+        $mitra->telegram_chat_id = null;
+        $mitra->telegram_verification_code = null;
+        $mitra->save();
+
+        return back()->with('success', 'Akun Telegram Anda berhasil dilepas.');
     }
 }
