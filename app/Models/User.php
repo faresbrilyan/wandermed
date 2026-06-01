@@ -24,8 +24,6 @@ class User extends Authenticatable
         'is_active',
         'blocking_reason',
         'last_login_at',
-        'telegram_chat_id',
-        'telegram_verification_code',
     ];
 
     /**

@@ -28,8 +28,6 @@ class Mitra extends Model
         'blocking_reason',
         'catatan_admin',
         'last_login_at',
-        'telegram_chat_id',
-        'telegram_verification_code',
     ];
 
     protected $hidden = [

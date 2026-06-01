@@ -1,37 +1,3 @@
-async function forgotPasswordTelegram(e) {
-    e.preventDefault();
-    const botUser = window.WanderMedConfig.telegramBotUsername || 'wandermed_recovery_bot';
-    Swal.fire({
-        title: 'Reset Password via Telegram',
-        html: `
-            <div style="text-align: left; line-height: 1.6; font-size: 14px; color: #cbd5e1;">
-                <p>Fitur ini mendukung akun <b>Wisatawan</b> dan <b>Mitra Faskes</b>. Untuk menyetel ulang kata sandi Anda secara instan:</p>
-                <ol style="padding-left: 20px; margin-bottom: 15px;">
-                    <li>Buka bot Telegram kami: <b>@${botUser}</b></li>
-                    <li>Kirim pesan perintah: <code style="color: #ff7a00; font-weight: bold; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">/reset [email_anda]</code></li>
-                    <li>Bot akan mengirimkan kata sandi sementara jika akun Anda telah terhubung.</li>
-                </ol>
-                <p style="margin-top: 10px; font-size: 13px; text-align: center;">
-                    <a href="/panduan-telegram" target="_blank" style="color: #ff7a00; text-decoration: underline; font-weight: 600;">
-                        <i class="fas fa-book-open"></i> Lihat Panduan Lengkap Integrasi
-                    </a>
-                </p>
-            </div>
-        `,
-        icon: 'info',
-        background: '#111827',
-        color: '#e8ecf4',
-        showCancelButton: true,
-        confirmButtonColor: '#0088cc',
-        cancelButtonColor: '#4b5563',
-        confirmButtonText: '<i class="fab fa-telegram-plane"></i> Buka Telegram',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.open(`https://t.me/${botUser}`, '_blank');
-        }
-    });
-}
 
 async function requestDeleteAccount(e) {
     e.preventDefault();

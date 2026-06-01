@@ -33,7 +33,6 @@
                 <a class="wm-nav-link scroll-link" href="/#panduan">Panduan</a>
                 <a class="wm-nav-link scroll-link" href="/#mitra">Mitra</a>
                 <a class="wm-nav-link" href="/faq">FAQ</a>
-                <a class="wm-nav-link" href="{{ route('panduan.telegram') }}">Panduan Bot</a>
             </nav>
 
             {{-- Vertical Divider --}}

@@ -67,8 +67,8 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between flex-wrap align-items-center mt-2 px-1 gap-2" style="font-size: 0.82rem;">
-                                        <a href="#" onclick="forgotPasswordTelegram(event)" class="text-hnb-orange text-decoration-none hover-orange" style="font-weight: 500;">
-                                            <i class="fab fa-telegram-plane"></i> Lupa Password?
+                                        <a href="{{ route('password.forgot') }}" class="text-hnb-orange text-decoration-none hover-orange" style="font-weight: 500;">
+                                            <i class="fas fa-key"></i> Lupa Password?
                                         </a>
                                         <a href="#" onclick="requestDeleteAccount(event)" class="text-danger text-decoration-none hover-orange" style="font-weight: 500;">
                                             <i class="fas fa-trash-alt"></i> Ajukan Hapus Akun
@@ -110,7 +110,6 @@
 @push('scripts')
 <script>
     window.WanderMedConfig = {
-        telegramBotUsername: `{{ env('TELEGRAM_BOT_USERNAME', 'wandermed_recovery_bot') }}`,
         requestDeleteUrl: `{{ route('wisatawan.request-delete') }}`,
         csrfToken: `{{ csrf_token() }}`
     };
