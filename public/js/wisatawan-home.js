@@ -67,3 +67,10 @@
 
     // Aktifkan dragging hanya jika hero tidak di-scroll (opsional, dibiarkan disabled)
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Initialize Lucide Line Art Icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});

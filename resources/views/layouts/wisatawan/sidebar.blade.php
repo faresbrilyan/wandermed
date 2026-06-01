@@ -7,6 +7,7 @@
         <div class="p-email">{{ $user?->email ?? '—' }}</div>
         <div class="p-badge"><i class="fas fa-check-circle"></i> Wisatawan Aktif</div>
         <div class="p-join"><i class="fas fa-calendar-alt"></i> Bergabung {{ $user?->created_at ? $user->created_at->format('M Y') : '—' }}</div>
+        <div class="p-join" style="margin-top: 4px;"><i class="fas fa-history" style="color: var(--hnb-orange);"></i> Terakhir Login: {{ session('auth_user.last_login_at') }}</div>
     </div>
 
     <div class="sidebar-divider"></div>

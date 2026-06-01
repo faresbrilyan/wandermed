@@ -193,86 +193,82 @@
 
     <div class="wm-card">
         <div class="wm-card-body">
-            <!-- Toggle: Operasional -->
-            <div class="wm-toggle-row">
-                <div class="wm-toggle-info">
-                    <h6>Status Operasional Klinik</h6>
-                    <p>Apakah faskes sedang buka dan dapat menerima pasien?</p>
+            <!-- Kategori 1: Status & Jam Operasional -->
+            <div style="border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 18px;">
+                <h5 style="font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-clock"></i> Status Operasional & Waktu Buka
+                </h5>
+                
+                <!-- Toggle: Operasional -->
+                <div class="wm-toggle-row">
+                    <div class="wm-toggle-info">
+                        <h6>Status Operasional Klinik</h6>
+                        <p>Apakah faskes sedang buka dan dapat menerima pasien?</p>
+                    </div>
+                    <div class="wm-toggle-group">
+                        <span class="wm-toggle-label" id="labelOps" style="color: {{ $faskes && $faskes->status_operasional == 'open' ? '#1cc88a' : '#e74a3b' }};">
+                            {{ $faskes && $faskes->status_operasional == 'open' ? '✓ BUKA' : '✕ TUTUP' }}
+                        </span>
+                        <label class="wm-switch">
+                            <input type="checkbox" id="switchOps" {{ $faskes && $faskes->status_operasional == 'open' ? 'checked' : '' }}
+                                onchange="handleAjaxToggle('status_operasional', this.checked ? 'true' : 'false', 'switchOps', 'labelOps', '✓ BUKA', '✕ TUTUP', '#1cc88a', '#e74a3b', 'Status Operasional diperbarui!')">
+                            <span class="wm-switch-slider"></span>
+                        </label>
+                    </div>
                 </div>
-                <div class="wm-toggle-group">
-                    <span class="wm-toggle-label" id="labelOps" style="color: {{ $faskes && $faskes->status_operasional == 'open' ? '#1cc88a' : '#e74a3b' }};">
-                        {{ $faskes && $faskes->status_operasional == 'open' ? '✓ BUKA' : '✕ TUTUP' }}
-                    </span>
-                    <label class="wm-switch">
-                        <input type="checkbox" id="switchOps" {{ $faskes && $faskes->status_operasional == 'open' ? 'checked' : '' }}
-                            onchange="handleAjaxToggle('status_operasional', this.checked ? 'true' : 'false', 'switchOps', 'labelOps', '✓ BUKA', '✕ TUTUP', '#1cc88a', '#e74a3b', 'Status Operasional diperbarui!')">
-                        <span class="wm-switch-slider"></span>
-                    </label>
+                
+                <!-- Toggle: Buka 24 Jam -->
+                <div class="wm-toggle-row" style="margin-top:16px;">
+                    <div class="wm-toggle-info">
+                        <h6>Buka 24 Jam nonstop</h6>
+                        <p>Apakah faskes ini beroperasi 24 jam penuh tanpa tutup?</p>
+                    </div>
+                    <div class="wm-toggle-group">
+                        <span class="wm-toggle-label" id="label24Jam" style="color: {{ $faskes && $faskes->is_24_jam ? '#1cc88a' : '#858796' }};">
+                            {{ $faskes && $faskes->is_24_jam ? '✓ YA (24 JAM)' : '✕ TIDAK' }}
+                        </span>
+                        <label class="wm-switch">
+                            <input type="checkbox" id="switch24Jam" {{ $faskes && $faskes->is_24_jam ? 'checked' : '' }}
+                                onchange="handleAjaxToggle('is_24_jam', this.checked ? '1' : '0', 'switch24Jam', 'label24Jam', '✓ YA (24 JAM)', '✕ TIDAK', '#1cc88a', '#858796', 'Status 24 Jam diperbarui!')">
+                            <span class="wm-switch-slider"></span>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <!-- Toggle: Buka 24 Jam -->
-            <div class="wm-toggle-row" style="margin-top:16px;">
-                <div class="wm-toggle-info">
-                    <h6>Buka 24 Jam</h6>
-                    <p>Apakah faskes ini beroperasi 24 jam nonstop?</p>
-                </div>
-                <div class="wm-toggle-group">
-                    <span class="wm-toggle-label" id="label24Jam" style="color: {{ $faskes && $faskes->is_24_jam ? '#1cc88a' : '#858796' }};">
-                        {{ $faskes && $faskes->is_24_jam ? '✓ YA (24 J)' : '✕ TIDAK' }}
-                    </span>
-                    <label class="wm-switch">
-                        <input type="checkbox" id="switch24Jam" {{ $faskes && $faskes->is_24_jam ? 'checked' : '' }}
-                            onchange="handleAjaxToggle('is_24_jam', this.checked ? '1' : '0', 'switch24Jam', 'label24Jam', '✓ YA (24 J)', '✕ TIDAK', '#1cc88a', '#858796', 'Status 24 Jam diperbarui!')">
-                        <span class="wm-switch-slider"></span>
-                    </label>
-                </div>
-            </div>
 
-            <!-- Jam Operasional -->
-            <div class="wm-toggle-row" style="margin-top:16px; border-bottom: 1px solid #e3e6f0; padding-bottom: 16px;">
-                <div class="wm-toggle-info" style="flex:1;">
-                    <h6>Pengaturan Jam Operasional</h6>
-                    <p>Atur jam buka dan tutup faskes (hanya berlaku jika tidak 24 jam).</p>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
+                <!-- Jam Operasional -->
+                <div style="margin-top:20px; background: rgba(255,255,255,0.02); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--border);">
+                    <h6 style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;"><i class="far fa-clock"></i> Pengaturan Jam Operasional Manual</h6>
+                    <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">Hanya berlaku jika status faskes di atas TIDAK diatur Buka 24 Jam.</p>
+                    <div style="display:flex; gap:16px; flex-wrap: wrap;">
                         <div>
-                            <label style="font-size:12px; font-weight:600; color:#5a5c69;">Jam Buka</label>
-                            <input type="time" class="form-control" style="width:120px;" value="{{ $faskes && $faskes->jam_buka ? substr($faskes->jam_buka, 0, 5) : '' }}"
+                            <label style="font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px;">Jam Buka</label>
+                            <input type="time" class="wm-input" style="width:130px; height: 36px; padding: 6px 12px;" value="{{ $faskes && $faskes->jam_buka ? substr($faskes->jam_buka, 0, 5) : '' }}"
                                 onchange="handleAjaxToggle('jam_buka', this.value, null, null, null, null, null, null, 'Jam Buka diperbarui!')">
                         </div>
                         <div>
-                            <label style="font-size:12px; font-weight:600; color:#5a5c69;">Jam Tutup</label>
-                            <input type="time" class="form-control" style="width:120px;" value="{{ $faskes && $faskes->jam_tutup ? substr($faskes->jam_tutup, 0, 5) : '' }}"
+                            <label style="font-size:12px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:4px;">Jam Tutup</label>
+                            <input type="time" class="wm-input" style="width:130px; height: 36px; padding: 6px 12px;" value="{{ $faskes && $faskes->jam_tutup ? substr($faskes->jam_tutup, 0, 5) : '' }}"
                                 onchange="handleAjaxToggle('jam_tutup', this.value, null, null, null, null, null, null, 'Jam Tutup diperbarui!')">
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Toggle: BPJS -->
-            <div class="wm-toggle-row" style="margin-top:16px;">
-                <div class="wm-toggle-info">
-                    <h6>Penerimaan BPJS Kesehatan</h6>
-                    <p>Sedang menerima pasien peserta BPJS saat ini?</p>
-                </div>
-                <div class="wm-toggle-group">
-                    <span class="wm-toggle-label" id="labelBPJS" style="color: {{ $faskes && $faskes->dukungan_bpjs ? '#1cc88a' : '#e74a3b' }};">
-                        {{ $faskes && $faskes->dukungan_bpjs ? '✓ TERIMA BPJS' : '✕ TIDAK TERIMA' }}
-                    </span>
-                    <label class="wm-switch">
-                        <input type="checkbox" id="switchBPJS" {{ $faskes && $faskes->dukungan_bpjs ? 'checked' : '' }}
-                            onchange="handleAjaxToggle('dukungan_bpjs', this.checked ? '1' : '0', 'switchBPJS', 'labelBPJS', '✓ TERIMA BPJS', '✕ TIDAK TERIMA', '#1cc88a', '#e74a3b', 'Status BPJS diperbarui!')">
-                        <span class="wm-switch-slider"></span>
-                    </label>
-                </div>
-            </div>
 
-            <!-- Pengumuman -->
-            <div class="wm-form-group" style="margin-top: 24px;">
-                <label class="wm-label">Pengumuman Sementara untuk Wisatawan di Peta</label>
-                <textarea class="wm-textarea" id="inputPengumuman" rows="4" placeholder="Contoh: Stok oksigen terbatas hari ini, harap hubungi kami terlebih dahulu..." maxlength="200">{{ $faskes ? $faskes->pengumuman : '' }}</textarea>
+            <!-- Kategori 2: Siaran Pengumuman Darurat -->
+            <div>
+                <h5 style="font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-broadcast-tower"></i> Pengumuman Sementara / Siaran Peta
+                </h5>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+                    Tulis pengumuman mendesak atau catatan operasional sementara yang akan langsung dibaca wisatawan di pin peta Anda.
+                </p>
+                <div class="wm-form-group">
+                    <textarea class="wm-textarea" id="inputPengumuman" rows="3" placeholder="Contoh: Stok oksigen terbatas hari ini, harap hubungi kami terlebih dahulu..." maxlength="200">{{ $faskes ? $faskes->pengumuman : '' }}</textarea>
+                </div>
+                <button class="wm-btn orange" style="width:100%; margin-top: 10px;" onclick="savePengumuman()">
+                    <i class="fas fa-broadcast-tower"></i> Simpan & Siaran ke Peta
+                </button>
             </div>
-            <button class="wm-btn orange" style="width:100%;" onclick="savePengumuman()">
-                <i class="fas fa-broadcast-tower"></i> Simpan & Siaran ke Peta
-            </button>
         </div>
     </div>
 </div>
@@ -620,43 +616,88 @@
 <div id="sectionProfil" class="faskes-section" style="display:none;">
     <div class="wm-page-header">
         <div>
-            <div class="wm-page-title">Profil & Data Faskes</div>
+            <div class="wm-page-title">Profil & Lokasi Faskes</div>
             <div class="wm-page-subtitle">Perubahan akan langsung diperbarui di sistem peta WanderMed</div>
         </div>
     </div>
 
     <div class="wm-card">
         <div class="wm-card-header">
-            <div class="wm-card-title"><i class="fas fa-hospital"></i> Edit Identitas Faskes</div>
+            <div class="wm-card-title"><i class="fas fa-hospital"></i> Informasi & Lokasi Faskes</div>
         </div>
         <div class="wm-card-body">
             <form action="{{ route('faskes.profil.update') }}" method="POST">
                 @csrf
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px;">
-                    <div class="wm-form-group" style="grid-column: 1/-1;">
-                        <label class="wm-label">Nama Faskes <span style="color:#e74a3b">*</span></label>
-                        <input type="text" name="nama_faskes" class="wm-input" value="{{ $faskes?->nama_faskes ?? '' }}" placeholder="Contoh: RSUD Subang" required maxlength="100">
-                    </div>
-                    <div class="wm-form-group">
-                        <label class="wm-label">Kategori / Jenis <span style="color:#e74a3b">*</span></label>
-                        <select name="jenis_faskes" class="wm-input" required>
-                            @foreach(['Rumah Sakit','Klinik','Apotek','Puskesmas','Lainnya'] as $jenis)
-                            <option value="{{ $jenis }}" {{ ($faskes?->jenis_faskes ?? '') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="wm-form-group">
-                        <label class="wm-label">Nomor Telepon</label>
-                        <input type="tel" name="no_telp" class="wm-input" value="{{ $faskes?->no_telp ?? '' }}" placeholder="0260-xxxxxx" maxlength="15">
-                    </div>
-                    <div class="wm-form-group" style="grid-column: 1/-1;">
-                        <label class="wm-label">Alamat Lengkap <span style="color:#e74a3b">*</span></label>
-                        <textarea name="alamat" class="wm-textarea" rows="2" required maxlength="200">{{ $faskes?->alamat ?? '' }}</textarea>
+                
+                <!-- Kategori 1: Identitas Dasar -->
+                <div style="border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 18px;">
+                    <h5 style="font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-id-card"></i> Identitas Faskes
+                    </h5>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+                        <div class="wm-form-group" style="grid-column: 1/-1;">
+                            <label class="wm-label">Nama Faskes <span style="color:#e74a3b">*</span></label>
+                            <input type="text" name="nama_faskes" class="wm-input" value="{{ $faskes?->nama_faskes ?? '' }}" placeholder="Contoh: RSUD Subang" required maxlength="100">
+                        </div>
+                        <div class="wm-form-group">
+                            <label class="wm-label">Kategori / Jenis <span style="color:#e74a3b">*</span></label>
+                            <select name="jenis_faskes" class="wm-input" required>
+                                @foreach(['Rumah Sakit','Klinik','Apotek','Puskesmas','Lainnya'] as $jenis)
+                                <option value="{{ $jenis }}" {{ ($faskes?->jenis_faskes ?? '') == $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="wm-form-group">
+                            <label class="wm-label">Nomor Telepon</label>
+                            <input type="tel" name="no_telp" class="wm-input" value="{{ $faskes?->no_telp ?? '' }}" placeholder="0260-xxxxxx" maxlength="15">
+                        </div>
+                        <div class="wm-form-group" style="grid-column: 1/-1;">
+                            <label class="wm-label">Alamat Lengkap <span style="color:#e74a3b">*</span></label>
+                            <textarea name="alamat" class="wm-textarea" rows="2" required maxlength="200">{{ $faskes?->alamat ?? '' }}</textarea>
+                        </div>
                     </div>
                 </div>
-                <div style="margin-top: 18px;">
-                    <label class="wm-label">Dukungan BPJS Kesehatan</label>
-                    <div style="display:flex; gap: 16px; margin-top: 8px;">
+
+                <!-- Kategori 2: Koordinat Lokasi Peta -->
+                <div style="border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 18px;">
+                    <h5 style="font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-map-marker-alt"></i> Koordinat Lokasi di Peta
+                    </h5>
+                    
+                    <div style="background: rgba(246,194,62,0.08); border: 1px solid rgba(246,194,62,0.3); border-radius:8px; padding:12px; margin-bottom:16px; font-family:monospace; font-size:14px; text-align:center;">
+                        📍 Lat Saat Ini: <strong>{{ $faskes?->latitude ?? '0.000000' }}</strong> &nbsp;|&nbsp; Lng Saat Ini: <strong>{{ $faskes?->longitude ?? '0.000000' }}</strong>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+                        <div class="wm-form-group">
+                            <label class="wm-label">Latitude <span style="color:#e74a3b">*</span></label>
+                            <input type="number" step="any" name="latitude" id="quickLat" class="wm-input" value="{{ $faskes?->latitude ?? '' }}" placeholder="-6.571..." required>
+                        </div>
+                        <div class="wm-form-group">
+                            <label class="wm-label">Longitude <span style="color:#e74a3b">*</span></label>
+                            <input type="number" step="any" name="longitude" id="quickLng" class="wm-input" value="{{ $faskes?->longitude ?? '' }}" placeholder="107.760..." required>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 12px; display:flex; gap:12px;">
+                        <button type="button" class="wm-btn blue" onclick="fillGPS()" style="flex:1;">
+                            <i class="fas fa-crosshairs"></i> Deteksi Otomatis via GPS
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top:14px; padding:10px 14px; background: rgba(255,255,255,0.03); border-radius:8px; font-size:11.5px; color: var(--text-muted); line-height: 1.5;">
+                        <i class="fas fa-info-circle mr-1" style="color:#4e73df"></i>
+                        <strong>Tips:</strong> Buka Google Maps, klik kanan di titik lokasi faskes Anda, lalu salin koordinatnya ke sini.
+                    </div>
+                </div>
+
+                <!-- Kategori 3: Layanan BPJS Kesehatan -->
+                <div style="margin-bottom: 24px;">
+                    <h5 style="font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-notes-medical"></i> Layanan BPJS Kesehatan
+                    </h5>
+                    <label class="wm-label">Apakah faskes Anda menerima pasien peserta BPJS?</label>
+                    <div style="display:flex; gap: 24px; margin-top: 8px;">
                         <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px;">
                             <input type="radio" name="dukungan_bpjs" value="1" {{ ($faskes?->dukungan_bpjs ?? false) ? 'checked' : '' }}> Ya, Menerima BPJS
                         </label>
@@ -665,20 +706,17 @@
                         </label>
                     </div>
                 </div>
-                {{-- Info: koordinat dikelola di menu Update Koordinat --}}
-                <div style="margin-top: 16px; padding: 12px 16px; background: rgba(78,115,223,0.06); border-left: 3px solid #4e73df; border-radius: 8px; font-size: 12px; color: var(--text-muted);">
-                    <i class="fas fa-map-pin mr-1" style="color:#4e73df"></i>
-                    Untuk mengubah koordinat lokasi PIN di peta, gunakan menu <strong style="color: var(--text-primary);">Update Koordinat</strong> di sidebar.
-                </div>
-                <div style="margin-top: 20px;">
+
+                <div>
                     <button type="submit" class="wm-btn orange" style="width:100%;">
-                        <i class="fas fa-save"></i> Simpan Perubahan Profil
+                        <i class="fas fa-save"></i> Simpan Perubahan Profil & Lokasi
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Keamanan Akses -->
     <div class="wm-card mt-4">
         <div class="wm-card-header">
             <div class="wm-card-title"><i class="fas fa-lock" style="color:var(--orange);"></i> Ganti Password Akses</div>
@@ -706,62 +744,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<!-- ===== SECTION 5: UPDATE KOORDINAT ===== -->
-<div id="sectionKoordinat" class="faskes-section" style="display:none;">
-    <div class="wm-page-header">
-        <div>
-            <div class="wm-page-title">Update Koordinat di Peta</div>
-            <div class="wm-page-subtitle">Masukkan koordinat baru agar lokasi PIN faskes di peta lebih akurat</div>
-        </div>
-    </div>
-
-    <div class="wm-card">
-        <div class="wm-card-header">
-            <div class="wm-card-title"><i class="fas fa-map-marker-alt" style="color:#f6c23e"></i> Koordinat Saat Ini</div>
-        </div>
-        <div class="wm-card-body">
-            <div style="background: rgba(246,194,62,0.08); border: 1px solid rgba(246,194,62,0.3); border-radius:8px; padding:16px; margin-bottom:20px; font-family:monospace; font-size:15px; text-align:center;">
-                📍 Lat: <strong>{{ $faskes?->latitude ?? '0.000000' }}</strong> &nbsp;|&nbsp; Lng: <strong>{{ $faskes?->longitude ?? '0.000000' }}</strong>
-            </div>
-
-            <form action="{{ route('faskes.profil.update') }}" method="POST">
-                @csrf
-                {{-- Kirim semua field lain sebagai hidden agar validasi lolos --}}
-                <input type="hidden" name="nama_faskes" value="{{ $faskes?->nama_faskes ?? '' }}">
-                <input type="hidden" name="jenis_faskes" value="{{ $faskes?->jenis_faskes ?? 'Klinik' }}">
-                <input type="hidden" name="alamat" value="{{ $faskes?->alamat ?? '-' }}">
-                <input type="hidden" name="no_telp" value="{{ $faskes?->no_telp ?? '' }}">
-                <input type="hidden" name="dukungan_bpjs" value="{{ $faskes?->dukungan_bpjs ? '1' : '0' }}">
-
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
-                    <div class="wm-form-group">
-                        <label class="wm-label">Latitude Baru <span style="color:#e74a3b">*</span></label>
-                        <input type="number" step="any" name="latitude" id="quickLat" class="wm-input" value="{{ $faskes?->latitude ?? '' }}" placeholder="-6.571..." required>
-                    </div>
-                    <div class="wm-form-group">
-                        <label class="wm-label">Longitude Baru <span style="color:#e74a3b">*</span></label>
-                        <input type="number" step="any" name="longitude" id="quickLng" class="wm-input" value="{{ $faskes?->longitude ?? '' }}" placeholder="107.760..." required>
-                    </div>
-                </div>
-                <div style="margin-top: 14px; display:flex; gap:12px;">
-                    <button type="button" class="wm-btn blue" onclick="fillGPS()" style="flex:1;">
-                        <i class="fas fa-crosshairs"></i> Deteksi Otomatis via GPS
-                    </button>
-                    <button type="submit" class="wm-btn orange" style="flex:1;">
-                        <i class="fas fa-save"></i> Simpan Koordinat Baru
-                    </button>
-                </div>
-            </form>
-
-            <div style="margin-top:24px; padding:14px; background: rgba(255,255,255,0.03); border-radius:8px; font-size:12px; color: var(--text-muted);">
-                <i class="fas fa-info-circle mr-1" style="color:#4e73df"></i>
-                <strong>Tips:</strong> Buka Google Maps, klik kanan di titik lokasi faskes Anda, lalu salin koordinatnya ke sini.
-                Format: <code>Latitude, Longitude</code> (pisahkan dengan koma).
-            </div>
         </div>
     </div>
 </div>

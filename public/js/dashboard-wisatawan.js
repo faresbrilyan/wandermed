@@ -118,3 +118,72 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+function requestAccountDeletionFromDashboard(emailAddress, csrfToken) {
+    Swal.fire({
+        title: 'Ajukan Penghapusan Akun',
+        html: `<p style="color:var(--text-muted);font-size:14px;margin:0;line-height:1.6;">
+                   Apakah Anda yakin ingin mengajukan penghapusan akun wisatawan Anda ke admin? Akun beserta seluruh data rekam medis Anda akan dihapus secara permanen.
+               </p>`,
+        icon: 'warning',
+        iconColor: '#ff4d4d',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fas fa-trash-alt" style="margin-right:6px;"></i>Ya, Kirim Pengajuan',
+        cancelButtonText:  '<i class="fas fa-times" style="margin-right:6px;"></i>Batal',
+        reverseButtons: true,
+        focusCancel: true,
+        showLoaderOnConfirm: true,
+        customClass: {
+            popup:         'wm-swal-popup',
+            title:         'wm-swal-title',
+            confirmButton: 'wm-swal-confirm',
+            cancelButton:  'wm-swal-cancel',
+        },
+        preConfirm: () => {
+            return fetch('/wisatawan/request-delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ email: emailAddress })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(response.statusText)
+                return response.json()
+            })
+            .catch(error => {
+                Swal.showValidationMessage(`Gagal menghubungi server: ${error}`)
+            })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (result.value.success) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    html: `<p style="color:var(--text-muted);font-size:14px;margin:0;line-height:1.6;">${result.value.message}</p>`,
+                    icon: 'success',
+                    iconColor: '#28a745',
+                    customClass: {
+                        popup:         'wm-swal-popup',
+                        title:         'wm-swal-title',
+                        confirmButton: 'wm-swal-confirm',
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Gagal',
+                    html: `<p style="color:var(--text-muted);font-size:14px;margin:0;line-height:1.6;">${result.value.message || 'Gagal mengirim pengajuan.'}</p>`,
+                    icon: 'error',
+                    iconColor: '#ff4d4d',
+                    customClass: {
+                        popup:         'wm-swal-popup',
+                        title:         'wm-swal-title',
+                        confirmButton: 'wm-swal-confirm',
+                    }
+                });
+            }
+        }
+    });
+}

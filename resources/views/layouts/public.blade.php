@@ -18,7 +18,6 @@
     <link href="{{ asset('css/style-wisatawan.css') }}" rel="stylesheet">
     <link href="{{ asset('css/wisatawan-layout.css') }}" rel="stylesheet">
     <link href="{{ asset('css/mobile-responsive.css') }}" rel="stylesheet">
-
     <!-- AOS Animate On Scroll -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 
@@ -26,17 +25,8 @@
 
 </head>
 
-
 <body class="bg-hnb-navy">
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem("wanderMedTheme");
-            if (savedTheme === "light") {
-                document.documentElement.classList.add("light-mode");
-                document.body.classList.add("light-mode");
-            }
-        })();
-    </script>
+    <script src="{{ asset('js/theme-init.js') }}"></script>
 
     <div class="w-100 d-flex flex-column min-vh-100">
         @yield('content')

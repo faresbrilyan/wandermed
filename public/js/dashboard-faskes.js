@@ -21,7 +21,6 @@
         'navFasilitas'    : 'sectionFasilitas',
         'navUlasan'       : 'sectionUlasan',
         'navProfilFaskes' : 'sectionProfil',
-        'navKoordinat'    : 'sectionKoordinat',
         'navChat'         : 'sectionChat',
     };
 

@@ -323,10 +323,18 @@
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
                 <a href="{{ route('admin.faskes.export') }}" class="wm-btn success sm" style="height:34px; line-height:22px;"><i class="fas fa-file-excel"></i> Export CSV</a>
-                <div style="position:relative;flex:0 0 200px;">
-                    <i class="fas fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;"></i>
-                    <input type="text" id="filterFaskesInput" class="wm-input" style="padding-left:32px;height:34px;font-size:12px;" placeholder="Cari faskes (halaman ini)..." onkeyup="filterTable('filterFaskesInput','faskesTable','col-nama-faskes')">
-                </div>
+                <form action="/dashboard/admin#tab-sectionFaskes" method="GET" style="display:inline-flex; margin:0;">
+                    @if(request('search_users'))
+                        <input type="hidden" name="search_users" value="{{ request('search_users') }}">
+                    @endif
+                    <div style="position:relative;flex:0 0 220px;">
+                        <i class="fas fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none;"></i>
+                        <input type="text" name="search_faskes" class="wm-input" style="padding-left:32px;padding-right:28px;height:34px;font-size:12px;" placeholder="Cari faskes (Tekan Enter)..." value="{{ request('search_faskes') }}">
+                        @if(request('search_faskes'))
+                            <a href="/dashboard/admin?search_faskes=#tab-sectionFaskes" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;text-decoration:none;"><i class="fas fa-times"></i></a>
+                        @endif
+                    </div>
+                </form>
             </div>
         </div>
         <div class="wm-table-wrap">
@@ -338,6 +346,7 @@
                         <th>Alamat</th>
                         <th>Status</th>
                         <th>BPJS</th>
+                        <th>Terakhir Login</th>
                         <th class="text-center" width="130">Aksi</th>
                     </tr>
                 </thead>
@@ -383,6 +392,9 @@
                             @else
                                 <span class="wm-badge" style="font-size:10px;background:rgba(255,255,255,0.06);color:var(--text-muted);border:1px solid var(--border);">❌ Non-BPJS</span>
                             @endif
+                        </td>
+                        <td style="font-size:12px;color:var(--text-muted);">
+                            {{ $faskesItem->mitra?->last_login_at ? $faskesItem->mitra->last_login_at->translatedFormat('d M Y, H:i') : '-' }}
                         </td>
                         <td style="text-align:center;white-space:nowrap;">
                             <div style="display:inline-flex;align-items:center;gap:6px;">
@@ -488,14 +500,71 @@
             <div class="wm-page-subtitle">Kelola akun pengguna wisatawan yang terdaftar di platform</div>
         </div>
     </div>
-    <div class="wm-card">
-        <div class="wm-card-header">
-            <div class="wm-card-title"><i class="fas fa-users"></i> Daftar Pengguna Wisatawan</div>
+
+    @if(isset($deletionRequests) && $deletionRequests->isNotEmpty())
+    <div class="wm-card animate-fade-up" style="border: 1px solid rgba(231,74,59,0.3); background: rgba(231,74,59,0.02); margin-bottom: 22px;">
+        <div class="wm-card-header" style="border-bottom: 1px solid rgba(231,74,59,0.2);">
+            <div class="wm-card-title text-danger" style="color: #ff6b6b !important;">
+                <i class="fas fa-trash-alt" style="color: #ff6b6b !important;"></i> Permohonan Hapus Akun (Lupa PIN)
+                <span class="wm-badge danger" style="margin-left: 8px; font-size: 10px;">{{ $deletionRequests->count() }} Permohonan</span>
+            </div>
         </div>
         <div class="wm-table-wrap">
-            <table class="wm-table">
+            <table class="wm-table" id="deletionRequestsTable">
                 <thead>
-                    <tr><th>Nama</th><th>Email</th><th>Gol. Darah</th><th>Kelengkapan Data</th><th>Status Akun</th><th class="text-center">Aksi</th></tr>
+                    <tr>
+                        <th>Nama Pengguna</th>
+                        <th>Email Terdaftar</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th class="text-center" width="220">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($deletionRequests as $req)
+                    <tr id="deletionRow-{{ $req->id }}">
+                        <td class="bold">{{ $req->user ? $req->user->name : 'Akun Tidak Ditemukan' }}</td>
+                        <td>{{ $req->email }}</td>
+                        <td style="color: var(--text-muted); font-size: 12px;">{{ $req->created_at->format('d M Y, H:i') }}</td>
+                        <td style="text-align: center;">
+                            <div style="display:inline-flex; align-items:center; gap:6px;">
+                                <button class="wm-btn danger sm" onclick="approveDeletionRequest(this, {{ $req->id }}, '{{ addslashes($req->user ? $req->user->name : $req->email) }}')">
+                                    <i class="fas fa-user-minus"></i> Hapus Akun
+                                </button>
+                                <button class="wm-btn ghost sm" onclick="rejectDeletionRequest(this, {{ $req->id }})" style="border: 1px solid var(--border);">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
+    <div class="wm-card">
+        <div class="wm-card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div class="wm-card-title"><i class="fas fa-users"></i> Daftar Pengguna Wisatawan</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <form action="/dashboard/admin#tab-sectionWisatawan" method="GET" style="display:inline-flex; margin:0;">
+                    @if(request('search_faskes'))
+                        <input type="hidden" name="search_faskes" value="{{ request('search_faskes') }}">
+                    @endif
+                    <div style="position:relative;flex:0 0 250px;">
+                        <i class="fas fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none;"></i>
+                        <input type="text" name="search_users" class="wm-input" style="padding-left:32px;padding-right:28px;height:34px;font-size:12px;" placeholder="Cari nama atau email (Tekan Enter)..." value="{{ request('search_users') }}">
+                        @if(request('search_users'))
+                            <a href="/dashboard/admin?search_users=#tab-sectionWisatawan" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;text-decoration:none;"><i class="fas fa-times"></i></a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="wm-table-wrap">
+            <table class="wm-table" id="wisatawanTable">
+                <thead>
+                    <tr><th>Nama</th><th>Email</th><th>Gol. Darah</th><th>Kelengkapan Data</th><th>Terakhir Login</th><th>Status Akun</th><th class="text-center">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @foreach(($users ?? []) as $usr)
@@ -504,8 +573,8 @@
                             || empty($usr?->kontak_darurat);
                     @endphp
                     <tr>
-                        <td class="bold">{{ $usr?->name ?? 'Anonim' }}</td>
-                        <td>{{ $usr?->email ?? '-' }}</td>
+                        <td class="bold col-nama-wisatawan">{{ $usr?->name ?? 'Anonim' }}</td>
+                        <td class="col-nama-wisatawan">{{ $usr?->email ?? '-' }}</td>
                         <td>
                             @if(empty($usr?->gol_darah))
                                 <span style="color:#f6c23e;"><i class="fas fa-exclamation-circle"></i> -</span>
@@ -526,6 +595,9 @@
                                 <span class="wm-badge green" style="font-size:10px;"><i class="fas fa-check"></i> Lengkap</span>
                             @endif
                         </td>
+                        <td style="font-size:12px;color:var(--text-muted);">
+                            {{ $usr->last_login_at ? $usr->last_login_at->translatedFormat('d M Y, H:i') : '-' }}
+                        </td>
                         <td id="statusUser-{{ $usr?->id ?? 0 }}">
                             @if($usr?->is_active)
                                 <span class="wm-badge green">Aktif</span>
@@ -534,13 +606,18 @@
                             @endif
                         </td>
                         <td style="text-align: center;">
-                            <button class="wm-btn {{ ($usr?->is_active ?? false) ? 'danger' : 'success' }} sm" onclick="toggleUserStatus(this, {{ $usr?->id ?? 0 }})">
-                                @if($usr?->is_active)
-                                    <i class="fas fa-ban"></i> Blokir
-                                @else
-                                    <i class="fas fa-check"></i> Aktifkan
-                                @endif
-                            </button>
+                            <div style="display:inline-flex; align-items:center; gap:6px;">
+                                <button class="wm-btn {{ ($usr?->is_active ?? false) ? 'danger' : 'success' }} sm" onclick="toggleUserStatus(this, {{ $usr?->id ?? 0 }})">
+                                    @if($usr?->is_active)
+                                        <i class="fas fa-ban"></i> Blokir
+                                    @else
+                                        <i class="fas fa-check"></i> Aktifkan
+                                    @endif
+                                </button>
+                                <button class="wm-btn orange sm" onclick="adminResetPasswordWisatawan(this, {{ $usr?->id ?? 0 }}, '{{ addslashes($usr?->name ?? '') }}')" title="Reset Password">
+                                    <i class="fas fa-key"></i> Reset
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

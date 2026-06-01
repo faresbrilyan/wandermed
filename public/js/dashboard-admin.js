@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (!activeTabId) {
         var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('page_faskes')) {
+        if (urlParams.has('page_faskes') || urlParams.has('search_faskes')) {
             activeTabId = 'navDataFaskes';
-        } else if (urlParams.has('page_users')) {
+        } else if (urlParams.has('page_users') || urlParams.has('search_users')) {
             activeTabId = 'navDataWisatawan';
         }
     }
@@ -553,4 +553,164 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.innerHTML = oldHtml; showToast('Gagal mengubah status.', 'danger');
         }).finally(function() { btn.disabled = false; });
     }
+
+    window.adminResetPasswordWisatawan = function(btn, user_id, userName) {
+        Swal.fire({
+            title: 'Reset Password Wisatawan',
+            html: '<p style="font-size:13px; color:var(--text-secondary); margin-bottom:15px;">Reset password untuk ' + userName + '</p>' +
+                  '<input type="password" id="adminNewPass" class="swal2-input" placeholder="Password Baru" style="margin: 5px auto 10px auto;">' +
+                  '<input type="password" id="adminNewPassConf" class="swal2-input" placeholder="Konfirmasi Password Baru" style="margin: 5px auto 10px auto;">',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonColor: '#ff7a00',
+            confirmButtonText: 'Reset Password',
+            cancelButtonText: 'Batal',
+            preConfirm: () => {
+                const p1 = document.getElementById('adminNewPass').value;
+                const p2 = document.getElementById('adminNewPassConf').value;
+                if (!p1 || !p2) { Swal.showValidationMessage('Password tidak boleh kosong'); return false; }
+                if (p1 !== p2) { Swal.showValidationMessage('Konfirmasi password tidak cocok'); return false; }
+                if (p1.length < 8) { Swal.showValidationMessage('Password minimal 8 karakter'); return false; }
+                return p1;
+            }
+        }).then((result) => {
+            if(result.isConfirmed) {
+                var originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch('/admin/user/' + user_id + '/reset-password', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content 
+                    },
+                    body: JSON.stringify({ new_password: result.value })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        Swal.fire('Berhasil!', 'Password wisatawan berhasil direset.', 'success');
+                    } else {
+                        Swal.fire('Gagal', data.message || 'Terjadi kesalahan', 'error');
+                    }
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghubungi server.', 'error'))
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                });
+            }
+        });
+    };
+
+    window.approveDeletionRequest = function(btn, id, name) {
+        Swal.fire({
+            title: 'Hapus Akun Permanen?',
+            text: 'Yakin menyetujui permohonan hapus akun "' + name + '"? Akun ini akan dihapus secara permanen dari sistem.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e53e3e',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Hapus Permanen',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch('/admin/deletion-request/' + id + '/approve', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        showToast(data.message || 'Akun berhasil dihapus permanen!');
+                        var row = document.getElementById('deletionRow-' + id);
+                        if(row) {
+                            row.style.transition = 'all .4s';
+                            row.style.opacity = '0';
+                            setTimeout(function(){ 
+                                row.remove();
+                                var table = document.getElementById('deletionRequestsTable');
+                                if (table && table.querySelectorAll('tbody tr').length === 0) {
+                                    location.reload();
+                                }
+                            }, 400);
+                        } else {
+                            setTimeout(function(){ location.reload(); }, 1500);
+                        }
+                    } else {
+                        Swal.fire('Gagal', data.message || 'Gagal menghapus akun.', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
+                })
+                .catch(() => {
+                    Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                });
+            }
+        });
+    };
+
+    window.rejectDeletionRequest = function(btn, id) {
+        Swal.fire({
+            title: 'Tolak Permohonan?',
+            text: 'Tolak pengajuan permohonan hapus akun ini? User akan tetap terdaftar.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#ff7a00',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Tolak',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch('/admin/deletion-request/' + id + '/reject', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        showToast(data.message || 'Permohonan ditolak.');
+                        var row = document.getElementById('deletionRow-' + id);
+                        if(row) {
+                            row.style.transition = 'all .4s';
+                            row.style.opacity = '0';
+                            setTimeout(function(){ 
+                                row.remove();
+                                var table = document.getElementById('deletionRequestsTable');
+                                if (table && table.querySelectorAll('tbody tr').length === 0) {
+                                    location.reload();
+                                }
+                            }, 400);
+                        } else {
+                            setTimeout(function(){ location.reload(); }, 1500);
+                        }
+                    } else {
+                        Swal.fire('Gagal', data.message || 'Gagal menolak permohonan.', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
+                })
+                .catch(() => {
+                    Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                });
+            }
+        });
+    };
 });

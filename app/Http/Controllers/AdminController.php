@@ -13,6 +13,7 @@ use App\Models\LaporanMasalah;
 use App\Models\User;
 use App\Models\PendaftaranPariwisata;
 use App\Models\UlasanFaskes;
+use App\Models\AccountDeletionRequest;
 use App\Services\MitraService;
 use App\Http\Requests\ResolveLaporanRequest;
 use Exception;
@@ -31,11 +32,28 @@ class AdminController extends Controller
         $this->mitraService = $mitraService;
     }
 
-    /**
-     * Menampilkan antarmuka Dashboard Admin.
-     */
-    public function dashboard(): View
+    public function dashboard(Request $request): View
     {
+        $searchUsers = $request->query('search_users');
+        $searchFaskes = $request->query('search_faskes');
+
+        $usersQuery = User::query();
+        if ($searchUsers) {
+            $usersQuery->where(function($q) use ($searchUsers) {
+                $q->where('name', 'like', "%{$searchUsers}%")
+                  ->orWhere('email', 'like', "%{$searchUsers}%");
+            });
+        }
+
+        $faskesQuery = Faskes::query();
+        if ($searchFaskes) {
+            $faskesQuery->where(function($q) use ($searchFaskes) {
+                $q->where('nama_faskes', 'like', "%{$searchFaskes}%")
+                  ->orWhere('jenis_faskes', 'like', "%{$searchFaskes}%")
+                  ->orWhere('alamat', 'like', "%{$searchFaskes}%");
+            });
+        }
+
         return view('dashboard.admin', [
             'totalWisatawan'  => User::count(),
             'totalFaskes'     => Faskes::count(),
@@ -49,10 +67,11 @@ class AdminController extends Controller
                                     ->orderByRaw("FIELD(status, 'pending', 'on_review', 'resolved')")
                                     ->latest()->get(),
                                     
-            'users'           => User::paginate(10, ['*'], 'page_users'),
-            'faskesList'      => Faskes::paginate(10, ['*'], 'page_faskes'),
+            'users'           => $usersQuery->paginate(10, ['*'], 'page_users')->appends(['search_users' => $searchUsers, 'search_faskes' => $searchFaskes]),
+            'faskesList'      => $faskesQuery->paginate(10, ['*'], 'page_faskes')->appends(['search_users' => $searchUsers, 'search_faskes' => $searchFaskes]),
             'wisataApproved'  => $this->getMergedWisataForDashboard(),
             'allUlasan'       => UlasanFaskes::with(['user', 'faskes'])->latest()->get(),
+            'deletionRequests'=> AccountDeletionRequest::with('user')->latest()->get(),
         ]);
     }
 
@@ -265,6 +284,82 @@ class AdminController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan sistem.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Reset password akun wisatawan oleh admin.
+     */
+    public function resetPasswordWisatawan(Request $request, int $user_id): JsonResponse
+    {
+        $request->validate([
+            'new_password' => 'required|min:8',
+        ]);
+
+        try {
+            $user = User::findOrFail($user_id);
+            $user->update([
+                'password' => Hash::make($request->new_password)
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password Wisatawan berhasil direset.'
+            ]);
+        } catch (Exception $e) {
+            Log::error("Reset password wisatawan failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan sistem.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Setujui permohonan hapus akun wisatawan.
+     */
+    public function approveDeletionRequest(int $id): JsonResponse
+    {
+        try {
+            $req = AccountDeletionRequest::findOrFail($id);
+            if ($req->user) {
+                $req->user->delete(); // Ini otomatis men-delete request karena cascade FK
+            } else {
+                $req->delete();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Akun Wisatawan berhasil dihapus permanen.'
+            ]);
+        } catch (Exception $e) {
+            Log::error("Approve deletion request failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus akun.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Tolak permohonan hapus akun wisatawan.
+     */
+    public function rejectDeletionRequest(int $id): JsonResponse
+    {
+        try {
+            $req = AccountDeletionRequest::findOrFail($id);
+            $req->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Permohonan hapus akun berhasil ditolak.'
+            ]);
+        } catch (Exception $e) {
+            Log::error("Reject deletion request failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menolak permohonan.'
             ], 500);
         }
     }

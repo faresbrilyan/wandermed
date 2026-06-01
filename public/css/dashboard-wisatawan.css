@@ -549,3 +549,8 @@ input:checked + .slider::before { transform: translateX(14px); }
     .wb-actions { flex-direction: column; }
     .wb-btn, .wb-btn-solid { width: 100%; justify-content: center; }
 }
+
+/* Utility: sembunyikan teks di navbar pada layar xs */
+@media (max-width: 480px) {
+    .d-none-xs { display: none !important; }
+}

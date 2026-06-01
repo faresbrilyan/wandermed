@@ -98,6 +98,7 @@ class DashboardRenderTest extends TestCase
             'faskesList'      => $faskesPaginator,
             'wisataApproved'  => collect([$dummyWisata]),
             'allUlasan'       => collect([$dummyUlasan]),
+            'deletionRequests'=> collect([]),
         ];
 
         $html = view('dashboard.admin', $viewData)->render();

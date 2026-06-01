@@ -15,12 +15,9 @@
 <a href="#" class="wm-nav-link" id="navUlasan">
     <i class="fas fa-star"></i> Ulasan Wisatawan
 </a>
-<div class="wm-nav-label">Profil</div>
+<div class="wm-nav-label">Profil & Lokasi</div>
 <a href="#" class="wm-nav-link" id="navProfilFaskes">
-    <i class="fas fa-hospital"></i> Profil Faskes
-</a>
-<a href="#" class="wm-nav-link" id="navKoordinat">
-    <i class="fas fa-map-pin"></i> Update Koordinat
+    <i class="fas fa-hospital"></i> Profil & Lokasi Faskes
 </a>
 <div class="wm-nav-label">Komunikasi</div>
 <a href="#" class="wm-nav-link" id="navChat" style="position:relative;">
@@ -38,6 +35,11 @@
     <div title="Arahkan kursor untuk melihat PIN" style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 6px; color: var(--text-primary); filter: blur(6px); transition: filter 0.3s; user-select: none; cursor: crosshair;" onmouseover="this.style.filter='blur(0)'; this.style.userSelect='auto';" onmouseout="this.style.filter='blur(6px)'; this.style.userSelect='none';">
         {{ $mitra?->recovery_pin ?? '000000' }}
     </div>
+</div>
+
+<div style="padding: 12px 20px 5px 20px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 15px; line-height: 1.6;">
+    <i class="fas fa-history" style="color: #ff7a00; margin-right: 4px;"></i> Terakhir Login: <br>
+    <span style="font-weight: 600; color: var(--text-primary); margin-top: 4px; display: inline-block;">{{ session('auth_user.last_login_at') }}</span>
 </div>
 
 <a href="/logout" class="wm-nav-link">

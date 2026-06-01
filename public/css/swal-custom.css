@@ -1,0 +1,41 @@
+.wm-swal-popup {
+    border: 1px solid rgba(255,122,0,0.18) !important;
+    border-radius: 18px !important;
+    padding: 28px !important;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04) !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+.wm-swal-title {
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px !important;
+}
+.wm-swal-icon {
+    border-color: rgba(255,122,0,0.3) !important;
+}
+.wm-swal-confirm {
+    background: linear-gradient(135deg, #ff7a00, #e65c00) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 10px 22px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 6px 20px rgba(255,122,0,0.35) !important;
+    transition: opacity 0.2s !important;
+}
+.wm-swal-confirm:hover { opacity: 0.88 !important; }
+.wm-swal-cancel {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    border-radius: 10px !important;
+    padding: 10px 22px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    transition: background 0.2s, color 0.2s !important;
+}
+.wm-swal-cancel:hover {
+    background: rgba(255,255,255,0.14) !important;
+}

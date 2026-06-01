@@ -11,22 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="{{ asset('css/dashboard-wisatawan.css') }}" rel="stylesheet">
     {{-- Inline script tema: set SEBELUM render agar tidak flash --}}
-    <script>
-        (function() {
-            var t = localStorage.getItem('wanderMedTheme') || 'dark';
-            if (t === 'dark') document.write('<style>body{background:#0f172a;color:#f1f5f9}</style>');
-        })();
-    </script>
+    <script src="{{ asset('js/theme-init-wisatawan-head.js') }}"></script>
     @stack('styles')
 </head>
 <body id="appBody">
-<script>
-    // Set class tema sebelum konten dirender
-    (function() {
-        var t = localStorage.getItem('wanderMedTheme') || 'dark';
-        document.getElementById('appBody').className = t === 'dark' ? 'dark' : '';
-    })();
-</script>
+<script src="{{ asset('js/theme-init-wisatawan-body.js') }}"></script>
 
 @include('layouts.wisatawan.navbar')
 

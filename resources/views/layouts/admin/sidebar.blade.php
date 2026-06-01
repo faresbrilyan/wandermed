@@ -37,6 +37,11 @@
 <a href="/peta-faskes" class="wm-nav-link">
     <i class="fas fa-map-marked-alt"></i> Lihat Peta Publik
 </a>
+<div style="padding: 15px 20px 5px 20px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 15px; line-height: 1.6;">
+    <i class="fas fa-history" style="color: #ff7a00; margin-right: 4px;"></i> Terakhir Login: <br>
+    <span style="font-weight: 600; color: var(--text-primary); margin-top: 4px; display: inline-block;">{{ session('auth_user.last_login_at') }}</span>
+</div>
+
 <a href="/logout" class="wm-nav-link">
     <i class="fas fa-sign-out-alt"></i> Keluar
 </a>

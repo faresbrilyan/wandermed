@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Mitra;
 use App\Models\Faskes;
+use App\Models\AccountDeletionRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\MitraRegistrationRequest;
 use App\Http\Requests\WisatawanRegistrationRequest;
@@ -204,7 +205,9 @@ class AuthController extends Controller
     {
         if ($email === config('wandermed.admin_email', 'adminwandermed@gmail.com') &&
             $password === config('wandermed.admin_password', 'admin123')) {
-            $this->setSession('admin', 0, 'Super Admin', $email);
+            $previousLogin = cache('admin_last_login_at');
+            cache(['admin_last_login_at' => now()->toDateTimeString()]);
+            $this->setSession('admin', 0, 'Super Admin', $email, null, $previousLogin);
             return true;
         }
         return false;
@@ -219,7 +222,10 @@ class AuthController extends Controller
                 return back()->with('error', "Akun Anda telah DIBLOKIR oleh Admin. Alasan: {$reason}");
             }
 
-            $this->setSession('wisatawan', $user->id, $user->name, $user->email);
+            $previousLogin = $user->last_login_at;
+            $user->update(['last_login_at' => now()]);
+
+            $this->setSession('wisatawan', $user->id, $user->name, $user->email, null, $previousLogin);
             return redirect('/dashboard/wisatawan')->with('success', "Selamat datang, {$user->name}!");
         }
         return null;
@@ -237,7 +243,10 @@ class AuthController extends Controller
                 return back()->with('error', 'Akun Anda belum diverifikasi oleh admin. Silakan tunggu konfirmasi.');
             }
             
-            $this->setSession('mitra_faskes', $mitra->id, $mitra->nama_penanggung_jawab, $mitra->email, 'faskes');
+            $previousLogin = $mitra->last_login_at;
+            $mitra->update(['last_login_at' => now()]);
+
+            $this->setSession('mitra_faskes', $mitra->id, $mitra->nama_penanggung_jawab, $mitra->email, 'faskes', $previousLogin);
             
             return redirect('/dashboard/faskes')->with('success', "Selamat datang, {$mitra->nama_penanggung_jawab}!");
         }
@@ -269,14 +278,15 @@ class AuthController extends Controller
     }
 
 
-    private function setSession(string $role, int $id, string $name, string $email, ?string $jenisMitra = null): void
+    private function setSession(string $role, int $id, string $name, string $email, ?string $jenisMitra = null, $lastLoginAt = null): void
     {
         session(['auth_user' => [
-            'id'          => $id,
-            'name'        => $name,
-            'email'       => $email,
-            'role'        => $role,
-            'jenis_mitra' => $jenisMitra,
+            'id'            => $id,
+            'name'          => $name,
+            'email'         => $email,
+            'role'          => $role,
+            'jenis_mitra'   => $jenisMitra,
+            'last_login_at' => $lastLoginAt ? \Carbon\Carbon::parse($lastLoginAt)->translatedFormat('d M Y, H:i') : '-',
         ]]);
     }
 
@@ -288,5 +298,47 @@ class AuthController extends Controller
             'mitra_pariwisata' => redirect('/dashboard/faskes'),
             default            => redirect('/dashboard/wisatawan'),
         };
+    }
+
+    /**
+     * Memproses pengajuan hapus akun wisatawan karena lupa password & PIN.
+     */
+    public function requestDeleteAccount(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email|max:100',
+        ]);
+
+        $email = $request->email;
+
+        // Cek apakah email terdaftar sebagai Wisatawan
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email tidak terdaftar sebagai wisatawan.'
+            ]);
+        }
+
+        // Cek apakah sudah ada request pending untuk email ini
+        $exists = AccountDeletionRequest::where('email', $email)->where('status', 'pending')->exists();
+        if ($exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Permohonan hapus akun untuk email ini sudah dikirim sebelumnya dan sedang menunggu persetujuan admin.'
+            ]);
+        }
+
+        // Buat request baru
+        AccountDeletionRequest::create([
+            'user_id' => $user->id,
+            'email' => $email,
+            'status' => 'pending',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permohonan hapus akun berhasil dikirim. Admin akan meninjau dan menghapus akun Anda.'
+        ]);
     }
 }

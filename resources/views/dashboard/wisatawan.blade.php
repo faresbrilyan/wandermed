@@ -180,6 +180,20 @@
                             </button>
                         </div>
                     </form>
+
+                    <hr style="border-color:var(--border); margin:24px 0;">
+
+                    <h5 style="font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; color:var(--red);">
+                        <i class="fas fa-exclamation-triangle" style="color:var(--red)"></i> Hapus Akun (Danger Zone)
+                    </h5>
+                    <div style="background:rgba(239,68,68,0.05); border:1px solid rgba(239,68,68,0.2); border-radius:10px; padding:18px;">
+                        <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5;">
+                            Jika Anda ingin menghapus akun wisatawan Anda secara permanen dari platform WanderMed, silakan ajukan permohonan penghapusan akun ke admin. Akun Anda beserta seluruh data rekam medis dan riwayat kunjungan akan dihapus secara permanen setelah permohonan disetujui.
+                        </p>
+                        <button type="button" class="w-btn" onclick="requestAccountDeletionFromDashboard('{{ $user->email }}', '{{ csrf_token() }}')" style="padding:11px 28px; background:rgba(239,68,68,0.15); color:var(--red); border:1px solid rgba(239,68,68,0.4); font-weight:600;">
+                            <i class="fas fa-trash-alt"></i> Ajukan Penghapusan Akun
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -236,13 +250,4 @@
             </div>
         </div>
 
-@endsection
-
-@section('additional_styles')
-<style>
-/* Utility: sembunyikan teks di navbar pada layar xs */
-@media (max-width: 480px) {
-    .d-none-xs { display: none !important; }
-}
-</style>
 @endsection

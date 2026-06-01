@@ -27,6 +27,7 @@ class Mitra extends Model
         'is_active',
         'blocking_reason',
         'catatan_admin',
+        'last_login_at',
     ];
 
     protected $hidden = [
@@ -35,8 +36,9 @@ class Mitra extends Model
     ];
 
     protected $casts = [
-        'is_verified' => 'boolean',
-        'password'    => 'hashed',
+        'is_verified'   => 'boolean',
+        'password'      => 'hashed',
+        'last_login_at' => 'datetime',
     ];
 
     // =========================================================

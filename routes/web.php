@@ -56,6 +56,9 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // Lupa Password (PIN)
 Route::post('/reset-password-pin', [AuthController::class, 'resetPasswordViaPin'])->name('password.pin.reset');
 
+// Request Hapus Akun (Lupa PIN)
+Route::post('/wisatawan/request-delete', [AuthController::class, 'requestDeleteAccount'])->name('wisatawan.request-delete');
+
 // Registrasi Wisatawan
 Route::post('/daftar/wisatawan', [AuthController::class, 'registerWisatawan'])->name('register.wisatawan');
 // Registrasi Faskes (butuh akun Mitra)
@@ -156,6 +159,14 @@ Route::middleware(['auth.session', 'role:admin'])->group(function () {
     // Reset Password Faskes
     Route::post('/admin/faskes/{id}/reset-password', [AdminController::class, 'resetPasswordFaskes'])
          ->name('admin.faskes.reset-password');
+    // Reset Password Wisatawan
+    Route::post('/admin/user/{id}/reset-password', [AdminController::class, 'resetPasswordWisatawan'])
+         ->name('admin.user.reset-password');
+    // Deletion Request Approve / Reject
+    Route::post('/admin/deletion-request/{id}/approve', [AdminController::class, 'approveDeletionRequest'])
+         ->name('admin.deletion-request.approve');
+    Route::post('/admin/deletion-request/{id}/reject', [AdminController::class, 'rejectDeletionRequest'])
+         ->name('admin.deletion-request.reject');
     // Hapus data faskes (admin)
     Route::delete('/admin/faskes/{id}', [AdminController::class, 'destroyFaskes'])
          ->name('admin.faskes.destroy');
