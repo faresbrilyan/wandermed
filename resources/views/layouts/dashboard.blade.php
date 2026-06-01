@@ -6,6 +6,7 @@
     <meta name="description" content="WanderMed – Sistem Pemetaan Medis Wisatawan Subang">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>WanderMed – @yield('page_title', 'Dashboard')</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/wdm.png') }}">
 
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
