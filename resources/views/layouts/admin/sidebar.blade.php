@@ -34,6 +34,9 @@
 </a>
 
 <div class="wm-nav-label">Sistem</div>
+<a href="#" class="wm-nav-link" id="navRiwayatLogin">
+    <i class="fas fa-history"></i> Log Login
+</a>
 <a href="/peta-faskes" class="wm-nav-link">
     <i class="fas fa-map-marked-alt"></i> Lihat Peta Publik
 </a>

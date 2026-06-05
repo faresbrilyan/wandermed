@@ -747,6 +747,67 @@
         </div>
     </div>
 
+</div> <!-- End sectionProfil -->
+
+<!-- ===== SECTION 5: RIWAYAT LOGIN ===== -->
+<div id="sectionRiwayatLogin" class="faskes-section" style="display:none;">
+    <div class="wm-page-header">
+        <div>
+            <div class="wm-page-title">Riwayat Login Akun</div>
+            <div class="wm-page-subtitle">Daftar catatan waktu setiap kali akun faskes Anda diakses</div>
+        </div>
+    </div>
+    <div class="wm-card">
+        <div class="wm-card-header">
+            <div class="wm-card-title"><i class="fas fa-history"></i> Log Login Akun Faskes</div>
+        </div>
+        <div class="wm-table-wrap">
+            <table class="wm-table" id="faskesLogsTable">
+                <thead>
+                    <tr>
+                        <th>Email / Nama</th>
+                        <th>Peran (Role)</th>
+                        <th>Aktivitas</th>
+                        <th>Waktu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse(($loginLogs ?? []) as $log)
+                    <tr>
+                        <td class="bold">
+                            {{ $log->email }}
+                            @if(!empty($log->name))
+                                <div style="font-size: 10px; font-weight: 400; color: var(--text-muted);"><i class="fas fa-id-card mr-1"></i>Nama: {{ $log->name }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="wm-badge green"><i class="fas fa-clinic-medical"></i> Mitra Faskes</span>
+                        </td>
+                        <td>
+                            @if(($log->type ?? 'login') === 'logout')
+                                <span class="wm-badge danger"><i class="fas fa-sign-out-alt"></i> Logout</span>
+                            @else
+                                <span class="wm-badge green"><i class="fas fa-sign-in-alt"></i> Login</span>
+                            @endif
+                        </td>
+                        <td style="color:var(--text-muted); font-size: 12px;">
+                            {{ $log->login_at->translatedFormat('d M Y, H:i:s') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="4" class="text-center" style="padding: 20px; color: #888;">Belum ada log login atau logout tercatat untuk akun ini.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if(isset($loginLogs) && $loginLogs instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        <div style="padding: 15px; border-top: 1px solid var(--border);">
+            {{ $loginLogs->fragment('tab-sectionRiwayatLogin')->links('pagination::bootstrap-4') }}
+        </div>
+        @endif
+    </div>
+</div>
+
 
 {{-- ===== SECTION CHAT ADMIN ===== --}}
 @include('partials.chat_mitra')

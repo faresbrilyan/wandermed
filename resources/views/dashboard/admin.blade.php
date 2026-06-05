@@ -695,6 +695,82 @@
     </div>
 </div>
 
+
+{{-- ==================== SECTION: RIWAYAT LOGIN ==================== --}}
+<div id="sectionRiwayatLogin" class="admin-section" style="display:none;">
+    <div class="wm-page-header">
+        <div>
+            <div class="wm-page-title">Log Login Pengguna</div>
+            <div class="wm-page-subtitle">Pantau riwayat masuk seluruh aktor di platform WanderMed</div>
+        </div>
+    </div>
+    <div class="wm-card">
+        <div class="wm-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="wm-card-title"><i class="fas fa-history"></i> Catatan Login Aktor</div>
+            <div style="position:relative; flex:0 0 250px;">
+                <i class="fas fa-search" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:12px;"></i>
+                <input type="text" id="filterLogsInput" class="wm-input" style="padding-left:32px; height:34px; font-size:12px;" placeholder="Cari email..." onkeyup="filterTable('filterLogsInput', 'logsTable', 'col-email')">
+            </div>
+        </div>
+        <div class="wm-table-wrap">
+            <table class="wm-table" id="logsTable">
+                <thead>
+                    <tr>
+                        <th>Email / Nama Aktor</th>
+                        <th>Peran (Role)</th>
+                        <th>Aktivitas</th>
+                        <th>Waktu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse(($loginLogs ?? []) as $log)
+                    <tr>
+                        <td class="bold col-email">
+                            {{ $log->email }}
+                            @if(!empty($log->name))
+                                <div style="font-size: 10px; font-weight: 400; color: var(--text-muted);"><i class="fas fa-id-card mr-1"></i>Nama: {{ $log->name }}</div>
+                            @elseif($log->role === 'wisatawan' && $log->user)
+                                <div style="font-size: 10px; font-weight: 400; color: var(--text-muted);"><i class="fas fa-user mr-1"></i>Nama: {{ $log->user->name }}</div>
+                            @elseif($log->role === 'mitra_faskes' && $log->mitra)
+                                <div style="font-size: 10px; font-weight: 400; color: var(--text-muted);"><i class="fas fa-hospital mr-1"></i>PJ: {{ $log->mitra->nama_penanggung_jawab }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($log->role === 'admin')
+                                <span class="wm-badge orange"><i class="fas fa-user-shield"></i> Administrator</span>
+                            @elseif($log->role === 'mitra_faskes')
+                                <span class="wm-badge green"><i class="fas fa-clinic-medical"></i> Mitra Faskes</span>
+                            @elseif($log->role === 'wisatawan')
+                                <span class="wm-badge info"><i class="fas fa-user"></i> Wisatawan</span>
+                            @else
+                                <span class="wm-badge text-muted">{{ $log->role }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if(($log->type ?? 'login') === 'logout')
+                                <span class="wm-badge danger"><i class="fas fa-sign-out-alt"></i> Logout</span>
+                            @else
+                                <span class="wm-badge green"><i class="fas fa-sign-in-alt"></i> Login</span>
+                            @endif
+                        </td>
+                        <td style="color:var(--text-muted); font-size: 12px;">
+                            {{ $log->login_at->translatedFormat('d M Y, H:i:s') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="4" class="text-center" style="padding: 20px; color: #888;">Belum ada log aktivitas login/logout tercatat.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if(isset($loginLogs) && $loginLogs instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        <div style="padding: 15px; border-top: 1px solid var(--border);">
+            {{ $loginLogs->fragment('tab-sectionRiwayatLogin')->links('pagination::bootstrap-4') }}
+        </div>
+        @endif
+    </div>
+</div>
+
 {{-- ==================== MODAL: DETAIL FASKES (untuk approve) ==================== --}}
 <div class="modal fade" id="modalDetailFaskes" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

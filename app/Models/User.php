@@ -76,4 +76,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(LaporanMasalah::class);
     }
+
+    /**
+     * Wisatawan memiliki banyak log login.
+     */
+    public function loginLogs()
+    {
+        return $this->hasMany(LoginLog::class);
+    }
 }

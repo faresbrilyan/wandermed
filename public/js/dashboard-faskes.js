@@ -22,6 +22,7 @@
         'navUlasan'       : 'sectionUlasan',
         'navProfilFaskes' : 'sectionProfil',
         'navChat'         : 'sectionChat',
+        'navRiwayatLogin' : 'sectionRiwayatLogin',
     };
 
     function switchSection(navId, sectionId) {
@@ -37,6 +38,13 @@
             secEl.classList.add('wm-section-animate');
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Update URL hash without scrolling
+        if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, null, '#tab-' + sectionId);
+        } else {
+            window.location.hash = 'tab-' + sectionId;
+        }
     }
 
     document.querySelectorAll('.wm-nav-link').forEach(function(link) {
@@ -47,6 +55,32 @@
             switchSection(navId, faskesNavMap[navId]);
         });
     });
+
+    // RESTORE ACTIVE TAB ON PAGE LOAD
+    var hash = window.location.hash;
+    var activeTabId = null;
+    if (hash) {
+        window.scrollTo(0, 0);
+        var cleanSectionId = hash.replace('#tab-', '');
+        for (var tabId in faskesNavMap) {
+            if (faskesNavMap[tabId] === cleanSectionId) {
+                activeTabId = tabId;
+                break;
+            }
+        }
+    }
+    if (!activeTabId) {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('page_logs')) {
+            activeTabId = 'navRiwayatLogin';
+        }
+    }
+    if (activeTabId) {
+        var activeTab = document.getElementById(activeTabId);
+        if (activeTab) {
+            switchSection(activeTabId, faskesNavMap[activeTabId]);
+        }
+    }
 
     // =========================================================
     // AJAX Toggle Status

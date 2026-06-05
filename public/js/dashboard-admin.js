@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'navLaporan':'sectionLaporan','navDataWisatawan':'sectionWisatawan',
         'navDataFaskes':'sectionFaskes','navDataPariwisata':'sectionPariwisata',
         'navAllUlasan':'sectionAllUlasan','navChat':'sectionChat',
+        'navRiwayatLogin':'sectionRiwayatLogin',
     };
     document.querySelectorAll('.wm-nav-link').forEach(function(link) {
         link.addEventListener('click', function(e) {
@@ -53,6 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
             activeTabId = 'navDataFaskes';
         } else if (urlParams.has('page_users') || urlParams.has('search_users')) {
             activeTabId = 'navDataWisatawan';
+        } else if (urlParams.has('page_logs')) {
+            activeTabId = 'navRiwayatLogin';
         }
     }
     if (activeTabId) {

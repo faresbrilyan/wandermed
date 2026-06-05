@@ -39,6 +39,7 @@ class FaskesController extends Controller
 
         $ulasans = \App\Models\UlasanFaskes::with('user')->where('faskes_id', $faskes->id)->latest()->get();
         $jadwals = \App\Models\JadwalDokter::where('faskes_id', $faskes->id)->orderBy('hari')->get();
+        $loginLogs = \App\Models\LoginLog::where('mitra_id', $mitraId)->latest('login_at')->paginate(10, ['*'], 'page_logs');
 
         return view('dashboard.faskes', compact(
             'mitra',
@@ -46,7 +47,8 @@ class FaskesController extends Controller
             'totalPengunjung',
             'totalUlasan',
             'ulasans',
-            'jadwals'
+            'jadwals',
+            'loginLogs'
         ));
     }
 

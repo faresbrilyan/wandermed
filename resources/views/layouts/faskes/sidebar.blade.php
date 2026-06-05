@@ -25,6 +25,9 @@
     <span id="chatNavBadge" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#ff7a00;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;align-items:center;justify-content:center;">0</span>
 </a>
 <div class="wm-nav-label">Navigasi</div>
+<a href="#" class="wm-nav-link" id="navRiwayatLogin">
+    <i class="fas fa-history"></i> Riwayat Login
+</a>
 <a href="/peta-faskes" class="wm-nav-link">
     <i class="fas fa-map-marked-alt"></i> Lihat di Peta
 </a>

@@ -62,6 +62,19 @@ class AuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
+        $authUser = session('auth_user');
+        if ($authUser) {
+            \App\Models\LoginLog::create([
+                'email' => $authUser['email'],
+                'name' => $authUser['name'],
+                'role' => $authUser['role'],
+                'type' => 'logout',
+                'user_id' => $authUser['role'] === 'wisatawan' ? $authUser['id'] : null,
+                'mitra_id' => in_array($authUser['role'], ['mitra_faskes', 'mitra_pariwisata']) ? $authUser['id'] : null,
+                'login_at' => now(),
+            ]);
+        }
+
         $request->session()->forget('auth_user');
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -126,6 +139,15 @@ class AuthController extends Controller
 
         $this->setSession('wisatawan', $user->id, $user->name, $user->email);
 
+        \App\Models\LoginLog::create([
+            'email' => $user->email,
+            'name' => $user->name,
+            'role' => 'wisatawan',
+            'type' => 'login',
+            'user_id' => $user->id,
+            'login_at' => now(),
+        ]);
+
         return redirect('/dashboard/wisatawan')->with('success', 'Akun berhasil dibuat! Selamat datang di WanderMed.');
     }
 
@@ -177,6 +199,15 @@ class AuthController extends Controller
             $previousLogin = cache('admin_last_login_at');
             cache(['admin_last_login_at' => now()->toDateTimeString()]);
             $this->setSession('admin', 0, 'Super Admin', $email, null, $previousLogin);
+
+            \App\Models\LoginLog::create([
+                'email' => $email,
+                'name' => 'Super Admin',
+                'role' => 'admin',
+                'type' => 'login',
+                'login_at' => now(),
+            ]);
+
             return true;
         }
         return false;
@@ -195,6 +226,16 @@ class AuthController extends Controller
             $user->update(['last_login_at' => now()]);
 
             $this->setSession('wisatawan', $user->id, $user->name, $user->email, null, $previousLogin);
+
+            \App\Models\LoginLog::create([
+                'email' => $user->email,
+                'name' => $user->name,
+                'role' => 'wisatawan',
+                'type' => 'login',
+                'user_id' => $user->id,
+                'login_at' => now(),
+            ]);
+
             return redirect('/dashboard/wisatawan')->with('success', "Selamat datang, {$user->name}!");
         }
         return null;
@@ -216,6 +257,15 @@ class AuthController extends Controller
             $mitra->update(['last_login_at' => now()]);
 
             $this->setSession('mitra_faskes', $mitra->id, $mitra->nama_penanggung_jawab, $mitra->email, 'faskes', $previousLogin);
+
+            \App\Models\LoginLog::create([
+                'email' => $mitra->email,
+                'name' => $mitra->faskes ? $mitra->faskes->nama_faskes : $mitra->nama_penanggung_jawab,
+                'role' => 'mitra_faskes',
+                'type' => 'login',
+                'mitra_id' => $mitra->id,
+                'login_at' => now(),
+            ]);
             
             return redirect('/dashboard/faskes')->with('success', "Selamat datang, {$mitra->nama_penanggung_jawab}!");
         }

@@ -54,6 +54,14 @@ class Mitra extends Model
         return $this->hasOne(Faskes::class, 'mitra_id');
     }
 
+    /**
+     * Mitra memiliki banyak log login.
+     */
+    public function loginLogs()
+    {
+        return $this->hasMany(LoginLog::class);
+    }
+
     // =========================================================
     // HELPER / SCOPE
     // =========================================================

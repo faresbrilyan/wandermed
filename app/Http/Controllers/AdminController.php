@@ -72,6 +72,7 @@ class AdminController extends Controller
             'wisataApproved'  => $this->getMergedWisataForDashboard(),
             'allUlasan'       => UlasanFaskes::with(['user', 'faskes'])->latest()->get(),
             'deletionRequests'=> AccountDeletionRequest::with('user')->latest()->get(),
+            'loginLogs'       => \App\Models\LoginLog::with(['user', 'mitra.faskes'])->latest('login_at')->paginate(15, ['*'], 'page_logs')->appends($request->query()),
         ]);
     }
 
