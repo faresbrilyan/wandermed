@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateForm();
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } else {
-                window.location.href = "/daftar";
+                window.location.href = "/login";
             }
         });
 

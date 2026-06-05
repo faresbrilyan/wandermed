@@ -88,7 +88,7 @@
                                 <div id="step1" class="step-content">
                                     <div class="row">
                                         <div class="col-md-7 mb-4">
-                                            <label class="text-white font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Nama Faskes</label>
+                                            <label class="text-white font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Nama Faskes <span class="text-hnb-orange">*</span></label>
                                             <div class="input-group" style="border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text border-0 bg-transparent text-white-50 px-3"><i class="fas fa-hospital-alt"></i></span>
@@ -97,7 +97,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Kategori</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Kategori <span class="text-hnb-orange">*</span></label>
                                             <select name="jenis_faskes" class="form-control form-control-dark radius-hnb px-3 input-dark" style="height:50px;" required>
                                                 <option value="" disabled selected>Pilih Kategori...</option>
                                                 <option value="Rumah Sakit">Rumah Sakit</option>
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Informasi Layanan Utama</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Informasi Layanan Utama <span class="text-hnb-orange">*</span></label>
                                         <textarea name="pengumuman" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="3" placeholder="Contoh: Melayani poli gigi, bedah ringan, dll..." required maxlength="200"></textarea>
                                     </div>
                                 </div>
@@ -116,11 +116,11 @@
                                 {{-- STEP 2: Lokasi & Peta --}}
                                 <div id="step2" class="step-content d-none">
                                     <div class="form-group mb-4">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Alamat Lengkap</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Alamat Lengkap <span class="text-hnb-orange">*</span></label>
                                         <textarea name="alamat" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="2" placeholder="Jl. Raya Kesehatan No. 99..." required maxlength="200"></textarea>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75 mb-0 mr-2">Koordinat Lokasi di Peta</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75 mb-0 mr-2">Koordinat Lokasi di Peta <span class="text-hnb-orange">*</span></label>
                                         <button type="button" class="btn btn-sm btn-link text-hnb-orange p-0"
                                             data-toggle="modal" data-target="#modalKoordinat" style="font-size:12px; text-decoration:none;">
                                             <i class="fas fa-question-circle mr-1"></i>Cara mendapatkan koordinat?
@@ -132,12 +132,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Latitude (Lintang)</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Latitude (Lintang) <span class="text-hnb-orange">*</span></label>
                                             <input type="number" step="any" id="inputLat" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="-6.5718" oninput="syncCoord()">
                                             <small class="text-white-50 ml-1">Contoh: -6.571800</small>
                                         </div>
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Longitude (Bujur)</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Longitude (Bujur) <span class="text-hnb-orange">*</span></label>
                                             <input type="number" step="any" id="inputLng" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="107.7600" oninput="syncCoord()">
                                             <small class="text-white-50 ml-1">Contoh: 107.760000</small>
                                         </div>
@@ -153,7 +153,7 @@
                                 {{-- STEP 3: Kontak --}}
                                 <div id="step3" class="step-content d-none">
                                     <div class="form-group mb-4">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Telepon / Kontak Darurat</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Telepon / Kontak Darurat <span class="text-hnb-orange">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text bg-transparent border-right-0 text-white font-weight-bold" style="border-color: rgba(255,255,255,0.1) !important;">+62</span>
@@ -163,14 +163,14 @@
                                     </div>
                                     <div class="row mb-4">
                                         <div class="col-md-6 mb-3 mb-md-0">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Terima BPJS?</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Terima BPJS? <span class="text-hnb-orange">*</span></label>
                                             <select name="dukungan_bpjs" class="form-control form-control-dark radius-hnb px-3 input-dark" style="height:50px;" required>
                                                 <option value="1">Ya, Menerima</option>
                                                 <option value="0">Tidak (Umum)</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Layanan UGD</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Layanan UGD <span class="text-hnb-orange">*</span></label>
                                             <select name="layanan_ugd" class="form-control form-control-dark radius-hnb px-3 input-dark" style="height:50px;" required>
                                                 <option value="24 Jam">Buka 24 Jam</option>
                                                 <option value="Terbatas">Tidak Ada (Klinik Biasa)</option>
@@ -182,14 +182,14 @@
                                 {{-- STEP 4: Dokumen & PJ --}}
                                 <div id="step4" class="step-content d-none">
                                     <div class="form-group mb-3">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nomor Izin Praktik</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nomor Izin Praktik <span class="text-hnb-orange">*</span></label>
                                         <input type="text" name="nomor_izin_praktik" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="Masukkan Nomor Izin Praktik" required>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <div class="upload-box-premium h-100" style="padding:15px; display:flex; flex-direction:column; justify-content:center;">
                                                 <i class="fas fa-camera text-hnb-orange mb-2" style="font-size:1.5em;"></i>
-                                                <p class="text-white small font-weight-bold mb-1">Foto Plang Izin</p>
+                                                <p class="text-white small font-weight-bold mb-1">Foto Plang Izin <span class="text-hnb-orange">*</span></p>
                                                 <small class="text-white-50 d-block mb-2" style="font-size:0.7em;">Format: JPG, PNG (Maks 5MB)</small>
                                                 <input type="file" name="foto_plang_izin" class="form-control-file small text-white-50 mx-auto" accept=".jpg,.jpeg,.png" required>
                                             </div>
@@ -197,14 +197,14 @@
                                         <div class="col-md-6 mb-3">
                                             <div class="upload-box-premium h-100" style="padding:15px; display:flex; flex-direction:column; justify-content:center;">
                                                 <i class="fas fa-building text-hnb-orange mb-2" style="font-size:1.5em;"></i>
-                                                <p class="text-white small font-weight-bold mb-1">Foto Kondisi Faskes</p>
+                                                <p class="text-white small font-weight-bold mb-1">Foto Kondisi Faskes <span class="text-hnb-orange">*</span></p>
                                                 <small class="text-white-50 d-block mb-2" style="font-size:0.7em;">Format: JPG, PNG (Maks 5MB)</small>
                                                 <input type="file" name="foto_kondisi_faskes" class="form-control-file small text-white-50 mx-auto" accept=".jpg,.jpeg,.png" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nama Penanggung Jawab / Pimpinan</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nama Penanggung Jawab / Pimpinan <span class="text-hnb-orange">*</span></label>
                                         <input type="text" name="nama_penanggung_jawab" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="Contoh: dr. Andi Susanto" required maxlength="100">
                                     </div>
                                 </div>
@@ -216,18 +216,18 @@
                                         <p class="text-white-50 small mb-0">Akun ini digunakan untuk Login Dashboard & memperbarui status faskes secara <strong class="text-white">Real-Time</strong>.</p>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Email Akun Login</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Email Akun Login <span class="text-hnb-orange">*</span></label>
                                         <input type="email" name="email" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="klinik@email.com" required maxlength="100">
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Sandi Akses</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Sandi Akses <span class="text-hnb-orange">*</span></label>
                                         <div class="pass-group-wizard">
                                             <input type="password" name="password" id="inputPass" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="Minimal 8 karakter..." required maxlength="50">
                                             <i class="fas fa-eye btn-toggle-pass" id="btnTogglePass"></i>
                                         </div>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Konfirmasi Sandi</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Konfirmasi Sandi <span class="text-hnb-orange">*</span></label>
                                         <div class="pass-group-wizard">
                                             <input type="password" name="password_confirmation" class="form-control form-control-dark radius-hnb py-4 px-3 input-dark" placeholder="Ketik ulang sandi..." required maxlength="50">
                                         </div>

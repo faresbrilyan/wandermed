@@ -656,38 +656,118 @@
             <table class="wm-table" id="ulasanTable">
                 <thead>
                     <tr>
-                        <th>Wisatawan</th>
-                        <th>Fasilitas Kesehatan</th>
-                        <th>Rating</th>
-                        <th>Isi Ulasan</th>
-                        <th>Tanggal</th>
+                        <th width="35%">Wisatawan</th>
+                        <th width="20%">Fasilitas Kesehatan</th>
+                        <th width="15%">Rating</th>
+                        <th width="20%">Isi Ulasan</th>
+                        <th width="10%">Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse(($allUlasan ?? []) as $ul)
+                    @php
+                        $reviewer = $ul?->user;
+                        $hasGolDarah = $reviewer && !empty($reviewer->gol_darah);
+                        $hasAlergi = $reviewer && !empty($reviewer->riwayat_alergi);
+                        $hasPenyakit = $reviewer && !empty($reviewer->riwayat_penyakit);
+                        $hasKontak = $reviewer && !empty($reviewer->kontak_darurat);
+                        $initial = $reviewer ? strtoupper(substr($reviewer->name, 0, 1)) : '?';
+                    @endphp
                     <tr>
-                        <td class="bold col-search">
-                            {{ $ul?->user?->name ?? 'Anonim' }}
-                            <div style="font-size: 10px; font-weight: 400; color: var(--text-muted);">{{ $ul?->user?->email ?? '-' }}</div>
-                        </td>
+                        <!-- Wisatawan Column with Medical Badges -->
                         <td class="col-search">
-                            <span class="wm-badge info" style="font-size: 11px;"><i class="fas fa-hospital-alt"></i> {{ $ul?->faskes?->nama_faskes ?? 'Faskes Terhapus' }}</span>
+                            <div style="display:flex; align-items:flex-start; gap:12px;">
+                                <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#4e73df,#224abe); display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:14px; flex-shrink:0; margin-top:2px;">
+                                    {{ $initial }}
+                                </div>
+                                <div style="flex:1; min-width:0;">
+                                    <strong style="font-size:14px; color:var(--text-primary); display:block;">{{ $reviewer->name ?? 'Wisatawan' }}</strong>
+                                    <span style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:6px;">{{ $reviewer->email ?? '-' }}</span>
+                                    
+                                    {{-- Medical Info Badges --}}
+                                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+                                        @if($hasGolDarah)
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(231,74,59,0.08); color:#e74a3b; border:1px solid rgba(231,74,59,0.2); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:600;">
+                                                <i class="fas fa-tint" style="font-size:9px;"></i> Gol: {{ $reviewer->gol_darah }}
+                                            </span>
+                                        @else
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.02); color:var(--text-muted); border:1px solid var(--border); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:500;">
+                                                <i class="fas fa-tint" style="font-size:9px; opacity:0.5;"></i> Gol: -
+                                            </span>
+                                        @endif
+
+                                        @if($hasAlergi)
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(246,194,62,0.08); color:#f6c23e; border:1px solid rgba(246,194,62,0.2); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:600;" title="{{ $reviewer->riwayat_alergi }}">
+                                                <i class="fas fa-exclamation-triangle" style="font-size:9px;"></i> Alergi: {{ \Illuminate\Support\Str::limit($reviewer->riwayat_alergi, 25) }}
+                                            </span>
+                                        @else
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.02); color:var(--text-muted); border:1px solid var(--border); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:500;">
+                                                <i class="fas fa-exclamation-triangle" style="font-size:9px; opacity:0.5;"></i> Alergi: -
+                                            </span>
+                                        @endif
+
+                                        @if($hasPenyakit)
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(54,185,204,0.08); color:#36b9cc; border:1px solid rgba(54,185,204,0.2); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:600;" title="{{ $reviewer->riwayat_penyakit }}">
+                                                <i class="fas fa-notes-medical" style="font-size:9px;"></i> Penyakit: {{ \Illuminate\Support\Str::limit($reviewer->riwayat_penyakit, 25) }}
+                                            </span>
+                                        @else
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.02); color:var(--text-muted); border:1px solid var(--border); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:500;">
+                                                <i class="fas fa-notes-medical" style="font-size:9px; opacity:0.5;"></i> Penyakit: -
+                                            </span>
+                                        @endif
+
+                                        @if($hasKontak)
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(28,200,138,0.08); color:#1cc88a; border:1px solid rgba(28,200,138,0.2); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:600;" title="{{ $reviewer->kontak_darurat }}">
+                                                <i class="fas fa-phone-alt" style="font-size:9px;"></i> Kontak: {{ \Illuminate\Support\Str::limit($reviewer->kontak_darurat, 25) }}
+                                            </span>
+                                        @else
+                                            <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.02); color:var(--text-muted); border:1px solid var(--border); border-radius:6px; padding:2px 8px; font-size:10px; font-weight:500;">
+                                                <i class="fas fa-phone-alt" style="font-size:9px; opacity:0.5;"></i> Kontak: -
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </td>
+                        
+                        <!-- Fasilitas Kesehatan Column -->
+                        <td class="col-search">
+                            <span class="wm-badge info" style="font-size:11px; padding: 6px 12px; border-radius: 8px;">
+                                <i class="fas fa-hospital-alt mr-1"></i> {{ $ul?->faskes?->nama_faskes ?? 'Faskes Terhapus' }}
+                            </span>
+                            <div style="font-size:10.5px; color:var(--text-muted); margin-top:4px;">{{ $ul?->faskes?->jenis_faskes ?? '-' }}</div>
+                        </td>
+                        
+                        <!-- Rating Column -->
                         <td>
-                            @for($i=1; $i<=5; $i++)
-                                <i class="fas fa-star" style="font-size:10px; {{ $i <= ($ul?->rating ?? 0) ? 'color:#f6c23e;' : 'color:rgba(255,255,255,0.1);' }}"></i>
-                            @endfor
-                            <span style="font-size:11px; margin-left:4px;">{{ $ul?->rating ?? 0 }}/5</span>
+                            <div style="display:inline-flex; flex-direction:column; gap:2px;">
+                                <div>
+                                    @for($i=1; $i<=5; $i++)
+                                        <i class="fas fa-star" style="font-size:11px; {{ $i <= ($ul?->rating ?? 0) ? 'color:#f6c23e;' : 'color:rgba(0,0,0,0.08);' }}"></i>
+                                    @endfor
+                                </div>
+                                <span style="font-size:11px; font-weight: 600; color:var(--text-primary);">{{ $ul?->rating ?? 0 }}/5</span>
+                            </div>
                         </td>
-                        <td class="col-search" style="max-width: 300px; font-size: 12px; line-height: 1.4; font-style: italic;">
-                            "{{ $ul?->komentar ?? '-' }}"
+                        
+                        <!-- Isi Ulasan Column -->
+                        <td class="col-search">
+                            <div style="background:rgba(0,0,0,0.02); border-left:3px solid var(--orange); border-radius:6px; padding:8px 12px; font-size:12.5px; color:var(--text-secondary); line-height:1.45; font-style:italic; max-width:320px;">
+                                "{{ $ul?->komentar ?? '-' }}"
+                            </div>
                         </td>
-                        <td style="font-size: 11px; color: var(--text-muted);">
-                            {{ $ul?->created_at?->format('d/m/Y H:i') ?? '-' }}
+                        
+                        <!-- Tanggal Column -->
+                        <td style="font-size:11px; color:var(--text-muted); white-space:nowrap;">
+                            <i class="far fa-calendar-alt mr-1"></i>{{ $ul?->created_at?->format('d M Y') ?? '-' }}
+                            <div style="font-size:10px; margin-top:2px; opacity:0.8;"><i class="far fa-clock mr-1"></i>{{ $ul?->created_at?->format('H:i') ?? '-' }}</div>
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="text-center" style="padding: 30px; color: #888;">Belum ada ulasan yang masuk.</td></tr>
+                    <tr><td colspan="5" class="text-center" style="padding: 40px 20px; color: var(--text-muted);">
+                        <div style="font-size: 24px; opacity:0.3; margin-bottom: 8px;"><i class="fas fa-comment-slash"></i></div>
+                        Belum ada ulasan yang masuk dari wisatawan.
+                    </td></tr>
                     @endforelse
                 </tbody>
             </table>

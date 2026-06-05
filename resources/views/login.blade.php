@@ -6,7 +6,7 @@
     <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px; clip-path: none;">
         <div class="container px-4" style="position: relative; z-index: 5;">
             <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-8 col-sm-10 animate-fade-up">
+                <div class="col-lg-6 col-md-8 col-sm-10 animate-fade-up" style="max-width: 520px; width: 100%;">
 
                     <div class="text-center mb-4">
                         <div class="icon-kesehatan mx-auto mb-3 d-flex align-items-center justify-content-center animasi-jantung" style="width: 80px; height: 80px;">
@@ -38,56 +38,76 @@
                             <form action="{{ route('login.post') }}" method="POST">
                                 @csrf
 
-                                <div class="form-group mb-4">
-                                    <label class="text-white font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Email Akun</label>
-                                    <div class="input-group" style="border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text border-0 bg-transparent text-white-50 px-3"><i class="fas fa-envelope"></i></span>
-                                        </div>
-                                        <input type="email" name="email" class="form-control border-0 bg-transparent text-white shadow-none px-2 py-4 @error('email') is-invalid @enderror" placeholder="Masukkan email aktif Anda..." value="{{ old('email') }}" required autocomplete="email" maxlength="100" style="font-size: 1.05rem;">
-                                    </div>
-                                    @error('email')
-                                        <small class="text-danger ml-1 mt-1 d-block">{{ $message }}</small>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mb-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <label class="text-white font-weight-bold ml-1 mb-0" style="font-size: 0.9rem; opacity: 0.9;">Kata Sandi</label>
-                                    </div>
-                                    <div class="input-group" style="border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text border-0 bg-transparent text-white-50 px-3"><i class="fas fa-lock"></i></span>
-                                        </div>
-                                        <input type="password" name="password" id="inputPassword" class="form-control border-0 bg-transparent text-white shadow-none px-2 py-4" placeholder="Ketik kata sandi Anda..." required autocomplete="current-password" maxlength="50" style="font-size: 1.05rem;">
-                                        <div class="input-group-append">
-                                            <button type="button" id="btnToggle" class="btn border-0 text-white-50 shadow-none px-3" style="background: transparent;">
-                                                <i class="fas fa-eye" id="ikonMata"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between flex-wrap align-items-center mt-2 px-1 gap-2" style="font-size: 0.82rem;">
-                                        <a href="{{ route('password.forgot') }}" class="text-hnb-orange text-decoration-none hover-orange" style="font-weight: 500;">
-                                            <i class="fas fa-key"></i> Lupa Password?
-                                        </a>
-                                        <a href="#" onclick="requestDeleteAccount(event)" class="text-danger text-decoration-none hover-orange" style="font-weight: 500;">
-                                            <i class="fas fa-trash-alt"></i> Ajukan Hapus Akun
-                                        </a>
-                                    </div>
-                                    @error('password')
-                                        <small class="text-danger ml-1 mt-1 d-block">{{ $message }}</small>
-                                    @enderror
-                                </div>
-
-                                <div class="d-flex flex-column gap-3 mt-2">
-                                    <button type="submit" class="btn btn-hnb-orange py-3 font-weight-bold shadow-lg mb-3" style="border-radius: 10px; font-size: 1.1rem;">
-                                        Masuk <i class="fas fa-sign-in-alt ml-2"></i>
-                                    </button>
-
-                                    <a href="/" class="btn btn-link text-white-50 text-decoration-none text-center hover-orange" style="font-size: 0.9rem;">
-                                        <i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda
-                                    </a>
-                                </div>
+                                 <div class="form-group mb-4">
+                                     <label class="wm-login-label font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Email Akun</label>
+                                     <div class="input-group wm-login-input-group">
+                                         <div class="input-group-prepend">
+                                             <span class="input-group-text border-0 bg-transparent wm-login-icon px-3"><i class="fas fa-envelope"></i></span>
+                                         </div>
+                                         <input type="email" name="email" class="form-control border-0 bg-transparent wm-login-input shadow-none px-2 py-4 @error('email') is-invalid @enderror" placeholder="Masukkan email aktif Anda..." value="{{ old('email') }}" required autocomplete="email" maxlength="100" style="font-size: 1.05rem;">
+                                     </div>
+                                     @error('email')
+                                         <small class="text-danger ml-1 mt-1 d-block">{{ $message }}</small>
+                                     @enderror
+                                 </div>
+ 
+                                 <div class="form-group mb-4">
+                                     <div class="d-flex justify-content-between align-items-center mb-2">
+                                         <label class="wm-login-label font-weight-bold ml-1 mb-0" style="font-size: 0.9rem; opacity: 0.9;">Kata Sandi</label>
+                                     </div>
+                                     <div class="input-group wm-login-input-group">
+                                         <div class="input-group-prepend">
+                                             <span class="input-group-text border-0 bg-transparent wm-login-icon px-3"><i class="fas fa-lock"></i></span>
+                                         </div>
+                                         <input type="password" name="password" id="inputPassword" class="form-control border-0 bg-transparent wm-login-input shadow-none px-2 py-4" placeholder="Ketik kata sandi Anda..." required autocomplete="current-password" maxlength="50" style="font-size: 1.05rem;">
+                                         <div class="input-group-append">
+                                             <button type="button" id="btnToggle" class="btn border-0 wm-login-icon shadow-none px-3" style="background: transparent;">
+                                                 <i class="fas fa-eye" id="ikonMata"></i>
+                                             </button>
+                                         </div>
+                                     </div>
+                                     <div class="d-flex justify-content-between flex-wrap align-items-center mt-2 px-1 gap-2" style="font-size: 0.82rem;">
+                                         <a href="{{ route('password.forgot') }}" class="text-hnb-orange text-decoration-none hover-orange" style="font-weight: 500;">
+                                             <i class="fas fa-key"></i> Lupa Password?
+                                         </a>
+                                         <a href="#" onclick="requestDeleteAccount(event)" class="text-danger text-decoration-none hover-orange" style="font-weight: 500;">
+                                             <i class="fas fa-trash-alt"></i> Ajukan Hapus Akun
+                                         </a>
+                                     </div>
+                                     @error('password')
+                                         <small class="text-danger ml-1 mt-1 d-block">{{ $message }}</small>
+                                     @enderror
+                                 </div>
+ 
+                                 <div class="d-flex flex-column gap-3 mt-4">
+                                     <button type="submit" class="btn btn-hnb-orange py-3 font-weight-bold shadow-lg mb-2" style="border-radius: 10px; font-size: 1.1rem;">
+                                         Masuk <i class="fas fa-sign-in-alt ml-2"></i>
+                                     </button>
+ 
+                                     <div class="text-center my-2">
+                                         <div class="d-flex align-items-center my-3">
+                                             <hr class="flex-grow-1 wm-login-divider" style="opacity: 0.15;">
+                                             <span class="mx-3 wm-login-divider-text small font-weight-bold" style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.72rem;">Belum memiliki akun?</span>
+                                             <hr class="flex-grow-1 wm-login-divider" style="opacity: 0.15;">
+                                         </div>
+                                         <div class="row no-gutters justify-content-center">
+                                             <div class="col-6 pr-2">
+                                                 <a href="/daftar/wisatawan" class="btn btn-outline-light w-100 py-3 font-weight-bold radius-hnb transition-all" style="font-size: 0.85rem; border-color: rgba(255, 122, 0, 0.3); background: rgba(255, 122, 0, 0.05); color: #ff7a00 !important; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                                     <i class="fas fa-user-plus"></i> Wisatawan
+                                                 </a>
+                                             </div>
+                                             <div class="col-6 pl-2">
+                                                 <a href="/daftar" class="btn wm-btn-mitra-outline w-100 py-3 font-weight-bold transition-all" style="font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                                     <i class="fas fa-handshake"></i> Mitra
+                                                 </a>
+                                             </div>
+                                         </div>
+                                     </div>
+ 
+                                     <a href="/" class="btn btn-link text-white-50 text-decoration-none text-center hover-orange mt-2" style="font-size: 0.9rem;">
+                                         <i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda
+                                     </a>
+                                 </div>
                             </form>
                         </div>
                     </div>

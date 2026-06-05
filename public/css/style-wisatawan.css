@@ -227,50 +227,60 @@ body.light-mode .wm-divider { background: rgba(17, 34, 64, 0.12); }
 
 /* ── Kontak CS (WhatsApp) ── */
 .wm-btn-cs {
-    background: rgba(37, 211, 102, 0.1);
-    border-color: rgba(37, 211, 102, 0.25);
-    color: #2ecc71 !important;
+    background: transparent;
+    border-color: transparent;
+    color: rgba(255, 255, 255, 0.68) !important;
+}
+.wm-btn-cs i {
+    color: #2ecc71;
+    transition: transform 0.2s ease;
 }
 .wm-btn-cs:hover {
-    background: #25d366;
-    border-color: #25d366;
-    color: #ffffff !important;
-    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71 !important;
     transform: translateY(-1px);
+}
+.wm-btn-cs:hover i {
+    transform: scale(1.1);
 }
 
 body.light-mode .wm-btn-cs {
-    background: rgba(37, 211, 102, 0.07);
-    border-color: rgba(37, 211, 102, 0.3);
-    color: #16a34a !important;
+    background: transparent;
+    border-color: transparent;
+    color: #475569 !important;
 }
 body.light-mode .wm-btn-cs:hover {
-    background: #25d366;
-    color: #ffffff !important;
+    background: rgba(37, 211, 102, 0.07);
+    color: #16a34a !important;
 }
 
 /* ── Lapor ── */
 .wm-btn-lapor {
-    background: rgba(239, 68, 68, 0.08);
-    border-color: rgba(239, 68, 68, 0.22);
-    color: #f87171 !important;
+    background: transparent;
+    border-color: transparent;
+    color: rgba(255, 255, 255, 0.68) !important;
+}
+.wm-btn-lapor i {
+    color: #f87171;
+    transition: transform 0.2s ease;
 }
 .wm-btn-lapor:hover {
-    background: #ef4444;
-    border-color: #ef4444;
-    color: #ffffff !important;
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171 !important;
     transform: translateY(-1px);
+}
+.wm-btn-lapor:hover i {
+    transform: scale(1.1);
 }
 
 body.light-mode .wm-btn-lapor {
-    background: rgba(239, 68, 68, 0.06);
-    border-color: rgba(239, 68, 68, 0.25);
-    color: #dc2626 !important;
+    background: transparent;
+    border-color: transparent;
+    color: #475569 !important;
 }
 body.light-mode .wm-btn-lapor:hover {
-    background: #ef4444;
-    color: #ffffff !important;
+    background: rgba(239, 68, 68, 0.06);
+    color: #dc2626 !important;
 }
 
 /* ── Login / Masuk (Primary CTA) ── */
@@ -291,14 +301,43 @@ body.light-mode .wm-btn-login {
     box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
 }
 
+/* ── Register / Daftar ── */
+.wm-btn-register {
+    background: transparent;
+    border-color: transparent;
+    color: rgba(255, 255, 255, 0.68) !important;
+}
+.wm-btn-register i {
+    color: #ff7a00;
+    transition: transform 0.2s ease;
+}
+.wm-btn-register:hover {
+    background: rgba(255, 122, 0, 0.1);
+    color: #ff7a00 !important;
+    transform: translateY(-1px);
+}
+.wm-btn-register:hover i {
+    transform: scale(1.1);
+}
+
+body.light-mode .wm-btn-register {
+    background: transparent;
+    border-color: transparent;
+    color: #475569 !important;
+}
+body.light-mode .wm-btn-register:hover {
+    background: rgba(255, 122, 0, 0.07);
+    color: var(--hnb-orange) !important;
+}
+
 /* ── Theme Toggle ── */
 .wm-theme-btn {
     width: 38px;
     height: 38px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.75);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.68);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,21 +347,19 @@ body.light-mode .wm-btn-login {
     font-size: 14px;
 }
 .wm-theme-btn:hover {
-    background: rgba(255, 122, 0, 0.15);
-    border-color: rgba(255, 122, 0, 0.4);
-    color: #ff7a00;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
     transform: scale(1.05);
 }
 
 body.light-mode .wm-theme-btn {
-    background: rgba(17, 34, 64, 0.05);
-    border-color: rgba(17, 34, 64, 0.12);
+    background: transparent;
+    border: none;
     color: #475569;
 }
 body.light-mode .wm-theme-btn:hover {
-    background: rgba(255, 122, 0, 0.08);
-    border-color: rgba(255, 122, 0, 0.3);
-    color: var(--hnb-orange);
+    background: rgba(17, 34, 64, 0.06);
+    color: var(--hnb-navy);
 }
 
 /* ─────────────────── HAMBURGER ─────────────────── */
@@ -624,6 +661,105 @@ section.section-scroll {
     border-color: var(--hnb-orange) !important;
     background: rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
+}
+
+/* Override browser autofill background in dark-mode inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.light-mode input:-webkit-autofill,
+body.light-mode input:-webkit-autofill:hover, 
+body.light-mode input:-webkit-autofill:focus, 
+body.light-mode input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--hnb-navy) !important;
+    box-shadow: inset 0 0 20px 20px rgba(255, 255, 255, 1) !important;
+}
+
+/* ── Login Form Light/Dark Mode Adapters ── */
+.wm-login-label {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+body.light-mode .wm-login-label {
+    color: var(--hnb-navy) !important;
+}
+
+.wm-login-input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+.wm-login-input-group:focus-within {
+    border-color: var(--hnb-orange) !important;
+    box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.2);
+}
+body.light-mode .wm-login-input-group {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+}
+
+.wm-login-input {
+    color: #ffffff !important;
+    background: transparent !important;
+}
+.wm-login-input::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+body.light-mode .wm-login-input {
+    color: var(--hnb-navy) !important;
+}
+body.light-mode .wm-login-input::placeholder {
+    color: #94a3b8 !important;
+}
+
+.wm-login-icon {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+body.light-mode .wm-login-icon {
+    color: #64748b !important;
+}
+
+.wm-login-divider {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    opacity: 0.15;
+}
+body.light-mode .wm-login-divider {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    opacity: 0.45;
+}
+
+.wm-login-divider-text {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+body.light-mode .wm-login-divider-text {
+    color: #64748b !important;
+}
+
+.wm-btn-mitra-outline {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 10px;
+}
+.wm-btn-mitra-outline:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff !important;
+}
+body.light-mode .wm-btn-mitra-outline {
+    border-color: #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #475569 !important;
+}
+body.light-mode .wm-btn-mitra-outline:hover {
+    background: #f1f5f9 !important;
+    color: var(--hnb-navy) !important;
 }
 
 /* 7. ANIMATIONS */

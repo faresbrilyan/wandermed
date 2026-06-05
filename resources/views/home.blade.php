@@ -44,9 +44,15 @@
                             <a href="/peta-faskes" class="btn btn-saas-primary">
                                 <i data-lucide="map"></i> Buka Peta Interaktif
                             </a>
-                            <a href="#tentang" class="btn btn-saas-secondary">
-                                Pelajari Sistem <i data-lucide="arrow-down" class="saas-icon" style="width: 16px; height: 16px;"></i>
-                            </a>
+                            @if(!session('auth_user'))
+                                <a href="/daftar/wisatawan" class="btn btn-saas-secondary" style="border-color: var(--saas-orange) !important; color: var(--saas-orange) !important;">
+                                    <i data-lucide="user-plus" class="saas-icon saas-icon-orange" style="width: 16px; height: 16px;"></i> Daftar Wisatawan
+                                </a>
+                            @else
+                                <a href="/dashboard/wisatawan" class="btn btn-saas-secondary">
+                                    Dashboard Saya <i data-lucide="arrow-right" class="saas-icon" style="width: 16px; height: 16px;"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -208,6 +214,13 @@
                         <p class="text-muted mb-0" style="font-size: 13px; line-height: 1.6; color: var(--saas-text-secondary) !important;">Dapatkan kalkulasi rute spasial darurat tercepat secara real-time langsung dari lokasi wisata Anda menuju gerbang faskes.</p>
                     </div>
                 </div>
+            </div>
+            <div class="text-center mt-5" data-aos="fade-up" data-aos-duration="600">
+                @if(!session('auth_user'))
+                    <a href="/daftar/wisatawan" class="btn btn-saas-primary px-5 py-3">
+                        <i data-lucide="user-plus"></i> Buat Akun Wisatawan Sekarang
+                    </a>
+                @endif
             </div>
         </div>
     </section>

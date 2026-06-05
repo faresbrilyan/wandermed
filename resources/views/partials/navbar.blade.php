@@ -60,6 +60,10 @@
                         <span>Dashboard</span>
                     </a>
                 @else
+                    <a href="/daftar/wisatawan" class="wm-btn wm-btn-register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Daftar</span>
+                    </a>
                     <a href="/login" class="wm-btn wm-btn-login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Masuk</span>

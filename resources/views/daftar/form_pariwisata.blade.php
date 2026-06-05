@@ -75,11 +75,21 @@
                     </div>
                     @endif
 
-                    <div class="text-center mb-4">
-                        <div style="background:rgba(78,115,223,0.12); border:1px solid rgba(78,115,223,0.3); border-radius:10px; padding:10px 16px; margin-bottom:16px; font-size:12px; color:#a0aec0;">
-                            <i class="fas fa-info-circle text-primary mr-1"></i>
-                            Form ini <strong class="text-white">tidak memerlukan akun</strong>. Setelah terverifikasi, Admin akan menghubungi Anda melalui email yang dicantumkan.
+                    <div class="glass-premier radius-hnb p-4 mb-4 shadow-sm animate-fade-up" style="background: rgba(255, 122, 0, 0.08) !important; border: 1px solid rgba(255, 122, 0, 0.25) !important;">
+                        <div class="d-flex align-items-start" style="gap: 16px;">
+                            <div style="min-width: 40px; text-align: center; margin-top: 2px;">
+                                <i class="fas fa-info-circle fa-2x text-hnb-orange"></i>
+                            </div>
+                            <div class="text-left">
+                                <h6 class="font-weight-bold text-white mb-2" style="font-size: 15px;">Pemberitahuan Pendaftaran Destinasi Wisata</h6>
+                                <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
+                                    Proses ini <strong class="text-white">tidak membuat akun login (tanpa password)</strong>. Anda hanya mengirimkan data profil destinasi wisata. Setelah data diverifikasi oleh tim kami, keputusan akan dikirimkan dan kami akan menghubungi Anda secara langsung via email kontak pengelola yang dicantumkan.
+                                </p>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="text-center mb-4">
                         <h3 class="font-weight-bold text-white teks-judul pb-1" id="formTitle">Profil Destinasi Wisata</h3>
                         <p class="text-white-50 teks-subjudul" style="font-size: 0.95rem;" id="formSubtitle">Langkah 1 dari 4</p>
                         <div class="progress mt-3 radius-hnb shadow-sm" style="height:6px; background:rgba(255,255,255,0.1);">
@@ -98,7 +108,7 @@
                                 <div id="step1" class="step-content">
                                     <div class="row">
                                         <div class="col-md-7 mb-4">
-                                            <label class="text-white font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Nama Destinasi Wisata</label>
+                                            <label class="text-white font-weight-bold ml-1 mb-2" style="font-size: 0.9rem; opacity: 0.9;">Nama Destinasi Wisata <span class="text-hnb-orange">*</span></label>
                                             <div class="input-group" style="border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text border-0 bg-transparent text-white-50 px-3"><i class="fas fa-mountain"></i></span>
@@ -107,7 +117,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Kategori</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Kategori <span class="text-hnb-orange">*</span></label>
                                             <select name="kategori" class="form-control form-control-dark radius-hnb px-3 input-dark" style="height:50px;" required>
                                                 <option value="" disabled selected>Pilih Kategori...</option>
                                                 <option value="Alam" {{ old('kategori')=='Alam'?'selected':'' }}>🌿 Wisata Alam</option>
@@ -119,7 +129,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Deskripsi & Daya Tarik Utama</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Deskripsi & Daya Tarik Utama <span class="text-white-50 font-weight-normal">(opsional)</span></label>
                                         <textarea name="deskripsi" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="4"
                                             placeholder="Ceritakan keunikan destinasi ini, apa yang bisa dinikmati wisatawan..." maxlength="200">{{ old('deskripsi') }}</textarea>
                                     </div>
@@ -128,12 +138,12 @@
                                 {{-- STEP 2: Lokasi + Koordinat --}}
                                 <div id="step2" class="step-content d-none">
                                     <div class="form-group mb-4">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Alamat Lengkap</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Alamat Lengkap <span class="text-hnb-orange">*</span></label>
                                         <textarea name="alamat" class="form-control form-control-dark radius-hnb p-3 input-dark" rows="2"
                                             placeholder="Desa Cibadak, Kec. Cisalak, Kab. Subang..." required maxlength="200">{{ old('alamat') }}</textarea>
                                     </div>
                                     <div class="d-flex align-items-center mb-2">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75 mb-0 mr-2">Koordinat di Peta <span class="text-white-50">(opsional tapi disarankan)</span></label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75 mb-0 mr-2">Koordinat di Peta <span class="text-white-50">(opsional)</span></label>
                                         <button type="button" class="btn btn-sm btn-link text-hnb-orange p-0"
                                             data-toggle="modal" data-target="#modalKoordinatPariwisata" style="font-size:12px; text-decoration:none;">
                                             <i class="fas fa-question-circle mr-1"></i>Cara dapatkan koordinat?
@@ -145,14 +155,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Latitude</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Latitude <span class="text-white-50 font-weight-normal">(opsional)</span></label>
                                             <input type="number" step="any" id="inputLatP"
                                                 class="form-control form-control-dark radius-hnb py-4 px-3 input-dark"
                                                 placeholder="-6.5718" value="{{ old('latitude') }}" oninput="syncCoordP()">
                                             <small class="text-white-50 ml-1">Contoh: -6.571800</small>
                                         </div>
                                         <div class="col-md-5 mb-3">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Longitude</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Longitude <span class="text-white-50 font-weight-normal">(opsional)</span></label>
                                             <input type="number" step="any" id="inputLngP"
                                                 class="form-control form-control-dark radius-hnb py-4 px-3 input-dark"
                                                 placeholder="107.7600" value="{{ old('longitude') }}" oninput="syncCoordP()">
@@ -171,7 +181,7 @@
                                 <div id="step3" class="step-content d-none">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">No. Telepon / WhatsApp</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">No. Telepon / WhatsApp <span class="text-hnb-orange">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text bg-transparent border-right-0 text-white font-weight-bold" style="border-color:rgba(255,255,255,0.1)!important;">+62</span>
@@ -182,7 +192,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
-                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Harga Tiket Masuk</label>
+                                            <label class="text-white font-weight-bold small ml-1 opacity-75">Harga Tiket Masuk <span class="text-white-50 font-weight-normal">(opsional)</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text bg-transparent border-right-0 text-white font-weight-bold" style="border-color:rgba(255,255,255,0.1)!important;">Rp</span>
@@ -194,7 +204,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Unggah Foto Destinasi / Dokumen Pendukung</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Unggah Foto Destinasi / Dokumen Pendukung <span class="text-white-50 font-weight-normal">(opsional)</span></label>
                                         <div class="upload-box-premium mt-2">
                                             <i class="fas fa-image fa-2x text-hnb-orange mb-2"></i>
                                             <p class="text-white small font-weight-bold mb-1">Format: JPG, PNG, PDF — Maks 5MB</p>
@@ -214,7 +224,7 @@
                                         </p>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nama Pengelola / Penanggung Jawab</label>
+                                        <label class="text-white font-weight-bold small ml-1 opacity-75">Nama Pengelola / Penanggung Jawab <span class="text-hnb-orange">*</span></label>
                                         <input type="text" name="nama_pengelola" value="{{ old('nama_pengelola') }}"
                                             class="form-control form-control-dark radius-hnb py-4 px-3 input-dark"
                                             placeholder="Contoh: Bapak Dede Suherman" required maxlength="100">
