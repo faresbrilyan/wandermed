@@ -78,11 +78,40 @@ document.addEventListener("DOMContentLoaded", function () {
     var scrollIndicator = document.getElementById('heroScrollIndicator');
     var pelajariBtn = document.querySelector('a[href="#tentang"]');
 
+    function smoothScrollTo(targetElement, duration) {
+        var navbar = document.getElementById("mainNavbar");
+        var navbarHeight = navbar ? navbar.offsetHeight : 68;
+        var targetPosition = targetElement.offsetTop - navbarHeight - 10;
+        var startPosition = window.pageYOffset || document.documentElement.scrollTop;
+        var distance = targetPosition - startPosition;
+        var startTime = null;
+
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            var timeElapsed = currentTime - startTime;
+            var run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        }
+
+        // Cubic Easing In-Out
+        function ease(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t * t + b;
+            t -= 2;
+            return c / 2 * (t * t * t + 2) + b;
+        }
+
+        requestAnimationFrame(animation);
+    }
+
     function scrollToTentang(e) {
         e.preventDefault();
         var targetSection = document.getElementById('tentang');
         if (targetSection) {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            smoothScrollTo(targetSection, 1000); // 1 second duration with cubic easing
         }
     }
 

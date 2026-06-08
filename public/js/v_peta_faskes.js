@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var csrfToken = window.WanderMed.csrfToken;
     var currentFaskesId = null;
     var globalUserLocation = null;
+    var userLocationMarker = null;
 
     // =========================================================
     // DATA MARKER
@@ -727,6 +728,17 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('geofenceModal').classList.remove('active');
     };
 
+    window.focusFaskesFromModal = function(id, lat, lng) {
+        closeGeofenceModal();
+        map.flyTo([lat, lng], 16, { duration: 1.5 });
+        const f = faskesData.find(item => item.id === id);
+        if (f) {
+            setTimeout(() => {
+                showDetail(f);
+            }, 800);
+        }
+    };
+
     function checkGeofence(userLat, userLng) {
         if (pariwisataData.length === 0) return;
 
@@ -778,6 +790,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <div class="gm-item-name">${f.name}</div>
                             <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
                         </div>
+                        <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
                         <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
                     </div>
                 `;
@@ -811,7 +824,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 map.flyTo([lat, lng], 15, { duration: 1.5 });
 
                 // Tandai posisi pengguna
-                L.circleMarker([lat, lng], {
+                if (userLocationMarker) {
+                    map.removeLayer(userLocationMarker);
+                }
+                userLocationMarker = L.circleMarker([lat, lng], {
                     radius: 10, color: '#ff7a00', fillColor: '#ff7a00', fillOpacity: 0.5, weight: 3
                 }).addTo(map).bindTooltip('<b>📍 Lokasi Anda</b>', { permanent: false });
 
@@ -830,6 +846,101 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('btnMyLocation').addEventListener('click', function() {
         locateUser(false);
     });
+
+    // =========================================================
+    // DETEKSI 3 FASKES TERDEKAT UTK USER SHORTCUT
+    // =========================================================
+    function detect3NearestFaskes(lat, lng) {
+        if (faskesData.length === 0) return;
+
+        document.getElementById('gfWisataName').innerHTML = '<i class="fas fa-street-view mr-2" style="color: var(--hnb-orange);"></i> Lokasi Anda Sekarang';
+        
+        let faskesWithDist = faskesData.map(f => {
+            return {
+                ...f,
+                dist: getDistanceFromLatLonInKm(lat, lng, f.lat, f.lng)
+            };
+        }).filter(f => f.lat && f.lng);
+        
+        faskesWithDist.sort((a, b) => a.dist - b.dist);
+        let top3 = faskesWithDist.slice(0, 3);
+        
+        let listHtml = '';
+        top3.forEach(f => {
+            let distMeters = Math.round(f.dist * 1000);
+            let distText = distMeters > 1000 ? (f.dist).toFixed(1) + ' km' : distMeters + ' m';
+            
+            let mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}`;
+
+            listHtml += `
+                <div class="gm-item">
+                    <div class="gm-item-icon">
+                        <i class="fas ${f.type === 'Rumah Sakit' ? 'fa-hospital-alt' : (f.type === 'Apotek' ? 'fa-pills' : 'fa-clinic-medical')}"></i>
+                    </div>
+                    <div class="gm-item-info">
+                        <div class="gm-item-name">${f.name}</div>
+                        <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
+                    </div>
+                    <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
+                    <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
+                </div>
+            `;
+        });
+
+        document.getElementById('gfFaskesList').innerHTML = listHtml;
+        
+        setTimeout(() => {
+            document.getElementById('geofenceModal').classList.add('active');
+        }, 150);
+        
+        closeDetail();
+    }
+
+    const btnNearbyShortcut = document.getElementById('btnNearbyShortcut');
+    if (btnNearbyShortcut) {
+        btnNearbyShortcut.addEventListener('click', function() {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            
+            if (globalUserLocation) {
+                detect3NearestFaskes(globalUserLocation.lat, globalUserLocation.lng);
+            } else {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                if (!navigator.geolocation) {
+                    alert('Browser Anda tidak mendukung geolocation.');
+                    btn.innerHTML = originalHTML;
+                    return;
+                }
+                
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        const { latitude: lat, longitude: lng } = pos.coords;
+                        globalUserLocation = { lat, lng };
+                        
+                        if (userLocationMarker) {
+                            map.removeLayer(userLocationMarker);
+                        }
+
+                        userLocationMarker = L.circleMarker([lat, lng], {
+                            radius: 10, color: '#ff7a00', fillColor: '#ff7a00', fillOpacity: 0.5, weight: 3
+                        }).addTo(map).bindTooltip('<b>📍 Lokasi Anda</b>', { permanent: false });
+                        
+                        btn.innerHTML = originalHTML;
+                        map.flyTo([lat, lng], 15, { duration: 1.5 });
+                        
+                        setTimeout(() => {
+                            detect3NearestFaskes(lat, lng);
+                        }, 1200);
+                    },
+                    err => {
+                        alert('Gagal mendapatkan lokasi. Pastikan izin lokasi browser aktif.');
+                        btn.innerHTML = originalHTML;
+                    }
+                );
+            }
+        });
+    }
 
     // =========================================================
     // INISIALISASI PERTAMA
@@ -944,6 +1055,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="gm-item-name">${f.name}</div>
                         <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
                     </div>
+                    <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
                     <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
                 </div>
             `;
