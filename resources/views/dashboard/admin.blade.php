@@ -244,6 +244,132 @@
     </div>
 </div>
 
+{{-- ==================== SECTION: ACC OTOMATIS ==================== --}}
+<div id="sectionAutoAcc" class="admin-section" style="display:none;">
+    <div class="wm-page-header">
+        <div>
+            <div class="wm-page-title">Pendaftaran ACC Otomatis</div>
+            <div class="wm-page-subtitle">Daftar mitra faskes dan destinasi pariwisata yang disetujui otomatis oleh sistem karena tidak diperiksa dalam 3 hari</div>
+        </div>
+    </div>
+
+    {{-- Mitra Faskes Table --}}
+    <div class="wm-card" style="margin-bottom: 22px;">
+        <div class="wm-card-header">
+            <div class="wm-card-title">
+                <i class="fas fa-clinic-medical" style="color: var(--green);"></i> Fasilitas Kesehatan
+                <span class="wm-badge green" style="margin-left: 8px; font-size: 10px;">{{ $autoApprovedFaskes->count() }} Faskes</span>
+            </div>
+            <div style="position: relative; flex: 0 0 220px;">
+                <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color: var(--text-muted);"></i>
+                <input type="text" id="filterAutoAccFaskesInput" class="wm-input" style="padding-left: 36px; height: 36px; font-size: 12px;"
+                    placeholder="Cari faskes..." onkeyup="filterTable('filterAutoAccFaskesInput', 'autoAccFaskesTable', 'col-nama')">
+            </div>
+        </div>
+        <div class="wm-table-wrap">
+            <table class="wm-table" id="autoAccFaskesTable">
+                <thead>
+                    <tr>
+                        <th width="25%">Nama PJ / Institusi</th>
+                        <th width="15%">Kategori</th>
+                        <th width="20%">Email & Telp</th>
+                        <th width="15%">Tanggal Daftar</th>
+                        <th width="15%">Tanggal ACC Otomatis</th>
+                        <th width="10%" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse(($autoApprovedFaskes ?? []) as $m)
+                    <tr>
+                        <td class="bold col-nama">
+                            {{ $m->nama_penanggung_jawab ?? '-' }}
+                            @if($m->faskes)
+                            <div style="font-size:11px; color: var(--text-muted); font-weight:400; margin-top:3px;">
+                                <i class="fas fa-hospital-alt mr-1"></i>{{ $m->faskes->nama_faskes ?? '-' }}
+                            </div>
+                            @endif
+                        </td>
+                        <td><span class="wm-badge green"><i class="fas fa-clinic-medical"></i> Faskes</span></td>
+                        <td style="color: var(--text-muted); font-size:12px;">
+                            {{ $m->email ?? '-' }}<br>
+                            <i class="fas fa-phone-alt mr-1"></i>{{ $m->no_telp ?? '-' }}
+                        </td>
+                        <td style="color: var(--text-muted); font-size:12px;">{{ $m->created_at ? $m->created_at->format('d M Y, H:i') : '-' }}</td>
+                        <td style="color: var(--text-muted); font-size:12px;">{{ $m->updated_at ? $m->updated_at->format('d M Y, H:i') : '-' }}</td>
+                        <td style="text-align: center;">
+                            <button class="wm-btn info sm" onclick='showDetailFaskes(@json($m))'>
+                                <i class="fas fa-eye"></i> Detail
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center" style="padding: 20px; color: #888;">Tidak ada mitra faskes yang disetujui secara otomatis.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- Destinasi Pariwisata Table --}}
+    <div class="wm-card">
+        <div class="wm-card-header">
+            <div class="wm-card-title">
+                <i class="fas fa-mountain" style="color: var(--teal);"></i> Destinasi Pariwisata
+                <span class="wm-badge teal" style="margin-left: 8px; font-size: 10px;">{{ $autoApprovedPariwisata->count() }} Destinasi</span>
+            </div>
+            <div style="position: relative; flex: 0 0 220px;">
+                <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color: var(--text-muted);"></i>
+                <input type="text" id="filterAutoAccWisataInput" class="wm-input" style="padding-left: 36px; height: 36px; font-size: 12px;"
+                    placeholder="Cari pariwisata..." onkeyup="filterTable('filterAutoAccWisataInput', 'autoAccWisataTable', 'col-nama')">
+            </div>
+        </div>
+        <div class="wm-table-wrap">
+            <table class="wm-table" id="autoAccWisataTable">
+                <thead>
+                    <tr>
+                        <th width="25%">Nama Destinasi / Pengelola</th>
+                        <th width="15%">Kategori</th>
+                        <th width="20%">Email & Telp</th>
+                        <th width="15%">Tanggal Daftar</th>
+                        <th width="15%">Tanggal ACC Otomatis</th>
+                        <th width="10%" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse(($autoApprovedPariwisata ?? []) as $w)
+                    <tr>
+                        <td class="bold col-nama">
+                            {{ $w->nama_wisata ?? '-' }}
+                            <div style="font-size:11px; color: var(--text-muted); font-weight:400; margin-top:3px;">
+                                <i class="fas fa-user mr-1"></i>Pengelola: {{ $w->nama_pengelola ?? '-' }}
+                            </div>
+                        </td>
+                        <td><span class="wm-badge teal"><i class="fas fa-mountain"></i> Pariwisata</span></td>
+                        <td style="color: var(--text-muted); font-size:12px;">
+                            {{ $w->email_kontak ?? '-' }}<br>
+                            <i class="fas fa-phone-alt mr-1"></i>{{ $w->no_telp ?? '-' }}
+                        </td>
+                        <td style="color: var(--text-muted); font-size:12px;">{{ $w->created_at ? $w->created_at->format('d M Y, H:i') : '-' }}</td>
+                        <td style="color: var(--text-muted); font-size:12px;">{{ $w->updated_at ? $w->updated_at->format('d M Y, H:i') : '-' }}</td>
+                        <td style="text-align: center;">
+                            <button class="wm-btn info sm" onclick='showDetailWisata(@json($w))'>
+                                <i class="fas fa-eye"></i> Detail
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center" style="padding: 20px; color: #888;">Tidak ada destinasi pariwisata yang disetujui secara otomatis.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 {{-- ==================== SECTION: LAPORAN MASALAH ==================== --}}
 <div id="sectionLaporan" class="admin-section" style="display:none;">
     <div class="wm-page-header">
@@ -899,8 +1025,12 @@
                         <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Dukungan BPJS</label>
                         <div id="detailFaskesBPJS" style="margin-top:4px;">-</div>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Layanan UGD</label>
+                        <div id="detailFaskesUGD" style="margin-top:4px;">-</div>
+                    </div>
                     <div class="col-md-12 mb-3">
-                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Layanan / Pengumuman</label>
+                        <label style="font-size:11px;font-weight:600;color:#a3aed1;text-transform:uppercase;letter-spacing:.5px;">Informasi Layanan Utama</label>
                         <div id="detailFaskesLayanan" style="color:#707eae;background:#f4f7fe;padding:10px 14px;border-radius:8px;margin-top:4px;font-size:13px;">-</div>
                     </div>
                     <div class="col-md-12 mb-3">

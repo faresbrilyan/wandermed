@@ -34,6 +34,9 @@ class AdminController extends Controller
 
     public function dashboard(Request $request): View
     {
+        // Picu persetujuan otomatis untuk mitra yang mendaftar > 3 hari lalu
+        $this->autoApprovePendingRegistrations();
+
         $searchUsers = $request->query('search_users');
         $searchFaskes = $request->query('search_faskes');
 
@@ -73,6 +76,10 @@ class AdminController extends Controller
             'allUlasan'       => UlasanFaskes::with(['user', 'faskes'])->latest()->get(),
             'deletionRequests'=> AccountDeletionRequest::with('user')->latest()->get(),
             'loginLogs'       => \App\Models\LoginLog::with(['user', 'mitra.faskes'])->latest('login_at')->paginate(15, ['*'], 'page_logs')->appends($request->query()),
+            
+            // ACC Otomatis Data
+            'autoApprovedFaskes'     => Mitra::where('is_auto_approved', true)->where('jenis_mitra', 'faskes')->with('faskes')->latest()->get(),
+            'autoApprovedPariwisata' => PendaftaranPariwisata::where('is_auto_approved', true)->latest()->get(),
         ]);
     }
 
@@ -470,6 +477,43 @@ class AdminController extends Controller
             'telp'       => $w->no_telp,
             'foto'       => $w->foto_path ? asset('storage/' . $w->foto_path) : null,
         ]);
+    }
+
+    /**
+     * Auto-approve pending mitra registrations (Faskes & Pariwisata) older than 3 days.
+     */
+    private function autoApprovePendingRegistrations(): void
+    {
+        $threeDaysAgo = now()->subDays(3);
+
+        // 1. Auto-approve Faskes (Mitra)
+        $pendingMitras = Mitra::pending()
+            ->where('created_at', '<=', $threeDaysAgo)
+            ->get();
+
+        foreach ($pendingMitras as $mitra) {
+            $mitra->update([
+                'is_verified'      => true,
+                'is_auto_approved' => true,
+                'catatan_admin'    => null,
+            ]);
+
+            if ($mitra->faskes) {
+                $mitra->faskes->update(['status_operasional' => 'open']);
+            }
+        }
+
+        // 2. Auto-approve Pariwisata (PendaftaranPariwisata)
+        $pendingPariwisata = PendaftaranPariwisata::menunggu()
+            ->where('created_at', '<=', $threeDaysAgo)
+            ->get();
+
+        foreach ($pendingPariwisata as $wisata) {
+            $wisata->update([
+                'status_review'    => 'disetujui',
+                'is_auto_approved' => true,
+            ]);
+        }
     }
 
     /**

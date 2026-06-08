@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1. NAVIGASI SIDEBAR (SPA)
     var sections = {
         'navDashboard':'sectionDashboard','navValidasi':'sectionValidasi',
+        'navAutoAcc':'sectionAutoAcc',
         'navLaporan':'sectionLaporan','navDataWisatawan':'sectionWisatawan',
         'navDataFaskes':'sectionFaskes','navDataPariwisata':'sectionPariwisata',
         'navAllUlasan':'sectionAllUlasan','navChat':'sectionChat',
@@ -100,7 +101,34 @@ document.addEventListener('DOMContentLoaded', function () {
         var bpjs='-';
         if(data.faskes){bpjs=data.faskes.dukungan_bpjs?'<span style="background:rgba(56,161,105,0.1);color:#38a169;border:1px solid rgba(56,161,105,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">✅ Menerima BPJS</span>':'<span style="background:rgba(229,62,62,0.1);color:#e53e3e;border:1px solid rgba(229,62,62,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">❌ Non-BPJS</span>';}
         document.getElementById('detailFaskesBPJS').innerHTML=bpjs;
-        document.getElementById('detailFaskesLayanan').textContent=(data.faskes&&data.faskes.pengumuman)?data.faskes.pengumuman:'Tidak ada informasi layanan.';
+
+        // Pisahkan informasi UGD (jika ter-prepend di awal pengumuman)
+        var rawLayanan = (data.faskes && data.faskes.pengumuman) ? data.faskes.pengumuman : '';
+        var ugdVal = '-';
+        var layananUtamaVal = rawLayanan || 'Tidak ada informasi layanan.';
+
+        if (rawLayanan.startsWith('Layanan UGD:')) {
+            var parts = rawLayanan.split('\n');
+            var firstLine = parts[0];
+            var ugdText = firstLine.replace('Layanan UGD:', '').trim();
+            if (ugdText.toLowerCase().includes('24 jam')) {
+                ugdVal = '<span style="background:rgba(231,74,59,0.1);color:#e74a3b;border:1px solid rgba(231,74,59,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">🚨 Buka 24 Jam</span>';
+            } else {
+                ugdVal = '<span style="background:rgba(160,174,192,0.15);color:#4a5568;border:1px solid rgba(160,174,192,0.4);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">❌ Terbatas / Tidak Ada</span>';
+            }
+            // Sisanya adalah deskripsi layanan utama
+            layananUtamaVal = parts.slice(1).join('\n').trim() || 'Tidak ada informasi layanan.';
+        } else {
+            // Fallback status is_24_jam jika data tersimpan secara normal
+            if (data.faskes && data.faskes.is_24_jam) {
+                ugdVal = '<span style="background:rgba(231,74,59,0.1);color:#e74a3b;border:1px solid rgba(231,74,59,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">🚨 Buka 24 Jam</span>';
+            } else {
+                ugdVal = '<span style="background:rgba(160,174,192,0.15);color:#4a5568;border:1px solid rgba(160,174,192,0.4);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">❌ Terbatas / Tidak Ada</span>';
+            }
+        }
+
+        document.getElementById('detailFaskesUGD').innerHTML = ugdVal;
+        document.getElementById('detailFaskesLayanan').textContent = layananUtamaVal;
         document.getElementById('detailFaskesNomorIzin').textContent = (data.faskes && data.faskes.nomor_izin_praktik) ? data.faskes.nomor_izin_praktik : '-';
         
         var plangWrap = document.getElementById('detailFaskesFotoPlangWrap');

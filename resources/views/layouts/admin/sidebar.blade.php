@@ -8,6 +8,10 @@
     <i class="fas fa-user-check"></i> Validasi Mitra
     <span class="badge-pill-side" id="navPendingCount">{{ $pendingMitra ?? 0 }}</span>
 </a>
+<a href="#" class="wm-nav-link" id="navAutoAcc">
+    <i class="fas fa-magic"></i> ACC Otomatis
+    <span class="badge-pill-side" style="background: var(--teal); color: #fff;">{{ (isset($autoApprovedFaskes) ? $autoApprovedFaskes->count() : 0) + (isset($autoApprovedPariwisata) ? $autoApprovedPariwisata->count() : 0) }}</span>
+</a>
 <a href="#" class="wm-nav-link" id="navLaporan">
     <i class="fas fa-exclamation-triangle"></i> Laporan Masalah
     <span class="badge-pill-side">{{ isset($laporans) ? $laporans->where('status', 'pending')->count() : 0 }}</span>

@@ -33,13 +33,15 @@ class PendaftaranPariwisata extends Model
         'jam_tutup',
         'harga_tiket',
         'status_review',
+        'is_auto_approved',
         'catatan_admin',
     ];
 
     protected $casts = [
-        'latitude'     => 'float',
-        'longitude'    => 'float',
-        'harga_tiket'  => 'integer',
+        'latitude'         => 'float',
+        'longitude'        => 'float',
+        'harga_tiket'      => 'integer',
+        'is_auto_approved' => 'boolean',
     ];
 
     // Scope: filter yang masih menunggu review

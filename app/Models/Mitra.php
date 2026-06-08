@@ -24,6 +24,7 @@ class Mitra extends Model
         'no_telp',
         'jenis_mitra',
         'is_verified',
+        'is_auto_approved',
         'is_active',
         'blocking_reason',
         'catatan_admin',
@@ -36,9 +37,10 @@ class Mitra extends Model
     ];
 
     protected $casts = [
-        'is_verified'   => 'boolean',
-        'password'      => 'hashed',
-        'last_login_at' => 'datetime',
+        'is_verified'      => 'boolean',
+        'is_auto_approved' => 'boolean',
+        'password'         => 'hashed',
+        'last_login_at'    => 'datetime',
     ];
 
     // =========================================================
