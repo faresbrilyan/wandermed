@@ -91,6 +91,11 @@
         {{-- Peta Leaflet --}}
         <div id="map"></div>
 
+        {{-- ========= FLOATING SHORTCUT PANEL (LEFT CORNER - SQUARE) ========= --}}
+        <button class="btn-map-shortcut" id="btnNearbyShortcut" title="Deteksi Bantuan Medis Terdekat">
+            <i class="fas fa-heartbeat"></i>
+        </button>
+
         {{-- ========= BOTTOM SHEET DETAIL FASKES ========= --}}
         <div id="faskesDetailPanel" class="faskes-detail-panel">
             <div class="panel-handle"></div>

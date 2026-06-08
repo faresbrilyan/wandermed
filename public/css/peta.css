@@ -940,3 +940,94 @@ body.light-mode .search-dropdown-item:hover { background: rgba(255,122,0,0.08); 
 body.light-mode .search-item-icon { background: rgba(0,0,0,0.05); color: var(--hnb-orange); }
 body.light-mode .search-item-name { color: #1a2a44; }
 body.light-mode .search-item-type { color: #64748b; }
+
+/* ===================== FLOATING SHORTCUT BUTTON ===================== */
+.btn-map-shortcut {
+    position: absolute;
+    bottom: 24px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(13, 27, 46, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px; /* Rounded square matching Leaflet controls */
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    outline: none;
+}
+.btn-map-shortcut:hover {
+    background: var(--hnb-orange);
+    color: #ffffff;
+    border-color: var(--hnb-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255, 122, 0, 0.35);
+}
+.btn-map-shortcut i {
+    font-size: 16px;
+    animation: heartbeat 2.5s infinite ease-in-out;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 576px) {
+    .btn-map-shortcut {
+        bottom: 16px;
+        left: 16px;
+        width: 34px;
+        height: 34px;
+    }
+    .btn-map-shortcut i {
+        font-size: 14px;
+    }
+}
+
+/* Light Mode support */
+body.light-mode .btn-map-shortcut {
+    background: rgba(255, 255, 255, 0.97);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #1a2a44;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+body.light-mode .btn-map-shortcut:hover {
+    background: var(--hnb-orange);
+    color: #ffffff;
+    border-color: var(--hnb-orange);
+    box-shadow: 0 6px 18px rgba(255, 122, 0, 0.25);
+}
+
+/* ===================== GEOFENCE MODAL 'LIHAT' BUTTON ===================== */
+.gm-item-btn-show {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.gm-item-btn-show:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+body.light-mode .gm-item-btn-show {
+    background: rgba(0, 0, 0, 0.04);
+    color: #374151;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+body.light-mode .gm-item-btn-show:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #111827;
+}

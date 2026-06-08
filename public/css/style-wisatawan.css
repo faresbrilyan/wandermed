@@ -636,7 +636,16 @@ section.section-scroll {
     animation: scrollBounce 2s infinite ease-in-out;
     cursor: pointer;
     /* Transition untuk fade-out saat scroll */
-    transition: opacity 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.2s ease;
+}
+.scroll-indicator:hover {
+    opacity: 1 !important;
+}
+.scroll-indicator:hover .saas-icon {
+    transform: translateY(4px);
+}
+.scroll-indicator .saas-icon {
+    transition: transform 0.2s ease;
 }
 .scroll-indicator span {
     font-size: 11px;
