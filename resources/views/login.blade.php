@@ -92,7 +92,7 @@
                                          </div>
                                          <div class="row no-gutters justify-content-center">
                                              <div class="col-6 pr-2">
-                                                 <a href="/daftar/wisatawan" class="btn btn-outline-light w-100 py-3 font-weight-bold radius-hnb transition-all" style="font-size: 0.85rem; border-color: rgba(255, 122, 0, 0.3); background: rgba(255, 122, 0, 0.05); color: #ff7a00 !important; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                                 <a href="/daftar/wisatawan" class="btn wm-btn-wisatawan-outline w-100 py-3 font-weight-bold transition-all" style="font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
                                                      <i class="fas fa-user-plus"></i> Wisatawan
                                                  </a>
                                              </div>
