@@ -279,6 +279,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // TAMPILKAN DETAIL FASKES DI BOTTOM SHEET
     // =========================================================
     window.showDetail = function(data) {
+        // Reset state/display elements that might be altered by showWisataDetail
+        document.getElementById('sectionFasilitas').style.display = 'block';
+        document.getElementById('headerPhotoContainer').style.display = 'none';
+
         // Isi data dasar
         document.getElementById('detailName').textContent    = data.name;
         document.getElementById('detailType').textContent    = data.type;
@@ -298,9 +302,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Status visual jam
         const rowJam = document.getElementById('rowJam');
+        rowJam.querySelector('i').className = 'fas fa-clock';
         if (data.status === 'open') {
             rowJam.classList.add('jam-open');
-            rowJam.querySelector('i').className = 'fas fa-clock';
         } else {
             rowJam.classList.remove('jam-open');
         }
@@ -954,6 +958,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Tampilkan panel detail wisata (reuse bottom sheet atau popup sederhana)
     function showWisataDetail(w) {
+        // Sembunyikan container rating (hanya untuk faskes)
+        document.getElementById('detailRatingContainer').style.display = 'none';
+
         // Pakai bottom panel yang sama dengan faskes tapi header ungu
         const name    = document.getElementById('detailName');
         const type    = document.getElementById('detailType');
