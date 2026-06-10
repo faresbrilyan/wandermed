@@ -22,3 +22,11 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cloudflare Tunnel executables and configurations
+/cloudflared
+/cloudflared.exe
+/cloudfired.exe
+.cloudflared/
+config.yml
+*.pem
