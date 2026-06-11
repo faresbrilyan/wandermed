@@ -13,7 +13,8 @@
 }
 
 /* Pastikan tidak ada horizontal scroll */
-html, body {
+html,
+body {
     max-width: 100vw;
     overflow-x: hidden;
 }
@@ -34,21 +35,29 @@ html, body {
 .navbar-action-wrapper,
 .nav-action-box,
 .nav-drawer-backdrop,
-.v-separator { display: none !important; }
+.v-separator {
+    display: none !important;
+}
 
 @media (max-width: 991px) {
 
-    /* Bootstrap collapse override — pastikan posisi tidak floating */
+    /* Bootstrap collapse override — diposisikan absolute agar memenuhi layar penuh (kiri-kanan) */
     .navbar-collapse {
-        position: static !important;
-        top: auto !important;
-        right: auto !important;
+        position: absolute !important;
+        top: 60px !important;
+        left: 0 !important;
+        right: 0 !important;
         width: 100% !important;
-        max-height: 82vh !important;
+        max-height: calc(100vh - 60px) !important;
         overflow-y: auto !important;
-        z-index: auto !important;
+        z-index: 9999 !important;
+        background: #0a1428 !important; /* Solid dark background */
         transition: none !important;
         pointer-events: auto !important;
+    }
+
+    body.light-mode .navbar-collapse {
+        background: #ffffff !important; /* Solid white background */
     }
 
     /* Nav items dari struktur lama tetap bisa dipakai */
@@ -57,7 +66,9 @@ html, body {
         width: 100% !important;
     }
 
-    .navbar-collapse .nav-item { width: 100% !important; }
+    .navbar-collapse .nav-item {
+        width: 100% !important;
+    }
 
 }
 
@@ -76,7 +87,7 @@ html, body {
  * ========================================================================= */
 @media (max-width: 768px) {
     .hero-slanted {
-        padding-top: 80px !important;
+        padding-top: 125px !important;
         padding-bottom: 80px !important;
         clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%);
         min-height: auto !important;
@@ -86,6 +97,13 @@ html, body {
     .hero-content-box {
         padding: 24px 20px !important;
         border-radius: 16px !important;
+    }
+
+    /* Refine paragraph and margins in content box on mobile */
+    .hero-content-box p {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 24px !important;
     }
 
     /* Logo box hero lebih kecil */
@@ -103,10 +121,22 @@ html, body {
 
     /* Badge Live Map dipindah agar tidak menutupi konten */
     .hero-map-badge {
-        top: 70px !important;
-        right: 12px !important;
-        font-size: 10px !important;
-        padding: 4px 10px !important;
+        top: 72px !important;
+        right: 16px !important;
+        font-size: 11px !important;
+        padding: 5px 12px !important;
+        background: rgba(11, 22, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 122, 0, 0.4) !important;
+        border-radius: 20px;
+        z-index: 10;
+    }
+
+    body.light-mode .hero-map-badge {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(10, 20, 40, 0.1) !important;
+        color: var(--saas-text-primary) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
     }
 
     /* Judul hero lebih kecil */
@@ -138,6 +168,24 @@ html, body {
         height: 140px !important;
         border-width: 3px !important;
     }
+
+    /* Tombol CTA Hero jadi full-width di mobile */
+    .hero-content-box .d-flex {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100%;
+        gap: 12px !important;
+    }
+
+    .hero-content-box .btn-saas-primary,
+    .hero-content-box .btn-saas-secondary {
+        width: 100% !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0 !important;
+        min-height: 48px !important;
+    }
 }
 
 /* =========================================================================
@@ -158,8 +206,8 @@ html, body {
     }
 
     /* Ubah grid kolom menjadi single di mobile */
-    .row.g-4 > .col-md-4,
-    .row.g-4 > .col-md-6 {
+    .row.g-4>.col-md-4,
+    .row.g-4>.col-md-6 {
         padding: 0 12px;
     }
 }
@@ -212,7 +260,8 @@ html, body {
     }
 
     .form-control-transparent {
-        font-size: 16px !important; /* Mencegah auto-zoom di iOS */
+        font-size: 16px !important;
+        /* Mencegah auto-zoom di iOS */
     }
 }
 
@@ -277,6 +326,7 @@ html, body {
  * 8. PETA FASKES
  * ========================================================================= */
 @media (max-width: 768px) {
+
     /* Panel overlay search lebih kecil */
     .map-overlay-panel {
         width: 94% !important;
@@ -291,7 +341,8 @@ html, body {
 
     /* Input search lebih besar untuk mobile */
     .search-input-group input {
-        font-size: 16px !important; /* Mencegah auto-zoom di iOS */
+        font-size: 16px !important;
+        /* Mencegah auto-zoom di iOS */
     }
 
     /* Tombol lokasi saya sembunyikan teks, hanya icon */
@@ -324,6 +375,7 @@ html, body {
         border-radius: 20px 20px 0 0 !important;
         max-height: 80vh !important;
     }
+
     .faskes-detail-panel.active {
         transform: translateY(0) !important;
     }
@@ -384,6 +436,7 @@ html, body {
  * 9. FAQ & HALAMAN KONTEN STATIS
  * ========================================================================= */
 @media (max-width: 768px) {
+
     /* Accordion FAQ */
     .accordion-button {
         font-size: 14px !important;
@@ -430,6 +483,7 @@ html, body {
  * 11. SWEETALERT – POPUP LUPA PASSWORD & RESET (Mobile Friendly)
  * ========================================================================= */
 @media (max-width: 576px) {
+
     /* SweetAlert popup lebih kecil dan pas di mobile */
     .swal2-popup {
         width: 92% !important;
@@ -448,7 +502,8 @@ html, body {
 
     /* Input SweetAlert lebih besar dan mudah diklik */
     .swal2-input {
-        font-size: 16px !important; /* Mencegah auto-zoom iOS */
+        font-size: 16px !important;
+        /* Mencegah auto-zoom iOS */
         padding: 12px 14px !important;
         height: 48px !important;
         border-radius: 12px !important;
@@ -493,6 +548,7 @@ html, body {
  * 13. UTILITY – TOUCH TARGETS (Semua tombol & link mudah diklik)
  * ========================================================================= */
 @media (max-width: 768px) {
+
     /* Semua tombol minimal 44px tinggi (standar iOS HIG)
      * PENTING: JANGAN tambahkan display:inline-flex di sini karena
      * akan meng-override display:none dari JavaScript/inline style!
