@@ -67,7 +67,7 @@ class AdminController extends Controller
             'wisataPending'   => PendaftaranPariwisata::menunggu()->oldest()->get(),
             
             'laporans'        => LaporanMasalah::with(['user', 'faskes'])
-                                    ->orderByRaw("FIELD(status, 'pending', 'on_review', 'resolved')")
+                                    ->orderByRaw("CASE WHEN status = 'pending' THEN 1 WHEN status = 'on_review' THEN 2 WHEN status = 'resolved' THEN 3 ELSE 4 END")
                                     ->latest()->get(),
                                     
             'users'           => $usersQuery->paginate(10, ['*'], 'page_users')->appends(['search_users' => $searchUsers, 'search_faskes' => $searchFaskes]),
@@ -488,6 +488,7 @@ class AdminController extends Controller
 
         // 1. Auto-approve Faskes (Mitra)
         $pendingMitras = Mitra::pending()
+            ->where('is_auto_approve_cancelled', false)
             ->where('created_at', '<=', $threeDaysAgo)
             ->get();
 
@@ -505,6 +506,7 @@ class AdminController extends Controller
 
         // 2. Auto-approve Pariwisata (PendaftaranPariwisata)
         $pendingPariwisata = PendaftaranPariwisata::menunggu()
+            ->where('is_auto_approve_cancelled', false)
             ->where('created_at', '<=', $threeDaysAgo)
             ->get();
 
@@ -577,5 +579,60 @@ class AdminController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Membatalkan persetujuan otomatis Faskes dan mengembalikannya ke antrean validasi.
+     */
+    public function cancelAutoApproveFaskes(int $id): JsonResponse
+    {
+        try {
+            $faskes = Faskes::findOrFail($id);
+            $mitra = $faskes->mitra;
+
+            if ($mitra) {
+                $mitra->update([
+                    'is_verified'               => false,
+                    'is_auto_approved'          => false,
+                    'is_auto_approve_cancelled' => true,
+                ]);
+            }
+
+            $faskes->update([
+                'status_operasional' => 'closed',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Faskes '{$faskes->nama_faskes}' berhasil dikembalikan ke antrean validasi.",
+            ]);
+        } catch (Exception $e) {
+            Log::error("Cancel auto-approve Faskes failed: " . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan sistem.'], 500);
+        }
+    }
+
+    /**
+     * Membatalkan persetujuan otomatis Pariwisata dan mengembalikannya ke antrean validasi.
+     */
+    public function cancelAutoApprovePariwisata(int $id): JsonResponse
+    {
+        try {
+            $wisata = PendaftaranPariwisata::findOrFail($id);
+
+            $wisata->update([
+                'status_review'             => 'menunggu',
+                'is_auto_approved'          => false,
+                'is_auto_approve_cancelled' => true,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Destinasi wisata '{$wisata->nama_wisata}' berhasil dikembalikan ke antrean validasi.",
+            ]);
+        } catch (Exception $e) {
+            Log::error("Cancel auto-approve Pariwisata failed: " . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan sistem.'], 500);
+        }
     }
 }

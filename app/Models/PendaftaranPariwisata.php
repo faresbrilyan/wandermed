@@ -34,14 +34,16 @@ class PendaftaranPariwisata extends Model
         'harga_tiket',
         'status_review',
         'is_auto_approved',
+        'is_auto_approve_cancelled',
         'catatan_admin',
     ];
 
     protected $casts = [
-        'latitude'         => 'float',
-        'longitude'        => 'float',
-        'harga_tiket'      => 'integer',
-        'is_auto_approved' => 'boolean',
+        'latitude'                  => 'float',
+        'longitude'                 => 'float',
+        'harga_tiket'               => 'integer',
+        'is_auto_approved'          => 'boolean',
+        'is_auto_approve_cancelled' => 'boolean',
     ];
 
     // Scope: filter yang masih menunggu review

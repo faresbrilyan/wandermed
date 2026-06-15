@@ -360,6 +360,110 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(function() { showToast('Gagal menyimpan. Cek koneksi.', 'danger'); })
         .finally(function() { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan'; });
     };
+    window.cancelAutoApproveFaskes = function(btn, id, name) {
+        Swal.fire({
+            title: 'Kembalikan ke Validasi?',
+            text: 'Yakin mengembalikan faskes "' + name + '" ke antrean validasi? Faskes ini tidak akan aktif sementara.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#ff7a00',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Kembalikan',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var oldHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch('/admin/faskes/' + id + '/cancel-auto-approve', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        showToast(data.message || 'Faskes berhasil dikembalikan ke antrean validasi.');
+                        var row = btn.closest('tr');
+                        if (row) {
+                            row.style.transition = 'all .4s';
+                            row.style.opacity = '0';
+                            setTimeout(function() {
+                                row.remove();
+                                location.reload();
+                            }, 400);
+                        } else {
+                            setTimeout(function() { location.reload(); }, 1000);
+                        }
+                    } else {
+                        Swal.fire('Gagal', data.message || 'Gagal memproses permintaan.', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = oldHtml;
+                    }
+                })
+                .catch(function() {
+                    Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = oldHtml;
+                });
+            }
+        });
+    };
+
+    window.cancelAutoApprovePariwisata = function(btn, id, name) {
+        Swal.fire({
+            title: 'Kembalikan ke Validasi?',
+            text: 'Yakin mengembalikan destinasi wisata "' + name + '" ke antrean validasi? Wisata ini tidak akan aktif sementara.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#ff7a00',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Kembalikan',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var oldHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+
+                fetch('/admin/pariwisata/' + id + '/cancel-auto-approve', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        showToast(data.message || 'Wisata berhasil dikembalikan ke antrean validasi.');
+                        var row = btn.closest('tr');
+                        if (row) {
+                            row.style.transition = 'all .4s';
+                            row.style.opacity = '0';
+                            setTimeout(function() {
+                                row.remove();
+                                location.reload();
+                            }, 400);
+                        } else {
+                            setTimeout(function() { location.reload(); }, 1000);
+                        }
+                    } else {
+                        Swal.fire('Gagal', data.message || 'Gagal memproses permintaan.', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = oldHtml;
+                    }
+                })
+                .catch(function() {
+                    Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = oldHtml;
+                });
+            }
+        });
+    };
+
     window.deleteFaskes = function(btn,id,nama) {
         Swal.fire({
             title: 'Hapus Faskes?',

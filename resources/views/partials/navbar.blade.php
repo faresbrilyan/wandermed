@@ -42,7 +42,7 @@
             <div class="wm-actions">
 
                 {{-- Kontak CS --}}
-                <a href="https://wa.me/6287775733922" target="_blank" class="wm-btn wm-btn-cs" title="Chat via WhatsApp">
+                <a href="#" class="wm-btn wm-btn-cs" data-toggle="modal" data-target="#csTemplateModal" title="Pilih Template Chat CS">
                     <i class="fab fa-whatsapp"></i>
                     <span>Kontak CS</span>
                 </a>
@@ -136,6 +136,68 @@
                     <button type="submit" id="btnSubmitLaporan" class="btn btn-danger radius-hnb w-100 font-weight-bold shadow">Kirim Laporan</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="csTemplateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 420px;">
+        <div class="modal-content radius-hnb border-0 shadow-lg cs-modal-content">
+            <div class="modal-header bg-success text-white radius-hnb" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; background: linear-gradient(135deg, #2ecc71, #27ae60) !important;">
+                <h6 class="modal-title font-weight-bold mb-0"><i class="fab fa-whatsapp mr-2" style="font-size: 1.1rem;"></i> Chat CS WanderMed</h6>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4 bg-light text-left">
+                <p class="text-muted small mb-3 text-center" style="font-family: 'Poppins', sans-serif;">Pilih template pesan untuk memulai obrolan dengan Customer Service kami via WhatsApp:</p>
+                <div class="cs-templates-list">
+                    {{-- Template 1: Masalah Akun / Teknis --}}
+                    <a href="https://wa.me/6287775733922?text=Halo%20Admin%20WanderMed%2C%20saya%20mengalami%20masalah%20teknis%2Fkendala%20pada%20akun%20saya.%20Mohon%20bantuannya." 
+                       target="_blank" 
+                       class="cs-template-card"
+                       onclick="$('#csTemplateModal').modal('hide');">
+                        <div class="cs-card-icon bg-warning-light">
+                            <i class="fas fa-tools text-warning"></i>
+                        </div>
+                        <div class="cs-card-info">
+                            <div class="cs-card-title">Masalah Teknis & Akun</div>
+                            <div class="cs-card-desc">Kendala login, error aplikasi, atau edit data.</div>
+                        </div>
+                        <i class="fas fa-chevron-right cs-card-arrow"></i>
+                    </a>
+
+                    {{-- Template 2: Kerja Sama / Kemitraan --}}
+                    <a href="https://wa.me/6287775733922?text=Halo%20Admin%20WanderMed%2C%20saya%20tertarik%20untuk%20mengajukan%20kerja%20sama%20kemitraan.%20Bagaimana%20langkah%20selanjutnya%3F" 
+                       target="_blank" 
+                       class="cs-template-card"
+                       onclick="$('#csTemplateModal').modal('hide');">
+                        <div class="cs-card-icon bg-info-light">
+                            <i class="fas fa-handshake text-info"></i>
+                        </div>
+                        <div class="cs-card-info">
+                            <div class="cs-card-title">Pengajuan Kerja Sama</div>
+                            <div class="cs-card-desc">Pendaftaran mitra faskes atau pariwisata baru.</div>
+                        </div>
+                        <i class="fas fa-chevron-right cs-card-arrow"></i>
+                    </a>
+
+                    {{-- Template 3: Keluhan & Saran --}}
+                    <a href="https://wa.me/6287775733922?text=Halo%20Admin%20WanderMed%2C%20saya%20mengalami%20keluhan%20atau%20ingin%20memberikan%20saran%20mengenai%20layanan.%20Berikut%20detailnya%3A" 
+                       target="_blank" 
+                       class="cs-template-card"
+                       onclick="$('#csTemplateModal').modal('hide');">
+                        <div class="cs-card-icon bg-danger-light">
+                            <i class="fas fa-comment-dots text-danger"></i>
+                        </div>
+                        <div class="cs-card-info">
+                            <div class="cs-card-title">Keluhan & Saran</div>
+                            <div class="cs-card-desc">Kirim masukan atau laporan penyalahgunaan.</div>
+                        </div>
+                        <i class="fas fa-chevron-right cs-card-arrow"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

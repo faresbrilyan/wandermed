@@ -1862,3 +1862,89 @@ body.light-mode .btn-back-map:hover {
     background: rgba(255, 122, 0, 0.1) !important;
     color: var(--hnb-orange) !important;
 }
+
+/* ── CS Template Modal Styles ── */
+.cs-templates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.cs-template-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+.cs-template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.15);
+    border-color: rgba(46, 204, 113, 0.25);
+    background: #ffffff;
+}
+.cs-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.bg-warning-light {
+    background-color: rgba(243, 156, 18, 0.12) !important;
+}
+.bg-info-light {
+    background-color: rgba(52, 152, 219, 0.12) !important;
+}
+.bg-danger-light {
+    background-color: rgba(231, 76, 60, 0.12) !important;
+}
+.cs-card-info {
+    flex: 1;
+    min-width: 0;
+}
+.cs-card-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+    font-family: 'Outfit', sans-serif;
+}
+.cs-card-desc {
+    font-size: 11.5px;
+    color: #64748b;
+    line-height: 1.4;
+    font-family: 'Poppins', sans-serif;
+}
+.cs-card-arrow {
+    color: #cbd5e1;
+    font-size: 12px;
+    transition: transform 0.2s;
+}
+.cs-template-card:hover .cs-card-arrow {
+    transform: translateX(3px);
+    color: #2ecc71;
+}
+
+/* Light mode overrides for modal content if body has .light-mode */
+body.light-mode .cs-template-card {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+body.light-mode .cs-template-card:hover {
+    background: #ffffff;
+    border-color: rgba(22, 163, 74, 0.3);
+}
+body.light-mode .cs-card-title {
+    color: #0f172a;
+}
+body.light-mode .cs-card-desc {
+    color: #475569;
+}

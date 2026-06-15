@@ -12,6 +12,9 @@
     /** @var \Illuminate\Pagination\LengthAwarePaginator|\App\Models\Faskes[] $faskesList */
     /** @var \Illuminate\Support\Collection|\App\Models\LaporanMasalah[] $laporans */
     /** @var \Illuminate\Support\Collection|\App\Models\UlasanFaskes[] $allUlasan */
+    /** @var \Illuminate\Support\Collection|\App\Models\Mitra[] $autoApprovedFaskes */
+    /** @var \Illuminate\Support\Collection|\App\Models\PendaftaranPariwisata[] $autoApprovedPariwisata */
+    /** @var \Illuminate\Pagination\LengthAwarePaginator|\App\Models\LoginLog[] $loginLogs */
 @endphp
 
 @section('content')
@@ -204,6 +207,11 @@
                                     <i class="fas fa-exclamation-triangle" style="font-size:9px;"></i> Data Kurang
                                 </span>
                             @endif
+                            @if($w?->is_auto_approved)
+                                <span title="Disetujui Otomatis" style="display:inline-flex;align-items:center;gap:4px;background:rgba(54,185,204,0.15);color:#36b9cc;border:1px solid rgba(54,185,204,0.4);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;margin-left:6px;">
+                                    <i class="fas fa-magic" style="font-size:9px;"></i> ACC Otomatis
+                                </span>
+                            @endif
                             <div style="font-size:11px; color: var(--text-muted); font-weight:400; margin-top:3px;">
                                 <i class="fas fa-mountain mr-1"></i>{{ $w?->nama_wisata ?? '-' }} ({{ $w?->kategori ?? '-' }})
                                 &nbsp;|&nbsp;
@@ -296,10 +304,21 @@
                         </td>
                         <td style="color: var(--text-muted); font-size:12px;">{{ $m->created_at ? $m->created_at->format('d M Y, H:i') : '-' }}</td>
                         <td style="color: var(--text-muted); font-size:12px;">{{ $m->updated_at ? $m->updated_at->format('d M Y, H:i') : '-' }}</td>
-                        <td style="text-align: center;">
+                        <td style="text-align: center; white-space: nowrap;">
+                            @if($m->faskes)
+                            <div style="display:inline-flex;align-items:center;gap:6px;">
+                                <button class="wm-btn info sm" onclick='openEditFaskes(@json($m->faskes))' title="Edit Detail">
+                                    <i class="fas fa-edit"></i> Detail
+                                </button>
+                                <button class="wm-btn danger sm" onclick='cancelAutoApproveFaskes(this, {{ $m->faskes->id }}, @json($m->faskes->nama_faskes))' title="Kembalikan ke Validasi">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            </div>
+                            @else
                             <button class="wm-btn info sm" onclick='showDetailFaskes(@json($m))'>
                                 <i class="fas fa-eye"></i> Detail
                             </button>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -353,10 +372,15 @@
                         </td>
                         <td style="color: var(--text-muted); font-size:12px;">{{ $w->created_at ? $w->created_at->format('d M Y, H:i') : '-' }}</td>
                         <td style="color: var(--text-muted); font-size:12px;">{{ $w->updated_at ? $w->updated_at->format('d M Y, H:i') : '-' }}</td>
-                        <td style="text-align: center;">
-                            <button class="wm-btn info sm" onclick='showDetailWisata(@json($w))'>
-                                <i class="fas fa-eye"></i> Detail
-                            </button>
+                        <td style="text-align: center; white-space: nowrap;">
+                            <div style="display:inline-flex;align-items:center;gap:6px;">
+                                <button class="wm-btn info sm" onclick='openEditPariwisata(@json($w))' title="Edit Detail">
+                                    <i class="fas fa-edit"></i> Detail
+                                </button>
+                                <button class="wm-btn danger sm" onclick='cancelAutoApprovePariwisata(this, {{ $w->id }}, @json($w->nama_wisata))' title="Kembalikan ke Validasi">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -492,6 +516,11 @@
                                     <i class="fas fa-exclamation-triangle" style="font-size:9px;"></i> Data Kurang
                                 </span>
                             @endif
+                            @if($faskesItem->mitra?->is_auto_approved)
+                                <span title="Disetujui Otomatis" style="display:inline-flex;align-items:center;gap:4px;background:rgba(54,185,204,0.15);color:#36b9cc;border:1px solid rgba(54,185,204,0.4);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;margin-left:6px;">
+                                    <i class="fas fa-magic" style="font-size:9px;"></i> ACC Otomatis
+                                </span>
+                            @endif
                         </td>
                         <td>
                             <span class="wm-badge" style="background:rgba(56,161,105,0.1);color:#38a169;border:1px solid rgba(56,161,105,0.3);font-size:10px;">
@@ -588,6 +617,11 @@
                             @if($wisataIncomplete)
                                 <span title="Data lokasi atau deskripsi belum lengkap" style="display:inline-flex;align-items:center;gap:4px;background:rgba(246,194,62,0.15);color:#f6c23e;border:1px solid rgba(246,194,62,0.4);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;margin-left:6px;">
                                     <i class="fas fa-exclamation-triangle" style="font-size:9px;"></i> Data Kurang
+                                </span>
+                            @endif
+                            @if($wi?->is_auto_approved)
+                                <span title="Disetujui Otomatis" style="display:inline-flex;align-items:center;gap:4px;background:rgba(54,185,204,0.15);color:#36b9cc;border:1px solid rgba(54,185,204,0.4);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;margin-left:6px;">
+                                    <i class="fas fa-magic" style="font-size:9px;"></i> ACC Otomatis
                                 </span>
                             @endif
                         </td>

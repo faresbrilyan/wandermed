@@ -76,7 +76,7 @@ class PasswordResetController extends Controller
         ]);
 
         // Kirim email berisi OTP
-        $name        = $user ? $user->name : $mitra->nama_faskes;
+        $name        = $user ? $user->name : $mitra->nama_penanggung_jawab;
         $accountType = $user ? 'Wisatawan' : 'Mitra Faskes';
 
         Mail::send('emails.reset_otp', [

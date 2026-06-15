@@ -18,6 +18,23 @@ class PartnerValidationSeeder extends Seeder
     {
         $this->command->info('=== SEEDER VALIDASI MITRA (PENDING & AUTO-APPROVED) ===');
 
+        // Clean up old dummy data to prevent unique constraints violations
+        $emails = [
+            'andi.pending@example.com',
+            'budi.pending@example.com',
+            'citra.auto@example.com'
+        ];
+        $mitraIds = Mitra::whereIn('email', $emails)->pluck('id');
+        Faskes::whereIn('mitra_id', $mitraIds)->delete();
+        Mitra::whereIn('email', $emails)->delete();
+
+        $wisataEmails = [
+            'hendra.pending@example.com',
+            'gilang.pending@example.com',
+            'doni.auto@example.com'
+        ];
+        PendaftaranPariwisata::whereIn('email_kontak', $wisataEmails)->delete();
+
         $fourDaysAgo = now()->subDays(4);
 
         // 1. FASKES PENDING (Terdaftar 4 hari yang lalu - akan ter-ACC Otomatis saat memuat halaman/command)
@@ -42,6 +59,7 @@ class PartnerValidationSeeder extends Seeder
             'status_operasional' => 'closed',
             'latitude' => -6.5718,
             'longitude' => 107.7600,
+            'no_telp' => '081234567801',
         ]);
 
         // 2. FASKES PENDING (Terdaftar hari ini - akan tetap Pending)
@@ -60,8 +78,9 @@ class PartnerValidationSeeder extends Seeder
             'jenis_faskes' => 'Klinik',
             'alamat' => 'Jl. Merdeka No. 22, Subang',
             'status_operasional' => 'closed',
-            'latitude' => -6.5718,
-            'longitude' => 107.7600,
+            'latitude' => -6.5745,
+            'longitude' => 107.7625,
+            'no_telp' => '081234567802',
         ]);
 
         // 3. PARIWISATA PENDING (Terdaftar 4 hari yang lalu - akan ter-ACC Otomatis saat memuat halaman/command)
@@ -73,6 +92,8 @@ class PartnerValidationSeeder extends Seeder
             'email_kontak' => 'hendra.pending@example.com',
             'no_telp' => '089876543201',
             'status_review' => 'menunggu',
+            'latitude' => -6.6500,
+            'longitude' => 107.6300,
             'is_auto_approved' => false,
         ]);
         DB::table('pendaftaran_pariwisata')->where('id', $wisata1->id)->update([
@@ -89,6 +110,8 @@ class PartnerValidationSeeder extends Seeder
             'email_kontak' => 'gilang.pending@example.com',
             'no_telp' => '089876543202',
             'status_review' => 'menunggu',
+            'latitude' => -6.7320,
+            'longitude' => 107.6480,
             'is_auto_approved' => false,
         ]);
 
@@ -112,8 +135,9 @@ class PartnerValidationSeeder extends Seeder
             'jenis_faskes' => 'Apotek',
             'alamat' => 'Jl. Gatot Subroto No. 5, Subang',
             'status_operasional' => 'open',
-            'latitude' => -6.5718,
-            'longitude' => 107.7600,
+            'latitude' => -6.5685,
+            'longitude' => 107.7565,
+            'no_telp' => '081234567803',
         ]);
 
         // 6. PARIWISATA AUTO-APPROVED (Sudah di-ACC Otomatis sebelumnya)
@@ -125,6 +149,8 @@ class PartnerValidationSeeder extends Seeder
             'email_kontak' => 'doni.auto@example.com',
             'no_telp' => '089876543203',
             'status_review' => 'disetujui',
+            'latitude' => -6.7280,
+            'longitude' => 107.6790,
             'is_auto_approved' => true,
         ]);
         DB::table('pendaftaran_pariwisata')->where('id', $wisata3->id)->update([

@@ -31,6 +31,7 @@ class AutoApprovePartnersCommand extends Command
 
         // 1. Auto-approve Faskes (Mitra)
         $pendingMitras = Mitra::pending()
+            ->where('is_auto_approve_cancelled', false)
             ->where('created_at', '<=', $threeDaysAgo)
             ->get();
 
@@ -50,6 +51,7 @@ class AutoApprovePartnersCommand extends Command
 
         // 2. Auto-approve Pariwisata (PendaftaranPariwisata)
         $pendingPariwisata = PendaftaranPariwisata::menunggu()
+            ->where('is_auto_approve_cancelled', false)
             ->where('created_at', '<=', $threeDaysAgo)
             ->get();
 

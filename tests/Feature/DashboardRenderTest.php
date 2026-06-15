@@ -87,18 +87,20 @@ class DashboardRenderTest extends TestCase
         $faskesPaginator = new LengthAwarePaginator([$dummyFaskes], 1, 10);
 
         $viewData = [
-            'totalWisatawan'  => 1,
-            'totalFaskes'     => 1,
-            'totalPariwisata' => 1,
-            'pendingMitra'    => 2,
-            'mitraPending'    => collect([$dummyMitra]),
-            'wisataPending'   => collect([$dummyWisata]),
-            'laporans'        => collect([$dummyLaporan]),
-            'users'           => $usersPaginator,
-            'faskesList'      => $faskesPaginator,
-            'wisataApproved'  => collect([$dummyWisata]),
-            'allUlasan'       => collect([$dummyUlasan]),
-            'deletionRequests'=> collect([]),
+            'totalWisatawan'         => 1,
+            'totalFaskes'            => 1,
+            'totalPariwisata'        => 1,
+            'pendingMitra'           => 2,
+            'mitraPending'           => collect([$dummyMitra]),
+            'wisataPending'          => collect([$dummyWisata]),
+            'laporans'               => collect([$dummyLaporan]),
+            'users'              => $usersPaginator,
+            'faskesList'         => $faskesPaginator,
+            'wisataApproved'     => collect([$dummyWisata]),
+            'allUlasan'          => collect([$dummyUlasan]),
+            'deletionRequests'   => collect([]),
+            'autoApprovedFaskes' => collect([]),
+            'autoApprovedPariwisata' => collect([]),
         ];
 
         $html = view('dashboard.admin', $viewData)->render();

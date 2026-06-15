@@ -12,6 +12,14 @@
     <section class="hero-slanted" style="min-height: 100vh; display: flex; align-items: center; padding-top: 50px; padding-bottom: 50px; clip-path: none;">
         <div class="container px-5" style="position: relative; z-index: 5;">
 
+            <!-- Flash sukses -->
+            @if(session('success'))
+            <div class="alert mx-auto mb-4 d-flex align-items-start animate-fade-up" style="max-width: 750px; border-radius: 12px; background:rgba(40,167,69,0.15); border:1px solid rgba(40,167,69,0.4); color:#6fcf97; text-align: left;">
+                <i class="fas fa-check-circle mr-3 mt-1 fa-lg"></i>
+                <div class="small">{!! session('success') !!}</div>
+            </div>
+            @endif
+
             <!-- Header Title -->
             <div class="text-center mb-5 animate-fade-up">
                 <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--hnb-orange); background: rgba(255, 122, 0, 0.08); padding: 6px 14px; border-radius: 50px; display: inline-block; margin-bottom: 16px;">

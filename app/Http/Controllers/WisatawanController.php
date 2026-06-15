@@ -114,4 +114,38 @@ class WisatawanController extends Controller
         return back()->with('success', 'Profil berhasil diperbarui!');
     }
 
+    // =========================================================
+    // SIMPAN RIWAYAT KUNJUNGAN (AJAX)
+    // Endpoint: POST /wisatawan/kunjungan
+    // =========================================================
+    public function recordVisit(Request $request)
+    {
+        $request->validate([
+            'faskes_id' => 'required|exists:faskes,id',
+        ]);
+
+        $userId = session('auth_user.id');
+
+        // Check if there is already a visit to this faskes today to avoid duplicates
+        $exists = RiwayatKunjungan::where('user_id', $userId)
+                                    ->where('faskes_id', $request->faskes_id)
+                                    ->whereDate('tanggal_kunjungan', today())
+                                    ->exists();
+
+        if (!$exists) {
+            RiwayatKunjungan::create([
+                'user_id'           => $userId,
+                'faskes_id'         => $request->faskes_id,
+                'tanggal_kunjungan' => today(),
+                'label_warna'       => 'yellow', // default label
+                'catatan_pribadi'   => null,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kunjungan berhasil dicatat!',
+        ]);
+    }
+
 }

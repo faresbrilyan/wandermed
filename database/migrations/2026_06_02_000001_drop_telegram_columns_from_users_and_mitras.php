@@ -13,6 +13,23 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Illuminate\Support\Facades\DB::getDriverName() === 'sqlite') {
+            Illuminate\Support\Facades\DB::statement('DROP INDEX IF EXISTS users_telegram_chat_id_unique');
+            Illuminate\Support\Facades\DB::statement('DROP INDEX IF EXISTS users_telegram_verification_code_unique');
+            Illuminate\Support\Facades\DB::statement('DROP INDEX IF EXISTS mitras_telegram_chat_id_unique');
+            Illuminate\Support\Facades\DB::statement('DROP INDEX IF EXISTS mitras_telegram_verification_code_unique');
+        } else {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropUnique(['telegram_chat_id']);
+                $table->dropUnique(['telegram_verification_code']);
+            });
+
+            Schema::table('mitras', function (Blueprint $table) {
+                $table->dropUnique(['telegram_chat_id']);
+                $table->dropUnique(['telegram_verification_code']);
+            });
+        }
+
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['telegram_chat_id', 'telegram_verification_code']);
         });

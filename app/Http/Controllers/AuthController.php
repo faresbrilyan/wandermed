@@ -181,7 +181,7 @@ class AuthController extends Controller
 
         $this->createFaskesProfile($mitra, $request, $fotoPlangPath, $fotoKondisiPath);
 
-        return redirect('/login')->with('success',
+        return redirect('/daftar')->with('success',
             'Pendaftaran berhasil dikirim! Akun Anda sedang menunggu verifikasi Admin WanderMed.'
         );
     }

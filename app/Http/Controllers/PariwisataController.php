@@ -63,7 +63,7 @@ class PariwisataController extends Controller
             'status_review'  => 'menunggu',
         ]);
 
-        return redirect('/daftar/pariwisata')
+        return redirect('/daftar')
             ->with('success',
                 'Terima kasih! Pendaftaran destinasi wisata Anda telah kami terima. ' .
                 'Admin WanderMed akan menghubungi Anda melalui email <strong>' .

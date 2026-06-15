@@ -96,6 +96,9 @@ Route::middleware(['auth.session', 'role:wisatawan'])->group(function () {
     Route::post('/wisatawan/profil', [WisatawanController::class, 'updateProfil'])
          ->name('wisatawan.profil.update');
 
+    // AJAX: Record new health facility visit
+    Route::post('/wisatawan/kunjungan', [WisatawanController::class, 'recordVisit'])
+         ->name('wisatawan.kunjungan.store');
 });
 
 
@@ -180,6 +183,12 @@ Route::middleware(['auth.session', 'role:admin'])->group(function () {
     // Export Faskes
     Route::get('/admin/faskes/export', [AdminController::class, 'exportFaskesCsv'])
          ->name('admin.faskes.export');
+
+    // Cancel Auto Approve
+    Route::post('/admin/faskes/{id}/cancel-auto-approve', [AdminController::class, 'cancelAutoApproveFaskes'])
+         ->name('admin.faskes.cancel-auto-approve');
+    Route::post('/admin/pariwisata/{id}/cancel-auto-approve', [AdminController::class, 'cancelAutoApprovePariwisata'])
+         ->name('admin.pariwisata.cancel-auto-approve');
 
     // ── CHAT: Admin side ───────────────────────────────────────
     Route::get('/admin/chat/contacts',              [ChatController::class, 'adminContacts'])->name('admin.chat.contacts');

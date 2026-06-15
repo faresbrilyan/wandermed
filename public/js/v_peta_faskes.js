@@ -288,7 +288,14 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('detailType').textContent    = data.type;
         document.getElementById('detailAddress').textContent = data.address;
         document.getElementById('detailJam').textContent     = data.jam;
-        document.getElementById('detailPhone').textContent   = data.phone;
+
+        const rowPhone = document.getElementById('rowPhone');
+        if (data.phone) {
+            rowPhone.style.display = '';
+            document.getElementById('detailPhone').textContent = data.phone;
+        } else {
+            rowPhone.style.display = 'none';
+        }
 
         // Rating
         const ratingContainer = document.getElementById('detailRatingContainer');
@@ -366,7 +373,17 @@ document.addEventListener("DOMContentLoaded", function() {
         btnJadwal.href = `/faskes/${data.id}/jadwal`;
         btnDeteksi.style.display = 'none';  // Bukan wisata, tombol ini harus tersembunyi
         btnDeteksi.onclick = null;
-        document.getElementById('btnCall').href = `tel:${data.phone.replace(/\D/g, '')}`;
+
+        const btnCall = document.getElementById('btnCall');
+        if (data.phone) {
+            btnCall.style.pointerEvents = 'auto';
+            btnCall.style.opacity = '1';
+            btnCall.href = `tel:${data.phone.replace(/\D/g, '')}`;
+        } else {
+            btnCall.removeAttribute('href');
+            btnCall.style.pointerEvents = 'none';
+            btnCall.style.opacity = '0.5';
+        }
 
         // Notes
         const notesSection = document.getElementById('rowNotes');
@@ -407,6 +424,25 @@ document.addEventListener("DOMContentLoaded", function() {
         // Redirect & Switch Mode
         window.open(mapUrl, '_blank');
         
+        // Log kunjungan ke database jika user login sebagai wisatawan & destinasi adalah faskes
+        if (isLoggedIn && isWisatawan && id && type !== 'Pariwisata') {
+            fetch('/wisatawan/kunjungan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ faskes_id: id })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Kunjungan faskes berhasil dicatat di riwayat.');
+                }
+            })
+            .catch(err => console.error('Gagal mencatat kunjungan:', err));
+        }
+
         setTimeout(function() {
             btn.innerHTML = originalText;
             switchToReviewMode(id, name);
@@ -795,7 +831,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
                         </div>
                         <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
-                        <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
+                        <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng}, ${f.id}, '${f.name.replace(/'/g, "\\'")}', '${f.type}');" class="gm-item-btn">Rute</a>
                     </div>
                 `;
             });
@@ -886,7 +922,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
                     </div>
                     <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
-                    <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
+                    <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng}, ${f.id}, '${f.name.replace(/'/g, "\\'")}', '${f.type}');" class="gm-item-btn">Rute</a>
                 </div>
             `;
         });
@@ -973,7 +1009,14 @@ document.addEventListener("DOMContentLoaded", function() {
         name.textContent    = w.name;
         type.textContent    = '🏔 ' + w.kategori;
         address.textContent = w.alamat;
-        phone.textContent   = w.telp || '-';
+
+        const rowPhone = document.getElementById('rowPhone');
+        if (w.telp) {
+            rowPhone.style.display = '';
+            phone.textContent = w.telp;
+        } else {
+            rowPhone.style.display = 'none';
+        }
         document.getElementById('detailJam').textContent = 'Harga tiket: ' + (w.tiket ? 'Rp ' + parseInt(w.tiket).toLocaleString('id-ID') : 'Gratis');
 
         // Status UI
@@ -1025,7 +1068,17 @@ document.addEventListener("DOMContentLoaded", function() {
             e.preventDefault();
             openSmartNavigation(w.lat, w.lng, w.id, w.name, 'Pariwisata');
         };
-        document.getElementById('btnCall').href = `tel:${(w.telp || '').replace(/\D/g, '')}`;
+
+        const btnCall = document.getElementById('btnCall');
+        if (w.telp) {
+            btnCall.style.pointerEvents = 'auto';
+            btnCall.style.opacity = '1';
+            btnCall.href = `tel:${w.telp.replace(/\D/g, '')}`;
+        } else {
+            btnCall.removeAttribute('href');
+            btnCall.style.pointerEvents = 'none';
+            btnCall.style.opacity = '0.5';
+        }
         document.getElementById('faskesDetailPanel').classList.add('active');
     }
 
@@ -1063,7 +1116,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="gm-item-dist"><i class="fas fa-route"></i> ${distText}</div>
                     </div>
                     <button onclick="focusFaskesFromModal(${f.id}, ${f.lat}, ${f.lng})" class="gm-item-btn-show">Lihat</button>
-                    <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng});" class="gm-item-btn">Rute</a>
+                    <a href="${mapsLink}" onclick="event.preventDefault(); openSmartNavigation(${f.lat}, ${f.lng}, ${f.id}, '${f.name.replace(/'/g, "\\'")}', '${f.type}');" class="gm-item-btn">Rute</a>
                 </div>
             `;
         });

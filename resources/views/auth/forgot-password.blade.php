@@ -75,7 +75,10 @@
                 <h1 class="rp-title">Masukkan Kode OTP</h1>
                 <p class="rp-subtitle">
                     Kode 6-digit telah dikirim ke email Anda.<br>
-                    Berlaku selama <strong style="color:var(--hnb-orange);">15 menit</strong>.
+                    Berlaku selama <strong style="color:var(--hnb-orange);">15 menit</strong>.<br>
+                    <small style="opacity: 0.85; margin-top: 4px; display: inline-block;">
+                        (Jika kode tidak muncul, silakan periksa folder <strong>Spam</strong> atau <strong>Promosi</strong> email Anda)
+                    </small>
                 </p>
 
                 {{-- Email badge --}}

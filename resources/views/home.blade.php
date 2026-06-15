@@ -309,7 +309,7 @@
                             <div class="d-flex align-items-center justify-content-center flex-wrap" style="gap: 15px;">
                                 <div class="d-flex align-items-center px-4 py-2" style="background: var(--saas-slate) !important; border-radius: 50px; border: 1px solid var(--saas-border) !important;">
                                     <i data-lucide="activity" class="saas-icon saas-icon-orange mr-2" style="width: 18px; height: 18px;"></i>
-                                    <span style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; color: var(--saas-text-primary) !important;">WANDERMED DEV LABS</span>
+                                    <span style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; color: var(--saas-text-primary) !important;">HEAR & BUILD STUDIO</span>
                                 </div>
                             </div>
                         </div>
