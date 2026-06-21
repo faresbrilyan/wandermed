@@ -123,11 +123,13 @@ class HomeController extends Controller
         try {
             $request->validate([
                 'subjek' => 'required|string|max:255',
-                'deskripsi' => 'required|string|max:200'
+                'deskripsi' => 'required|string|max:200',
+                'faskes_id' => 'nullable|exists:faskes,id'
             ]);
 
             \App\Models\LaporanMasalah::create([
                 'user_id' => session('auth_user.id'), // null jika tidak login
+                'faskes_id' => $request->faskes_id,
                 'subjek' => $request->subjek,
                 'deskripsi' => $request->deskripsi,
                 'status' => 'pending'

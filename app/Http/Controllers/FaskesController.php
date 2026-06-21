@@ -178,6 +178,25 @@ class FaskesController extends Controller
             'komentar'  => $request->komentar,
         ]);
 
+        // Sinkronisasi ke Riwayat Kunjungan
+        $labelWarna = 'yellow';
+        if ($request->rating >= 4) {
+            $labelWarna = 'green';
+        } elseif ($request->rating <= 2) {
+            $labelWarna = 'red';
+        }
+
+        \App\Models\RiwayatKunjungan::updateOrCreate(
+            [
+                'user_id'           => session('auth_user.id'),
+                'faskes_id'         => $faskes_id,
+                'tanggal_kunjungan' => today(),
+            ],
+            [
+                'label_warna'       => $labelWarna,
+            ]
+        );
+
         return response()->json(['success' => true, 'message' => 'Ulasan berhasil dikirim!']);
     }
 

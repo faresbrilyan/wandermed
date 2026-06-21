@@ -128,6 +128,15 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
+                        <label class="text-hnb-navy font-weight-bold small">Faskes Terkait (Opsional)</label>
+                        <select name="faskes_id" class="form-control radius-hnb shadow-sm border-0">
+                            <option value="">– Tidak Ada / Umum –</option>
+                            @foreach(\App\Models\Faskes::orderBy('nama_faskes')->get(['id', 'nama_faskes']) as $fs)
+                                <option value="{{ $fs->id }}">{{ $fs->nama_faskes }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
                         <label class="text-hnb-navy font-weight-bold small">Deskripsi Masalah</label>
                         <textarea name="deskripsi" class="form-control radius-hnb shadow-sm border-0" rows="4" placeholder="Ceritakan detail masalah..." required maxlength="200"></textarea>
                     </div>
